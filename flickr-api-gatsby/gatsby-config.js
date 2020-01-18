@@ -5,12 +5,11 @@ module.exports = {
     author: `Anthony Salemo`,
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images`,
+        path: `${__dirname}/src/images/background_images`,
       },
     },
     {
@@ -33,6 +32,8 @@ module.exports = {
         },
       },
     },
+    `gatsby-plugin-react-helmet`,
+    `gatsby-theme-material-ui`,
     `gatsby-plugin-styled-components`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
