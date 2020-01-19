@@ -32,6 +32,12 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      options: {
+        fonts: [{ family: `Pacifico` }],
+      },
+    },
     `gatsby-plugin-react-helmet`,
     `gatsby-theme-material-ui`,
     `gatsby-plugin-styled-components`,

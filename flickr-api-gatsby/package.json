@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@brainhubeu/react-carousel": "^1.10.34",
     "@material-ui/core": "^4.8.3",
     "@material-ui/styles": "^4.8.2",
     "babel-plugin-styled-components": "^1.10.6",
@@ -14,6 +15,7 @@
     "gatsby-plugin-manifest": "^2.2.31",
     "gatsby-plugin-material-ui": "^2.1.6",
     "gatsby-plugin-offline": "^3.0.27",
+    "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-plugin-sharp": "^2.3.5",
     "gatsby-plugin-styled-components": "^3.1.17",
