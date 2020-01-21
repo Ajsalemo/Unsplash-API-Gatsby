@@ -1,20 +1,20 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import React, { useState, useRef, useEffect } from "react"
+import { faBars } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   Button,
   ClickAwayListener,
   Grow,
+  MenuItem,
+  MenuList,
   Paper,
   Popper,
-  MenuList,
-  MenuItem,
 } from "@material-ui/core"
-import styled from "styled-components"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "gatsby"
+import React, { useEffect, useRef, useState } from "react"
+import styled from "styled-components"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
