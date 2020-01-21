@@ -4,16 +4,26 @@
 import React from "react"
 import { useQuery } from "@apollo/react-hooks"
 import { RANDOM_IMAGE_SEARCH } from "../apollo/queries"
+import styled from "styled-components"
+import { Grid } from "@material-ui/core"
+import { MainNavbar } from "../components/mainnavbar"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+const MainGrid = styled(Grid)`
+  background-color: #1e172f;
+  height: 100vh;
+`
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Main = () => {
-  const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
-  if (loading) return "Loading..."
-  if (error) return `Error! ${error.message}`
-  console.log(data)
-  return <div>test</div>
+  // const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
+  // if (loading) return "Loading..."
+  // if (error) return `Error! ${error.message}`
+  // console.log(data)
+  return <MainGrid container><MainNavbar /></MainGrid>
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

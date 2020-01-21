@@ -39,18 +39,23 @@ const ButtonGrid = styled(Grid)`
     justify-content: center;
     flex-direction: column;
 `
+const LandingLinks = styled(Link)`
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const SignIn = () => (
     <SignInDiv>
         <SignInGrid item>
-            <LandingpageMainText variant="h1">Something like pinterest</LandingpageMainText>
+            <LandingpageMainText variant="h1">Something like Unsplash</LandingpageMainText>
         </SignInGrid>
         <ButtonGrid>
-            <Link to="/main" style={{ color: "#fff" }}>Sign in</Link>
+            <Button style={{ color: "#fff" }}>Sign in</Button>
             <Button style={{ color: "#fff" }}>Create account</Button>
-            <Button style={{ color: "#fff" }}>Continue</Button>
+            <LandingLinks to="/main" style={{ color: "#fff" }}>Continue</LandingLinks>
         </ButtonGrid>
     </SignInDiv>
 )

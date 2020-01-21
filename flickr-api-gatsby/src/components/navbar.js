@@ -52,9 +52,9 @@ export const Navbar = () => (
     <StyledNavbar position="absolute">
         <Toolbar style={{ justifyContent: "center" }}>
             <ParentNavDiv>
-                <NavbarSiteName variant="h1">Something like Pinterest</NavbarSiteName>
+                <NavbarSiteName variant="h1">Something like Unsplash</NavbarSiteName>
                 <ParentNavGrid item xs={10} sm={8} md={4} lg={4}>
-                    <NavLink to="#">Continue</NavLink>
+                    <NavLink to="/main">Continue</NavLink>
                     <NavLink to="#">Sign in</NavLink>
                     <NavLink to="#">Create account</NavLink>
                 </ParentNavGrid>
