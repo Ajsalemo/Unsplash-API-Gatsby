@@ -7,23 +7,32 @@ import { RANDOM_IMAGE_SEARCH } from "../apollo/queries"
 import styled from "styled-components"
 import { Grid } from "@material-ui/core"
 import { MainNavbar } from "../components/mainnavbar"
+import { MainPageImages } from "../components/mainpageimages"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const MainGrid = styled(Grid)`
+const StyledMainContainer = styled(Grid)`
+  display: flex;  
+  justify-content: center;
   background-color: #1e172f;
-  height: 100vh;
+  height: 100%;
+  padding-top: 5em;
 `
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Main = () => {
-  // const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
-  // if (loading) return "Loading..."
-  // if (error) return `Error! ${error.message}`
-  // console.log(data)
-  return <MainGrid container><MainNavbar /></MainGrid>
+  const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
+  if (loading) return "Loading..."
+  if (error) return `Error! ${error.message}`
+  console.log(data)
+  return (
+    <StyledMainContainer item>
+      <MainNavbar />
+      <MainPageImages randomImages={data.randomImage} />
+    </StyledMainContainer>
+  )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

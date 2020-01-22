@@ -1,29 +1,35 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import gql from "graphql-tag"
+import React from "react"
+import { Grid } from "@material-ui/core"
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import "react-lazy-load-image-component/src/effects/blur.css"
+import styled from "styled-components"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const RANDOM_IMAGE_SEARCH = gql`
-    query randomImageSearch {
-        randomImage @rest(type: "Random Image", path: "photos/random?featured=true&count=20") {
-            description
-            id
-            location @type(name: "location") {
-                __typename
-                name
-                city
-                country
-            }
-            urls @type(name: "urls"){
-                small
-                regular
-                full
-            }
-        }
-    }
+const StyledLazyLoadedImage = styled(LazyLoadImage)`
+  border: 2px solid #fff;
+  border-radius: 4%;
 `
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+export const MainPageImages = ({ randomImages }) => (
+  <Grid item lg={10} style={{ textAlign: "center" }}>
+    {randomImages.map(src => (
+      <StyledLazyLoadedImage
+        alt={""}
+        src={src.urls.small}
+        key={src.id}
+        effect="blur"
+        borderRadius="borderRadius"
+      />
+    ))}
+  </Grid>
+)
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
