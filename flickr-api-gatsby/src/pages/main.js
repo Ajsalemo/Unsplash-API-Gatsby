@@ -5,9 +5,10 @@ import React from "react"
 import { useQuery } from "@apollo/react-hooks"
 import { RANDOM_IMAGE_SEARCH } from "../apollo/queries"
 import styled from "styled-components"
-import { Grid } from "@material-ui/core"
+import { Grid, CircularProgress } from "@material-ui/core"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
+import { LoadingContainer } from "../components/loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -24,13 +25,16 @@ const StyledMainContainer = styled(Grid)`
 
 const Main = () => {
   const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
-  if (loading) return "Loading..."
   if (error) return `Error! ${error.message}`
   console.log(data)
   return (
-    <StyledMainContainer item>
+    <StyledMainContainer container>
       <MainNavbar />
-      <MainPageImages randomImages={data.randomImage} />
+      {loading ? (
+        <MainPageImages randomImages={data.randomImage} />
+      ) : (
+        <LoadingContainer />
+      )}
     </StyledMainContainer>
   )
 }

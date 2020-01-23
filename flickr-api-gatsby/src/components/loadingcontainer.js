@@ -1,37 +1,30 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Grid } from "@material-ui/core"
 import React from "react"
-import { LazyLoadImage } from "react-lazy-load-image-component"
-import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
+import { Grid, CircularProgress, Typography } from "@material-ui/core"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const StyledLazyLoadedImage = styled(LazyLoadImage)`
-  border: 2px solid #fff;
-  border-radius: 4%;
-  margin: 0.4em;
+const LoadingContainerGrid = styled(Grid)`
+  height: 100vh;
   background-color: #1e172f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// Sets the random images height to 250px
-const changeRandomImageHeght = "&h=250"
 
-export const MainPageImages = ({ randomImages }) => (
-  <Grid item lg={8} style={{ textAlign: "center" }}>
-    {randomImages.map(src => (
-        <StyledLazyLoadedImage
-          alt={""}
-          src={src.urls.small + changeRandomImageHeght}
-          key={src.id}
-          effect="blur"
-        />
-    ))}
-  </Grid>
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+export const LoadingContainer = () => (
+    <LoadingContainerGrid>
+        <Typography style={{ color: "#fff", paddingRight: "0.3em" }} >Loading...</Typography><CircularProgress />
+    </LoadingContainerGrid>
+
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
