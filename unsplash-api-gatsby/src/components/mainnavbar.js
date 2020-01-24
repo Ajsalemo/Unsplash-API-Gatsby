@@ -60,9 +60,9 @@ export const MainNavbar = () => (
   >
     <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
       <StyledTextField
-        id="main_nav"
+        id="main-nav"
         placeholder="Search for images"
-        name="main_nav_search"
+        name="mainNavSearch"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

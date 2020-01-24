@@ -19,6 +19,7 @@
     "apollo-link-rest": "^0.7.3",
     "babel-plugin-styled-components": "^1.10.6",
     "embla-carousel-react": "^1.2.10",
+    "formik": "^2.1.2",
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-manifest": "^2.2.31",
