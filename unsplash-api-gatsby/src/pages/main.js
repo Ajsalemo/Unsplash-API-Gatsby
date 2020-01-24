@@ -17,7 +17,7 @@ const StyledMainContainer = styled(Grid)`
   display: flex;
   justify-content: center;
   background-color: #1e172f;
-  height: ${props => props.images > 15 ? "100%" : "100vh"};
+  height: 100vh;
   padding-top: 5em;
 `
 
@@ -27,9 +27,8 @@ const Main = () => {
   const { loading, error, data } = useQuery(RANDOM_IMAGE_SEARCH)
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
-  console.log(data)
   return (
-    <StyledMainContainer container images={data.randomImage.length}>
+    <StyledMainContainer container>
       <MainNavbar />
       <MainPageImages randomImages={data.randomImage} />
     </StyledMainContainer>

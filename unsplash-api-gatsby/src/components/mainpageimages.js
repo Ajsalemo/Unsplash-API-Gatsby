@@ -14,21 +14,31 @@ const StyledLazyLoadedImage = styled(LazyLoadImage)`
   border: 2px solid #fff;
   border-radius: 4%;
   margin: 0.4em;
+`
+const MainPageImagesGrid = styled(Grid)`
+  display: flex;
+  justify-content: center;
   background-color: #1e172f;
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const MainPageImages = ({ randomImages }) => (
-  <Grid item lg={8} style={{ textAlign: "center" }}>
-    {randomImages.map(src => (
+  <MainPageImagesGrid item>
+    <Grid
+      item
+      lg={8}
+      style={{ textAlign: "center", backgroundColor: "#1e172f" }}
+    >
+      {randomImages.map(src => (
         <StyledLazyLoadedImage
           alt={""}
           src={src.urls.custom}
           key={src.id}
           effect="blur"
         />
-    ))}
-  </Grid>
+      ))}
+    </Grid>
+  </MainPageImagesGrid>
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
