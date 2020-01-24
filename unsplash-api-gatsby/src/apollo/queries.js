@@ -6,10 +6,10 @@ import gql from "graphql-tag"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const RANDOM_IMAGE_SEARCH = gql`
-    query randomImageSearch {
+export const RANDOM_PHOTO_QUERY = gql`
+    query randomPhotoQuery {
         # Sets the random photo query to a count of 30 returned images, only featured photos, and width/height of 400px
-        randomImage @rest(type: "Random Image", path: "photos/random?featured=true&count=30&h=400&w=400") {
+        randomPhotoQuery @rest(type: "Random Photo Query", path: "photos/random?featured=true&count=30&h=400&w=400") {
             description
             id
             location @type(name: "location") {
@@ -25,6 +25,18 @@ export const RANDOM_IMAGE_SEARCH = gql`
                 raw
                 custom
             }
+        }
+    }
+`
+
+export const SEARCH_IMAGES_BY_KEYWORD = gql`
+    # This query takes the argument passed in by the SearchForm component and passes it to the rest directive path
+    query searchImagesByKeyword {
+        searchImagesByKeyword(query: $query) 
+            @rest(type: "Search Photos By Keyword", path: "/search/photos?query={args.query}") {
+            total
+            total_pages
+            results 
         }
     }
 `

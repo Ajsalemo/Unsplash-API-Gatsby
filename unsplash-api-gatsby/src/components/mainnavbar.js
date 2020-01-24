@@ -1,40 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { faSearch } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  AppBar,
-  Grid,
-  InputAdornment,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@material-ui/core"
+import { AppBar, Grid, Toolbar, Typography } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
 import { MobileNavMenu } from "./mobilenavmenu"
+import { SearchForm } from "./searchform"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const StyledTextField = styled(TextField)`
-  .MuiInput-underline:before {
-    border-bottom: 2px solid #fff;
-  }
-  /* hover (double-ampersand needed for specificity reasons. */
-  && .MuiInput-underline:hover:before {
-    border-bottom: 2px solid lightblue;
-  }
-  /* focused */
-  .MuiInput-underline:after {
-    border-bottom: 2px solid #f00;
-  }
-  .MuiInputBase-input {
-    color: #fff;
-  }
-`
 const NavbarSitename = styled(Typography)`
   display: none;
   @media (min-width: 700px) {
@@ -59,18 +35,7 @@ export const MainNavbar = () => (
     position="fixed"
   >
     <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
-      <StyledTextField
-        id="main-nav"
-        placeholder="Search for images"
-        name="mainNavSearch"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <FontAwesomeIcon icon={faSearch} style={{ color: "#fff" }} />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <SearchForm />
       <Link to="/" style={{ textDecoration: "none" }}>
         <NavbarSitename>Something like Unsplash</NavbarSitename>
       </Link>
