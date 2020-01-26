@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+import { ApolloProvider } from "@apollo/react-hooks"
 import { ApolloClient, ApolloLink, InMemoryCache } from "apollo-boost"
+import { persistCache } from "apollo-cache-persist"
 import { RestLink } from "apollo-link-rest"
 import fetch from "isomorphic-fetch"
-import React, { useState, useEffect } from "react"
-import { ApolloProvider } from "@apollo/react-hooks"
-import { persistCache } from "apollo-cache-persist"
+import React, { useEffect, useState } from "react"
 import { LoadingContainer } from "../components/loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -44,7 +44,7 @@ export const ApolloClientHOC = ({ children }) => {
     persistCache({
       cache,
       // Use local storage as the storage provider
-      storage: window.localStorage
+      storage: window.localStorage,
     }).then(() => {
       setClient(client)
     })
@@ -52,12 +52,13 @@ export const ApolloClientHOC = ({ children }) => {
     return () => {}
   }, [])
   // If the client state is undefined return a loading indicator
-  if (client === undefined ) return <div style={{ margin: 0 }}><LoadingContainer /></div>
-  return (
-    <ApolloProvider client={client}>
-      {children}
-    </ApolloProvider>
-  )
+  if (client === undefined)
+    return (
+      <div style={{ margin: 0 }}>
+        <LoadingContainer />
+      </div>
+    )
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

@@ -4,7 +4,7 @@
 import { useApolloClient } from "@apollo/react-hooks"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { InputAdornment, TextField } from "@material-ui/core"
+import { InputAdornment, TextField, CircularProgress } from "@material-ui/core"
 import { Form, Formik } from "formik"
 import { navigate } from "gatsby"
 import React from "react"
@@ -34,7 +34,7 @@ const SubmitButton = styled.button`
   background-color: transparent;
   border: none;
   &:hover {
-      cursor: pointer;
+    cursor: pointer;
   }
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -45,7 +45,8 @@ export const SearchForm = () => {
     <Formik
       initialValues={{ search: "" }}
       onSubmit={(values, { setSubmitting }) => {
-        apolloClient.query({
+        apolloClient
+          .query({
             query: SEARCH_IMAGES_BY_KEYWORD,
             variables: {
               query: values.search,
@@ -72,12 +73,15 @@ export const SearchForm = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SubmitButton type="submit">
-                    <FontAwesomeIcon
-                      icon={faSearch}
-                      style={{ color: "#fff" }}
-                      disabled={isSubmitting}
-                    />
+                  <SubmitButton type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <CircularProgress />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faSearch}
+                        style={{ color: "#fff" }}
+                      />
+                    )}
                   </SubmitButton>
                 </InputAdornment>
               ),

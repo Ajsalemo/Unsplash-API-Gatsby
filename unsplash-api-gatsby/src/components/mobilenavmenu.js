@@ -3,15 +3,7 @@
 
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  Button,
-  ClickAwayListener,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from "@material-ui/core"
+import { Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
