@@ -5,6 +5,7 @@ import { AppBar, Grid, Toolbar, Typography } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
+import { MobileNavMenu } from "./mobilenavmenu"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -27,10 +28,13 @@ const ParentNavDiv = styled.div`
     }
 `
 const ParentNavGrid = styled(Grid)`
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-    padding: 1em;
+    display: none;
+    @media (min-width: 700px) {
+        align-items: center;
+        display: flex;
+        justify-content: space-around;
+        padding: 1em;    
+    }
 `
 const NavbarSiteName = styled(Typography)`
     align-items: center;
@@ -58,6 +62,7 @@ export const Navbar = () => (
                     <NavLink to="#">Sign in</NavLink>
                     <NavLink to="#">Create account</NavLink>
                 </ParentNavGrid>
+                <MobileNavMenu />
             </ParentNavDiv>
         </Toolbar>
     </StyledNavbar>

@@ -11,12 +11,15 @@ import { Link } from "gatsby"
 
 const SignInDiv = styled.div`
     position: absolute;
-    top: 50%;
+    top: 40%;
     width: 100%;
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding-left: 4em;
+    @media (min-width: 600px) {
+        padding-left: 4em;
+        top: 50%;
+    }
     @media (min-width: 990px) {
         display: flex;
         flex-direction: row;
@@ -24,15 +27,16 @@ const SignInDiv = styled.div`
 `
 const SignInGrid = styled(Grid)`
     justify-content: center;
-    padding: 4em;
     @media (min-width: 600px) {
         display: flex;
+        padding: 4em;
     }
 `
 const LandingpageMainText = styled(Typography)`
     color: #fff;
     font-family: "Pacifico"; 
     font-size: 5em;
+    padding-bottom: 0.4em;
 `
 const ButtonGrid = styled(Grid)`
     display: flex;
