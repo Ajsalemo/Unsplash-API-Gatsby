@@ -56,7 +56,7 @@ export const SearchForm = () => {
             setSubmitting(false)
             if (data) {
               navigate("/image-results", {
-                state: data,
+                state: [data, values],
               })
             }
           })
@@ -75,7 +75,7 @@ export const SearchForm = () => {
                 <InputAdornment position="start">
                   <SubmitButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <CircularProgress />
+                      <CircularProgress style={{ color: "#fff" }} size="1.5em" />
                     ) : (
                       <FontAwesomeIcon
                         icon={faSearch}
