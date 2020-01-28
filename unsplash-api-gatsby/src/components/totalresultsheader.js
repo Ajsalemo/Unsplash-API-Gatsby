@@ -11,9 +11,11 @@ import { FlexCenterGrid } from "../helpers/styledcomponents"
 
 const generatedResultsNumber = totalResults => {
   if (totalResults > 1) {
-    return `${totalResults} results`
+    return `${totalResults} results.`
+  } else if (totalResults === 0) {
+    return `no results.`
   }
-  return `${totalResults} result`
+  return `${totalResults} result.`
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

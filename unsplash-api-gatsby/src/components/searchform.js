@@ -8,6 +8,8 @@ import { Form, Formik } from "formik"
 import { navigate } from "gatsby"
 import React from "react"
 import styled from "styled-components"
+import * as Yup from "yup";
+import { ErrorMessage } from "./errormessage"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -37,20 +39,34 @@ const SubmitButton = styled.button`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+const SearchFormValidationSchema = Yup.object().shape({
+  search: Yup.string()
+    .min(2, "Please provide a longer search term")
+    .max(85, "The value you have provided is too long")
+    .required("Please provide a search term")
+})
+
 export const SearchForm = () => {
   return (
     <Formik
       initialValues={{ search: "" }}
+      validationSchema={SearchFormValidationSchema}
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(false)
-        if (values) {
+        // If values are entered into the form, then push the user to the results page
+        /* 
+          The values entered into this form are then passed through to the './image-results.js' page through state 
+          to be accepted into the SEARCH_IMAGES_BY_KEYWORD ApolloGraphQL Query 
+        */
+        if (values.search !== "") {
           navigate("/image-results", {
             state: values,
           })
         }
+        return
       }}
     >
-      {({ isSubmitting, values, handleChange }) => (
+      {({ isSubmitting, values, handleChange, errors, touched }) => (
         <Form>
           <StyledTextField
             id="main-nav"
@@ -78,6 +94,7 @@ export const SearchForm = () => {
               ),
             }}
           />
+          {errors.search && touched.search ? <ErrorMessage errors={errors} /> : null}
         </Form>
       )}
     </Formik>
