@@ -19,16 +19,23 @@ const StyledLazyLoadedImage = styled(LazyLoadImage)`
 const MainPageImagesGrid = styled(FlexCenterGrid)`
   background-color: #1e172f;
 `
+const ImageCredit = styled.span`
+  color: #fff;
+  margin-top: -0.5em;
+  padding-bottom: 1em;
+  font-size: 0.8em;
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const MainPageImages = ({ images }) => (
-  <MainPageImagesGrid item>
+  <MainPageImagesGrid item lg={12}>
     <Grid
       item
-      lg={8}
       style={{ textAlign: "center", backgroundColor: "#1e172f" }}
+      lg={10}
     >
       {images.map(src => (
+        <div style={{ display: "inline-flex", flexDirection: "column" }}>
           <StyledLazyLoadedImage
             alt={""}
             // Render whichever one of the image src paramters that gets passed through
@@ -36,6 +43,8 @@ export const MainPageImages = ({ images }) => (
             key={src.id}
             effect="blur"
           />
+          <ImageCredit>Photo by <a href="#" style={{ color: "#fff" }}>{src.user.name}</a></ImageCredit>
+        </div>
       ))}
     </Grid>
   </MainPageImagesGrid>

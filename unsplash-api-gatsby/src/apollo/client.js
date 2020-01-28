@@ -29,7 +29,6 @@ export const ApolloClientHOC = ({ children }) => {
           "Accept-Version": "v1",
         },
       })
-      // Call the next link in the middleware chain
       return forward(operation)
     })
     // Configure the client

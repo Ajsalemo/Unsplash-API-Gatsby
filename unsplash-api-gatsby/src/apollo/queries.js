@@ -22,8 +22,16 @@ export const RANDOM_PHOTO_QUERY = gql`
         city
         country
       }
-      urls @type(name: "urls") {
-        custom
+      user @type(name: "random photo user name") {
+        __typename
+        name
+        links {
+          self
+        }
+      }
+      urls @type(name: "search urls") {
+        __typename
+        raw
       }
     }
   }
@@ -41,7 +49,15 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
       total_pages
       results @type(name: "results") {
         __typename
+        id
         description
+        user @type(name: "full user name") {
+          __typename
+          name
+          links {
+            self
+          }
+        }
         urls @type(name: "search urls") {
           __typename
           raw

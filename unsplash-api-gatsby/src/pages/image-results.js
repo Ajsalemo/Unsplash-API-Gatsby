@@ -21,6 +21,7 @@ const ImageResults = state => {
   })
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
+  console.log(data);
   return (
     <StyledMainContainer container>
       <MainNavbar />
