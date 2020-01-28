@@ -1,15 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { useApolloClient } from "@apollo/react-hooks"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { InputAdornment, TextField, CircularProgress } from "@material-ui/core"
+import { CircularProgress, InputAdornment, TextField } from "@material-ui/core"
 import { Form, Formik } from "formik"
 import { navigate } from "gatsby"
 import React from "react"
 import styled from "styled-components"
-import { SEARCH_IMAGES_BY_KEYWORD } from "../apollo/queries"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -40,26 +38,16 @@ const SubmitButton = styled.button`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const SearchForm = () => {
-  const apolloClient = useApolloClient()
   return (
     <Formik
       initialValues={{ search: "" }}
       onSubmit={(values, { setSubmitting }) => {
-        apolloClient
-          .query({
-            query: SEARCH_IMAGES_BY_KEYWORD,
-            variables: {
-              query: values.search,
-            },
+        setSubmitting(false)
+        if (values) {
+          navigate("/image-results", {
+            state: values,
           })
-          .then(data => {
-            setSubmitting(false)
-            if (data) {
-              navigate("/image-results", {
-                state: [data, values],
-              })
-            }
-          })
+        }
       }}
     >
       {({ isSubmitting, values, handleChange }) => (
@@ -75,7 +63,10 @@ export const SearchForm = () => {
                 <InputAdornment position="start">
                   <SubmitButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <CircularProgress style={{ color: "#fff" }} size="1.5em" />
+                      <CircularProgress
+                        style={{ color: "#fff" }}
+                        size="1.5em"
+                      />
                     ) : (
                       <FontAwesomeIcon
                         icon={faSearch}
