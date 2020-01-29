@@ -22,10 +22,12 @@ export const RANDOM_PHOTO_QUERY = gql`
         city
         country
       }
-      user @type(name: "random photo user name") {
+      user @type(name: "random photo username") {
         __typename
+        id
         name
-        links {
+        links @type(name: "random photo unsplash user"){
+          __typename
           self
         }
       }
@@ -51,10 +53,11 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
         __typename
         id
         description
-        user @type(name: "full user name") {
+        user @type(name: "full username") {
           __typename
           name
-          links {
+          links @type(name: "unsplash user") {
+            __typename
             self
           }
         }

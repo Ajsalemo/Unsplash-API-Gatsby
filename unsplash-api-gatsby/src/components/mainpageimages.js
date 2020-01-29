@@ -35,7 +35,10 @@ export const MainPageImages = ({ images }) => (
       lg={10}
     >
       {images.map(src => (
-        <div style={{ display: "inline-flex", flexDirection: "column" }}>
+        <div
+          style={{ display: "inline-flex", flexDirection: "column" }}
+          key={src.user.id}
+        >
           <StyledLazyLoadedImage
             alt={""}
             // Render whichever one of the image src paramters that gets passed through
@@ -43,7 +46,16 @@ export const MainPageImages = ({ images }) => (
             key={src.id}
             effect="blur"
           />
-          <ImageCredit>Photo by <a href="#" style={{ color: "#fff" }}>{src.user.name}</a></ImageCredit>
+          <ImageCredit>
+            Photo by{" "}
+            <a
+              href={src.user.links.self}
+              style={{ color: "#fff" }}
+              rel="noopener noreferrer"
+            >
+              {src.user.name}
+            </a>
+          </ImageCredit>
         </div>
       ))}
     </Grid>
