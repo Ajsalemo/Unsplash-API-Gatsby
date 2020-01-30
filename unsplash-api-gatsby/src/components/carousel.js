@@ -10,7 +10,7 @@ import { SignIn } from "./signin"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const EmblaCarouselComponent = ({ data }) => (
+const EmblaCarouselComponent = ({ data, user }) => (
   <Fragment>
     <Carousel animationSpeed={1500} autoPlay={5000} infinite>
       {data.allImageSharp.edges.map(src => (
@@ -21,7 +21,7 @@ const EmblaCarouselComponent = ({ data }) => (
         />
       ))}
     </Carousel>
-    <SignIn />
+    <SignIn user={user} />
   </Fragment>
 )
 

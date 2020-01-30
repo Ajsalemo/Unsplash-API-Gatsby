@@ -6,14 +6,15 @@ import { graphql } from "gatsby"
 import React from "react"
 import EmblaCarouselComponent from "../components/carousel"
 import { Navbar } from "../components/navbar"
+import { getProfile } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const IndexPage = ({ data }) => (
   <Grid item style={{ backgroundColor: "#000", position: "relative" }}>
-    <Navbar />
-    <EmblaCarouselComponent data={data} />
+    <Navbar user={getProfile()} />
+    <EmblaCarouselComponent data={data} user={getProfile()} />
   </Grid>
 )
 

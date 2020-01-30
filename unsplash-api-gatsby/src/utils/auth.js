@@ -40,7 +40,6 @@ export const isAuthenticated = () => {
   if (!isBrowser) {
     return
   }
-
   return localStorage.getItem("isLoggedIn") === "true"
 }
 
@@ -48,8 +47,12 @@ export const login = () => {
   if (!isBrowser) {
     return
   }
-
   auth.authorize()
+}
+
+export const logout = () => {
+  localStorage.setItem("isLoggedIn", false)
+  auth.logout()
 }
 
 const setSession = (cb = () => {}) => (err, authResult) => {
@@ -66,7 +69,7 @@ const setSession = (cb = () => {}) => (err, authResult) => {
     tokens.expiresAt = expiresAt
     user = authResult.idTokenPayload
     localStorage.setItem("isLoggedIn", true)
-    navigate("/account")
+    navigate("/main")
     cb()
   }
 }
@@ -75,11 +78,11 @@ export const handleAuthentication = () => {
   if (!isBrowser) {
     return
   }
-
   auth.parseHash(setSession())
 }
 
 export const getProfile = () => {
+  console.log(user);
   return user
 }
 

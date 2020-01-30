@@ -6,6 +6,7 @@ import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
+import { login } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -50,7 +51,7 @@ const LandingLinks = styled(Link)`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const SignIn = () => (
+export const SignIn = ({ user }) => (
   <SignInDiv>
     <SignInGrid item>
       <LandingpageMainText variant="h1">
@@ -58,8 +59,7 @@ export const SignIn = () => (
       </LandingpageMainText>
     </SignInGrid>
     <ButtonGrid>
-      <Button style={{ color: "#fff" }}>Sign in</Button>
-      <Button style={{ color: "#fff" }}>Create account</Button>
+      {user.name ? null : <Button style={{ color: "#fff" }} onClick={() => login()}>Sign in</Button>}
       <LandingLinks to="/main" style={{ color: "#fff" }}>
         Continue
       </LandingLinks>

@@ -8,17 +8,19 @@ import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { StyledMainContainer } from "../helpers/styledcomponents"
+import { getProfile } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Main = () => {
+  const user = getProfile()
   const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
   return (
     <StyledMainContainer container>
-      <MainNavbar />
+      <MainNavbar user={user} />
       <MainPageImages images={data.randomPhotoQuery} />
     </StyledMainContainer>
   )

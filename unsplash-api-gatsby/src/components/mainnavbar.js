@@ -7,6 +7,7 @@ import React from "react"
 import styled from "styled-components"
 import { MobileNavMenu } from "./mobilenavmenu"
 import { SearchForm } from "./searchform"
+import { logout, login } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -29,7 +30,7 @@ const MainNavLinks = styled(Grid)`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const MainNavbar = () => (
+export const MainNavbar = ({ user }) => (
   <AppBar
     style={{ backgroundColor: "#1e172f", boxShadow: "1px 1px #fff" }}
     position="fixed"
@@ -43,7 +44,7 @@ export const MainNavbar = () => (
         <Link to="/main" style={{ color: "#fff", textDecoration: "none" }}>
           <Typography>Home</Typography>
         </Link>
-        <Typography>Sign in</Typography>
+        {user.name ? <Typography onClick={() => logout()}>Sign out, {user.nickname}</Typography> : <Typography onClick={() => login()}>Sign in</Typography>}
       </MainNavLinks>
       <MobileNavMenu />
     </Toolbar>

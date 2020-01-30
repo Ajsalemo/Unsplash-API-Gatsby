@@ -1,11 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { AppBar, Grid, Toolbar, Typography } from "@material-ui/core"
+import { AppBar, Grid, Toolbar, Typography, Button } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
 import { MobileNavMenu } from "./mobilenavmenu"
+import { login } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -52,15 +53,14 @@ const NavLink = styled(Link)`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const Navbar = () => (
+export const Navbar = ({ user }) => (
   <StyledNavbar position="absolute">
     <Toolbar style={{ justifyContent: "center" }}>
       <ParentNavDiv>
         <NavbarSiteName variant="h1">Something like Unsplash</NavbarSiteName>
         <ParentNavGrid item xs={10} sm={8} md={4} lg={4}>
           <NavLink to="/main">Continue</NavLink>
-          <NavLink to="#">Sign in</NavLink>
-          <NavLink to="#">Create account</NavLink>
+          {user.name ? null : <Button style={{ color: "#fff" }} onClick={() => login()}>Sign in</Button>}
         </ParentNavGrid>
         <MobileNavMenu />
       </ParentNavDiv>
