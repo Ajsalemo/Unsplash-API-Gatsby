@@ -25,8 +25,8 @@ const TotalResultsGrid = styled(FlexCenterGrid)`
   text-align: center;
 `
 const KeywordTypography = styled(Typography)`
-    font-family: "Pacifico";
-    padding-bottom: 0.4em;
+  font-family: "Pacifico";
+  padding-bottom: 0.4em;
 `
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

@@ -8,7 +8,7 @@ import { Form, Formik } from "formik"
 import { navigate } from "gatsby"
 import React from "react"
 import styled from "styled-components"
-import * as Yup from "yup";
+import * as Yup from "yup"
 import { ErrorMessage } from "./errormessage"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -43,7 +43,7 @@ const SearchFormValidationSchema = Yup.object().shape({
   search: Yup.string()
     .min(2, "Please provide a longer search term")
     .max(85, "The value you have provided is too long")
-    .required("Please provide a search term")
+    .required("Please provide a search term"),
 })
 
 export const SearchForm = () => {
@@ -94,7 +94,9 @@ export const SearchForm = () => {
               ),
             }}
           />
-          {errors.search && touched.search ? <ErrorMessage errors={errors} /> : null}
+          {errors.search && touched.search ? (
+            <ErrorMessage errors={errors} />
+          ) : null}
         </Form>
       )}
     </Formik>

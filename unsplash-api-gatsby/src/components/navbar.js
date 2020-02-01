@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { AppBar, Grid, Toolbar, Typography, Button } from "@material-ui/core"
+import { AppBar, Button, Grid, Toolbar, Typography } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
-import { MobileNavMenu } from "./mobilenavmenu"
 import { login } from "../utils/auth"
+import { MobileNavMenu } from "./mobilenavmenu"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -50,7 +50,6 @@ const NavLink = styled(Link)`
     text-decoration: underline;
   }
 `
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const Navbar = ({ user }) => (
@@ -60,9 +59,13 @@ export const Navbar = ({ user }) => (
         <NavbarSiteName variant="h1">Something like Unsplash</NavbarSiteName>
         <ParentNavGrid item xs={10} sm={8} md={4} lg={4}>
           <NavLink to="/main">Continue</NavLink>
-          {user.name ? null : <Button style={{ color: "#fff" }} onClick={() => login()}>Sign in</Button>}
+          {!user ? (
+            <Button style={{ color: "#fff" }} onClick={() => login()}>
+              Sign in
+            </Button>
+          ) : null}
         </ParentNavGrid>
-        <MobileNavMenu />
+        <MobileNavMenu user={user} />
       </ParentNavDiv>
     </Toolbar>
   </StyledNavbar>

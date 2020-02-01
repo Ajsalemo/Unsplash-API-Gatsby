@@ -5,21 +5,21 @@ import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   Button,
-  Grid,
   ClickAwayListener,
+  Grid,
   Grow,
   MenuItem,
-  Typography,
   MenuList,
   Paper,
   Popper,
+  Typography,
 } from "@material-ui/core"
 import { Link } from "gatsby"
-import React, { Fragment, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
-import { logout, login } from "../utils/auth"
+import { login, logout } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -90,7 +90,7 @@ export const MobileNavMenu = ({ user }) => {
     }
     prevOpen.current = open
   }, [open])
-
+  
   return (
     <div>
       <Button
@@ -110,7 +110,10 @@ export const MobileNavMenu = ({ user }) => {
           <ConditionalDesktopLink to="/main">
             <Typography>Home</Typography>
           </ConditionalDesktopLink>
-          <Button style={{ color: "#fff", padding: "0em" }} onClick={() => login()}>
+          <Button
+            style={{ color: "#fff", padding: "0em" }}
+            onClick={() => login()}
+          >
             Sign in
           </Button>
         </NonMobileNavLinks>
@@ -145,10 +148,10 @@ export const MobileNavMenu = ({ user }) => {
                     <MenuItem onClick={handleClose}>Home</MenuItem>
                   </Link>
                   {/* If a user is logged in, then render these conditional components */}
-                  {user.name ? (
+                  {user ? (
                     <MenuItem onClick={handleClose}>My account</MenuItem>
                   ) : null}
-                  {user.name ? (
+                  {user ? (
                     <MenuItem onClick={() => logout()}>Sign out</MenuItem>
                   ) : (
                     <MenuItem onClick={handleClose}>Sign in</MenuItem>

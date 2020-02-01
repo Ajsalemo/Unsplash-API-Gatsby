@@ -59,7 +59,11 @@ export const SignIn = ({ user }) => (
       </LandingpageMainText>
     </SignInGrid>
     <ButtonGrid>
-      {user.name ? null : <Button style={{ color: "#fff" }} onClick={() => login()}>Sign in</Button>}
+      {user.name ? null : (
+        <Button style={{ color: "#fff" }} onClick={() => login()}>
+          Sign in
+        </Button>
+      )}
       <LandingLinks to="/main" style={{ color: "#fff" }}>
         Continue
       </LandingLinks>

@@ -9,6 +9,7 @@ import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
+import { getProfile } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -21,10 +22,9 @@ const ImageResults = state => {
   })
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
-  console.log(data);
   return (
     <StyledMainContainer container>
-      <MainNavbar />
+      <MainNavbar user={getProfile()} />
       <TotalResultsHeader
         keyword={state.location.state.search}
         totalResults={data.searchImagesByKeyword.total}
