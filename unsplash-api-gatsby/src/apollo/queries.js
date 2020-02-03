@@ -42,10 +42,10 @@ export const RANDOM_PHOTO_QUERY = gql`
 export const SEARCH_IMAGES_BY_KEYWORD = gql`
   # This query takes the argument passed in by the SearchForm component and passes it to the rest directive path
   query searchImagesByKeyword {
-    searchImagesByKeyword(query: $query)
+    searchImagesByKeyword(query: $query, page: $page)
       @rest(
         type: "Search Photos By Keyword"
-        path: "/search/photos?query={args.query}&per_page=30"
+        path: "/search/photos?query={args.query}&per_page=30&page={args.page}"
       ) {
       total
       total_pages

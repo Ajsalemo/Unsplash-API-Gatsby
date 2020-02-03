@@ -7,6 +7,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
+import { Pagination } from "../components/pagination"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -27,7 +28,7 @@ const ImageCredit = styled.span`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const MainPageImages = ({ images }) => (
+export const MainPageImages = ({ images, totalPages, fetchMore }) => (
   <MainPageImagesGrid item lg={12}>
     <Grid
       item
@@ -58,6 +59,7 @@ export const MainPageImages = ({ images }) => (
           </ImageCredit>
         </div>
       ))}
+      <Pagination totalPages={totalPages} fetchMore={fetchMore} />
     </Grid>
   </MainPageImagesGrid>
 )

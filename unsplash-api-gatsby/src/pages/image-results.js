@@ -15,13 +15,19 @@ import { getProfile } from "../utils/auth"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const ImageResults = state => {
-  const { loading, error, data } = useQuery(SEARCH_IMAGES_BY_KEYWORD, {
-    variables: {
-      query: state.location.state.search,
-    },
-  })
+  const { loading, error, data, fetchMore } = useQuery(
+    SEARCH_IMAGES_BY_KEYWORD,
+    {
+      variables: {
+        query: state.location.state.search,
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "cache-and-network"
+    }
+  )
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
+  console.log(data)
   return (
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
@@ -29,7 +35,11 @@ const ImageResults = state => {
         keyword={state.location.state.search}
         totalResults={data.searchImagesByKeyword.total}
       />
-      <MainPageImages images={data.searchImagesByKeyword.results} />
+      <MainPageImages 
+        images={data.searchImagesByKeyword.results} 
+        totalPages={data.searchImagesByKeyword.total_pages}
+        fetchMore={fetchMore}
+      />
     </StyledMainContainer>
   )
 }
