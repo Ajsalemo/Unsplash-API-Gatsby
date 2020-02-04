@@ -15,7 +15,7 @@ import { getProfile } from "../utils/auth"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const ImageResults = state => {
-  const { loading, error, data, fetchMore } = useQuery(
+  const { loading, error, data, fetchMore, networkStatus } = useQuery(
     SEARCH_IMAGES_BY_KEYWORD,
     {
       variables: {
@@ -26,7 +26,7 @@ const ImageResults = state => {
     }
   )
   if (error) return `Error: ${error.message}`
-  if (loading) return <LoadingContainer />
+  if (loading || networkStatus === 4) return <LoadingContainer />
   console.log(data)
   return (
     <StyledMainContainer container>
