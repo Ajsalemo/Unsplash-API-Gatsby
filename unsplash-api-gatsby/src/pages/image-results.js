@@ -10,6 +10,7 @@ import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import { CircularProgress } from "@material-ui/core"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -22,12 +23,10 @@ const ImageResults = state => {
         query: state.location.state.search,
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: "cache-and-network",
     }
   )
   if (error) return `Error: ${error.message}`
-  if (loading || networkStatus === 4) return <LoadingContainer />
-  console.log(data)
   return (
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
@@ -35,8 +34,10 @@ const ImageResults = state => {
         keyword={state.location.state.search}
         totalResults={data.searchImagesByKeyword.total}
       />
-      <MainPageImages 
-        images={data.searchImagesByKeyword.results} 
+      <MainPageImages
+        loading={loading}
+        networkStatus={networkStatus}
+        images={data.searchImagesByKeyword.results}
         totalPages={data.searchImagesByKeyword.total_pages}
         fetchMore={fetchMore}
       />

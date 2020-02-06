@@ -82,7 +82,6 @@ export const handleAuthentication = () => {
 }
 
 export const getProfile = () => {
-  console.log(user);
   return user
 }
 
