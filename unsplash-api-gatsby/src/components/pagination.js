@@ -1,15 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Typography } from "@material-ui/core"
+import { Typography, Grid } from "@material-ui/core"
 import React, { useState } from "react"
 import styled from "styled-components"
+import { FlexCenterGrid } from "../helpers/styledcomponents"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const PaginatedButton = styled.button`
-  background-color: transparent;
+  background-color: ${props => (props.selectedpage ? "red" : "transparent")};
   border: none;
   color: #fff;
   &:hover {
@@ -23,7 +24,7 @@ const PaginatedButton = styled.button`
 const fetchMoreResults = (page, fetchMore) => {
   fetchMore({
     variables: {
-      page: page + 1,
+      page: page,
     },
     // This method allows us to merge the newly fetched result into the original queries records
     updateQuery: (prev, { fetchMoreResult }) => {
@@ -37,18 +38,42 @@ const fetchMoreResults = (page, fetchMore) => {
 // fetchMore is a method of Apollo Client
 export const Pagination = ({ totalPages, fetchMore }) => {
   const [currentPage, getCurrentPage] = useState(0)
+  const delta = 3
+  // Empty array to house the total amount of pages
   const paginationButtonArray = []
-  // Looping over the page number creates a button for each iteration of page number
-  // Add "+1" to the page number since it starts at a -1 based index
-  for (let i = 0; i < totalPages; i++) {
+  // Pagination algorithm
+  for (
+    let i = Math.max(2, currentPage - delta);
+    i <= Math.min(totalPages - 1, currentPage + delta);
+    i += 1
+  ) {
     paginationButtonArray.push(i)
   }
-  console.log(currentPage)
-  return paginationButtonArray.map(page => (
-    <PaginatedButton onClick={() => { getCurrentPage(page + 1); fetchMoreResults(page, fetchMore) }}>
-      <Typography variant="subtitle2">{page + 1}</Typography>
-    </PaginatedButton>
-  ))
+
+  if (currentPage - delta > 2) {
+    paginationButtonArray.unshift("...")
+  }
+  if (currentPage + delta < totalPages - 1) {
+    paginationButtonArray.push("...")
+  }
+
+  paginationButtonArray.unshift(1)
+  if (totalPages !== 1) paginationButtonArray.push(totalPages)
+  return (
+    <FlexCenterGrid item style={{ flexDirection: "row" }}>
+      {paginationButtonArray.map(page => (
+        <PaginatedButton
+          onClick={() => {
+            getCurrentPage(page)
+            fetchMoreResults(page, fetchMore)
+          }}
+          selectedpage={currentPage === page ? 1 : 0}
+        >
+          <Typography variant="subtitle2">{page}</Typography>
+        </PaginatedButton>
+      ))}
+    </FlexCenterGrid>
+  )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
