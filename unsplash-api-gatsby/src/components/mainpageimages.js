@@ -64,7 +64,8 @@ export const MainPageImages = ({ images, totalPages, fetchMore, loading, network
           </div>
         ))
       )}
-      <Pagination totalPages={totalPages} fetchMore={fetchMore} />
+      {/* If the query returns no results then do not display the pagination component */}
+      {totalPages === 0 ? null : <Pagination totalPages={totalPages} fetchMore={fetchMore} />}
     </Grid>
   </MainPageImagesGrid>
 )

@@ -1,17 +1,22 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Typography, Grid } from "@material-ui/core"
+import { Typography } from "@material-ui/core"
 import React, { useState } from "react"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+} from "@fortawesome/free-solid-svg-icons"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const PaginatedButton = styled.button`
   background-color: ${props => (props.selectedpage ? "red" : "transparent")};
-  border: none;
+  border: ${props => (props.selectedpage ? "2px solid #fff" : "none")};
   color: #fff;
   &:hover {
     cursor: pointer;
@@ -22,6 +27,7 @@ const PaginatedButton = styled.button`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const fetchMoreResults = (page, fetchMore) => {
+  // Request the specified page number from the GraphQL Query
   fetchMore({
     variables: {
       page: page,
@@ -61,17 +67,48 @@ export const Pagination = ({ totalPages, fetchMore }) => {
   if (totalPages !== 1) paginationButtonArray.push(totalPages)
   return (
     <FlexCenterGrid item style={{ flexDirection: "row" }}>
-      {paginationButtonArray.map(page => (
+      {/* This button brings the user to the first page in the returned results */}
+      {totalPages === 1 ? null : (
         <PaginatedButton
           onClick={() => {
-            getCurrentPage(page)
-            fetchMoreResults(page, fetchMore)
+            getCurrentPage(1)
+            fetchMoreResults(1, fetchMore)
           }}
-          selectedpage={currentPage === page ? 1 : 0}
         >
-          <Typography variant="subtitle2">{page}</Typography>
+          <FontAwesomeIcon icon={faAngleDoubleLeft} style={{ color: "#fff" }} />
         </PaginatedButton>
-      ))}
+      )}
+      {paginationButtonArray.map(page =>
+        // If ellipsis is showing, do not make it clickable(for now)
+        page === "..." ? (
+          <span style={{ color: "#fff", alignSelf: "center" }}>{page}</span>
+        ) : (
+          // Display the normal numbered pages
+          <PaginatedButton
+            onClick={() => {
+              getCurrentPage(page)
+              fetchMoreResults(page, fetchMore)
+            }}
+            selectedpage={currentPage === page ? 1 : 0}
+          >
+            <Typography variant="subtitle2">{page}</Typography>
+          </PaginatedButton>
+        )
+      )}
+      {/* This button brings the user to the last page in the returned results */}
+      {totalPages === 1 ? null : (
+        <PaginatedButton
+          onClick={() => {
+            getCurrentPage(totalPages)
+            fetchMoreResults(totalPages, fetchMore)
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faAngleDoubleRight}
+            style={{ color: "#fff" }}
+          />
+        </PaginatedButton>
+      )}
     </FlexCenterGrid>
   )
 }
