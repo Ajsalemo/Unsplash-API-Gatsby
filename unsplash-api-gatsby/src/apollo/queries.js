@@ -55,6 +55,7 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
         description
         user @type(name: "full username") {
           __typename
+          id
           name
           links @type(name: "unsplash user") {
             __typename

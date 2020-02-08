@@ -8,6 +8,7 @@ import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
 import { Pagination } from "../components/pagination"
+import { LoadingContainer } from "./loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -28,38 +29,42 @@ const ImageCredit = styled.span`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const MainPageImages = ({ images, totalPages, fetchMore }) => (
+export const MainPageImages = ({ images, totalPages, fetchMore, loading, networkStatus, location }) => (
   <MainPageImagesGrid item lg={12}>
     <Grid
       item
       style={{ textAlign: "center", backgroundColor: "#1e172f" }}
       lg={10}
     >
-      {images.map(src => (
-        <div
-          style={{ display: "inline-flex", flexDirection: "column" }}
-          key={src.user.id}
-        >
-          <StyledLazyLoadedImage
-            alt={""}
-            // Render whichever one of the image src paramters that gets passed through
-            src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
+      {loading || networkStatus === 4 ? (
+        <LoadingContainer />
+      ) : (
+        images.map((src, i) => (
+          <div
+            style={{ display: "inline-flex", flexDirection: "column" }}
             key={src.id}
-            effect="blur"
-          />
-          <ImageCredit>
-            Photo by{" "}
-            <a
-              href={src.user.links.self}
-              style={{ color: "#fff" }}
-              rel="noopener noreferrer"
-            >
-              {src.user.name}
-            </a>
-          </ImageCredit>
-        </div>
-      ))}
-      <Pagination totalPages={totalPages} fetchMore={fetchMore} />
+          >
+            <StyledLazyLoadedImage
+              alt={""}
+              // Render whichever one of the image src paramters that gets passed through
+              src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
+              effect="blur"
+            />
+            <ImageCredit>
+              Photo by{" "}
+              <a
+                href={src.user.links.self}
+                style={{ color: "#fff" }}
+                rel="noopener noreferrer"
+              >
+                {src.user.name}
+              </a>
+            </ImageCredit>
+          </div>
+        ))
+      )}
+      {/* If the query returns no results then do not display the pagination component */}
+      {totalPages === 0 || location === "/main" ? null : <Pagination totalPages={totalPages} fetchMore={fetchMore} />}
     </Grid>
   </MainPageImagesGrid>
 )

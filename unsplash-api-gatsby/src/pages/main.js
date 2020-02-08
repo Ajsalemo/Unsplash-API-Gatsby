@@ -13,14 +13,14 @@ import { getProfile } from "../utils/auth"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const Main = () => {
+const Main = state => {
   const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
   return (
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
-      <MainPageImages images={data.randomPhotoQuery} />
+      <MainPageImages images={data.randomPhotoQuery} location={state.location.pathname} />
     </StyledMainContainer>
   )
 }
