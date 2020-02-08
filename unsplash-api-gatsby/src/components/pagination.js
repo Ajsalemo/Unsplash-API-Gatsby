@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import React from "react"
 import { Grid } from "@material-ui/core"
+import React from "react"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -13,8 +13,8 @@ export const Pagination = ({ totalPages, fetchMore }) => {
   console.log(totalPages)
   // Create an empty array for the components to be pushed to
   const paginationButtonArray = []
-  // Loop of the number of pages
   for (let i = 0; i < totalPages; i++) {
+    console.log(totalPages - 5)
     paginationButtonArray.push(
       <button
         onClick={() =>
@@ -32,10 +32,11 @@ export const Pagination = ({ totalPages, fetchMore }) => {
           })
         }
       >
-        {i + 1}
+        {i > 5 && i < totalPages - 5 ? null : i + 1}
       </button>
     )
   }
+  console.log(paginationButtonArray)
   return <Grid>{paginationButtonArray}</Grid>
 }
 
