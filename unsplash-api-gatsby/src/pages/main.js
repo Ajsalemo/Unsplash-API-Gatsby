@@ -20,7 +20,10 @@ const Main = state => {
   return (
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
-      <MainPageImages images={data.randomPhotoQuery} location={state.location.pathname} />
+      <MainPageImages
+        images={data.randomPhotoQuery}
+        location={state.location.pathname}
+      />
     </StyledMainContainer>
   )
 }

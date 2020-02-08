@@ -24,7 +24,6 @@ const ImageResults = state => {
       fetchPolicy: "cache-and-network",
     }
   )
-  console.log(state.location)
   if (error) return `Error: ${error.message}`
   return (
     <StyledMainContainer container>

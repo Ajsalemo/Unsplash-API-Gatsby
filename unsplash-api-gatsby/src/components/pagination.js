@@ -81,7 +81,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
       {paginationButtonArray.map(page =>
         // If ellipsis is showing, do not make it clickable(for now)
         page === "..." ? (
-          <span style={{ color: "#fff", alignSelf: "center" }}>{page}</span>
+          <span style={{ color: "#fff", alignSelf: "center" }} key={"page-span"}>{page}</span>
         ) : (
           // Display the normal numbered pages
           <PaginatedButton
