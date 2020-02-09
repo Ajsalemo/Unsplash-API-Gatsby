@@ -2,13 +2,14 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { useQuery } from "@apollo/react-hooks"
-import React from "react"
+import React, { Fragment } from "react"
 import { RANDOM_PHOTO_QUERY } from "../apollo/queries"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import { Footer } from "../components/footer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -18,13 +19,16 @@ const Main = state => {
   if (error) return `Error: ${error.message}`
   if (loading) return <LoadingContainer />
   return (
-    <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
-      <MainPageImages
-        images={data.randomPhotoQuery}
-        location={state.location.pathname}
-      />
-    </StyledMainContainer>
+    <Fragment>
+      <StyledMainContainer container>
+        <MainNavbar user={getProfile()} />
+        <MainPageImages
+          images={data.randomPhotoQuery}
+          location={state.location.pathname}
+        />
+        <Footer />
+      </StyledMainContainer>
+    </Fragment>
   )
 }
 
