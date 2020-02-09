@@ -20,6 +20,7 @@ const StyledLazyLoadedImage = styled(LazyLoadImage)`
 `
 const MainPageImagesGrid = styled(FlexCenterGrid)`
   background-color: #1e172f;
+  padding-bottom: 3.5em;
 `
 const ImageCredit = styled.span`
   color: #fff;

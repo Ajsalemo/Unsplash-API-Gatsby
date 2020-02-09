@@ -9,6 +9,7 @@ import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import { Footer } from "../components/footer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -39,6 +40,7 @@ const ImageResults = state => {
         totalPages={data.searchImagesByKeyword.total_pages}
         fetchMore={fetchMore}
       />
+      <Footer />
     </StyledMainContainer>
   )
 }

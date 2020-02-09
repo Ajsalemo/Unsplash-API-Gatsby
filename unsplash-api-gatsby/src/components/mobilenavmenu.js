@@ -90,7 +90,7 @@ export const MobileNavMenu = ({ user }) => {
     }
     prevOpen.current = open
   }, [open])
-  
+
   return (
     <div>
       <Button
@@ -148,13 +148,20 @@ export const MobileNavMenu = ({ user }) => {
                     <MenuItem onClick={handleClose}>Home</MenuItem>
                   </Link>
                   {/* If a user is logged in, then render these conditional components */}
-                  {user ? (
+                  {user.name ? (
                     <MenuItem onClick={handleClose}>My account</MenuItem>
                   ) : null}
-                  {user ? (
+                  {user.name ? (
                     <MenuItem onClick={() => logout()}>Sign out</MenuItem>
                   ) : (
-                    <MenuItem onClick={handleClose}>Sign in</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        login()
+                        handleClose()
+                      }}
+                    >
+                      Sign in
+                    </MenuItem>
                   )}
                 </MenuList>
               </ClickAwayListener>
