@@ -8,6 +8,7 @@ import { Avatar, Grid, Typography } from "@material-ui/core"
 import React from "react"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
+import { animateScroll as scroll } from "react-scroll"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -46,11 +47,12 @@ const BackToTopButton = styled(Avatar)`
   border: 2px solid #fff;
   margin-top: -2.8em;
   background-color: #1e172f;
-  transition: 1s ease all;
+  transition: all .5s ease-in-out;
   &:hover {
     cursor: pointer;
     border: 2px solid red;
-    transition: 1s ease all;
+    transition: all .5s ease-in-out;
+    transform: scale(1.1);
   }
 `
 
@@ -59,7 +61,7 @@ const BackToTopButton = styled(Avatar)`
 export const Footer = () => (
   <StyledFooter container>
     <StyledFooterGrid item xs={8} sm={6} md={5} lg={3}>
-      <BackToTopButton>
+      <BackToTopButton onClick={() => scroll.scrollToTop()}>
         <FontAwesomeIcon icon={faArrowCircleUp} style={{ color: "#fff" }} />
       </BackToTopButton>
       <UpperFooterTypography>Something like Unsplash</UpperFooterTypography>
