@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
+import { faArrowCircleUp } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Avatar, Grid, Typography } from "@material-ui/core"
 import React from "react"
-import { Grid, Typography } from "@material-ui/core"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
-import { faGithub } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -40,12 +41,27 @@ const FooterLinks = styled.a`
     text-decoration: underline;
   }
 `
+const BackToTopButton = styled(Avatar)`
+  align-self: center;
+  border: 2px solid #fff;
+  margin-top: -2.8em;
+  background-color: #1e172f;
+  transition: 1s ease all;
+  &:hover {
+    cursor: pointer;
+    border: 2px solid red;
+    transition: 1s ease all;
+  }
+`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const Footer = () => (
   <StyledFooter container>
     <StyledFooterGrid item xs={8} sm={6} md={5} lg={3}>
+      <BackToTopButton>
+        <FontAwesomeIcon icon={faArrowCircleUp} style={{ color: "#fff" }} />
+      </BackToTopButton>
       <UpperFooterTypography>Something like Unsplash</UpperFooterTypography>
       <FooterSubtextGrid item>
         <FooterLinks
@@ -56,7 +72,11 @@ export const Footer = () => (
           Unsplash
         </FooterLinks>
         <FooterLinks>Sitemap</FooterLinks>
-        <FooterLinks>
+        <FooterLinks
+          href="https://auth0.com/privacy/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           Auth0 Privacy Policy
         </FooterLinks>
       </FooterSubtextGrid>
