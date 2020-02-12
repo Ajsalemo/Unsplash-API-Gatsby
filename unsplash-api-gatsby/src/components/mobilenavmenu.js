@@ -34,8 +34,11 @@ const StyledAvatar = styled(LazyLoadImage)`
   height: 3em;
   border-radius: 50%;
   border: 3px solid #fff;
+  transition: all .5s ease-in-out;
   &:hover {
     cursor: pointer;
+    transition: all .5s ease-in-out;
+    border: 3px solid red;
   }
 `
 const MediaMenuIcon = styled(FontAwesomeIcon)`

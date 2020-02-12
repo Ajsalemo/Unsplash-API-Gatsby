@@ -54,7 +54,7 @@ export const MainPageImages = ({ images, totalPages, fetchMore, loading, network
             <ImageCredit>
               Photo by{" "}
               <a
-                href={src.user.links.self}
+                href={src.user.links.html}
                 style={{ color: "#fff" }}
                 rel="noopener noreferrer"
               >

@@ -28,7 +28,7 @@ export const RANDOM_PHOTO_QUERY = gql`
         name
         links @type(name: "random photo unsplash user"){
           __typename
-          self
+          html
         }
       }
       urls @type(name: "search urls") {

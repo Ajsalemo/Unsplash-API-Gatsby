@@ -33,6 +33,7 @@ const StyledTextField = styled(TextField)`
 const SubmitButton = styled.button`
   background-color: transparent;
   border: none;
+  color: ${props => (props.values ? "red" : null)};
   &:hover {
     cursor: pointer;
   }
@@ -66,7 +67,7 @@ export const SearchForm = () => {
         return
       }}
     >
-      {({ isSubmitting, values, handleChange, errors, touched }) => (
+      {({ isSubmitting, values, handleChange, errors, touched, setFieldValue }) => (
         <Form>
           <StyledTextField
             id="main-nav"
@@ -94,6 +95,16 @@ export const SearchForm = () => {
               ),
             }}
           />
+          {/* Button to let the user clear the current text values of the search form */}
+          {values.search ? (
+            <SubmitButton 
+              type="reset" 
+              values={values.search}
+              onClick={() => setFieldValue("search", "")}
+            >
+              x
+            </SubmitButton>
+          ) : null}
           {errors.search && touched.search ? (
             <ErrorMessage errors={errors} />
           ) : null}
