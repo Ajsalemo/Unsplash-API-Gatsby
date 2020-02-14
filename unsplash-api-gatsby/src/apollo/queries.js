@@ -26,7 +26,10 @@ export const RANDOM_PHOTO_QUERY = gql`
         __typename
         id
         name
-        links @type(name: "random photo unsplash user"){
+        profile_image @type(name: "profile image") {
+          small
+        }
+        links @type(name: "random photo unsplash user") {
           __typename
           html
         }
@@ -57,6 +60,9 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
           __typename
           id
           name
+          profile_image @type(name: "profile image") {
+            small
+          }
           links @type(name: "unsplash user") {
             __typename
             self

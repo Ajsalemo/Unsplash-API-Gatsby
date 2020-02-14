@@ -6,7 +6,7 @@ import React from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
-import { FlexCenterGrid } from "../helpers/styledcomponents"
+import { FlexCenterGrid, StyledAvatar } from "../helpers/styledcomponents"
 import { Pagination } from "../components/pagination"
 import { LoadingContainer } from "./loadingcontainer"
 
@@ -25,12 +25,24 @@ const MainPageImagesGrid = styled(FlexCenterGrid)`
 const ImageCredit = styled.span`
   color: #fff;
   margin-top: -0.5em;
-  padding-bottom: 1em;
+  padding-left: 1em;
   font-size: 0.8em;
 `
+const UserInformationGrid = styled(FlexCenterGrid)`
+  align-items: center;
+  padding-bottom: 3.5em;
+`
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const MainPageImages = ({ images, totalPages, fetchMore, loading, networkStatus, location }) => (
+export const MainPageImages = ({
+  images,
+  totalPages,
+  fetchMore,
+  loading,
+  networkStatus,
+  location,
+}) => (
   <MainPageImagesGrid item lg={12}>
     <Grid
       item
@@ -51,21 +63,26 @@ export const MainPageImages = ({ images, totalPages, fetchMore, loading, network
               src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
               effect="blur"
             />
-            <ImageCredit>
-              Photo by{" "}
-              <a
-                href={src.user.links.html}
-                style={{ color: "#fff" }}
-                rel="noopener noreferrer"
-              >
-                {src.user.name}
-              </a>
-            </ImageCredit>
+            <UserInformationGrid item>
+              <StyledAvatar src={src.user.profile_image.small} pageimages />
+              <ImageCredit>
+                Photo by{" "}
+                <a
+                  href={src.user.links.html}
+                  style={{ color: "#fff" }}
+                  rel="noopener noreferrer"
+                >
+                  {src.user.name}
+                </a>
+              </ImageCredit>
+            </UserInformationGrid>
           </div>
         ))
       )}
       {/* If the query returns no results then do not display the pagination component */}
-      {totalPages === 0 || location === "/main" ? null : <Pagination totalPages={totalPages} fetchMore={fetchMore} />}
+      {totalPages === 0 || location === "/main" ? null : (
+        <Pagination totalPages={totalPages} fetchMore={fetchMore} />
+      )}
     </Grid>
   </MainPageImagesGrid>
 )

@@ -16,10 +16,10 @@ import {
 } from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
-import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { login, logout } from "../utils/auth"
+import { StyledAvatar } from "../helpers/styledcomponents"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -29,17 +29,6 @@ const MobileNavPaper = styled(Paper)`
   border-radius: 0;
   color: #fff;
   background-color: #1e172f;
-`
-const StyledAvatar = styled(LazyLoadImage)`
-  height: 3em;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  transition: all .5s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    transition: all .5s ease-in-out;
-    border: 3px solid red;
-  }
 `
 const MediaMenuIcon = styled(FontAwesomeIcon)`
   color: #fff;
@@ -103,7 +92,7 @@ export const MobileNavMenu = ({ user }) => {
         onClick={handleToggle}
       >
         {user.name ? (
-          <StyledAvatar src={user.picture} />
+          <StyledAvatar src={user.picture} mobilenavbar />
         ) : (
           <MediaMenuIcon icon={faBars} />
         )}

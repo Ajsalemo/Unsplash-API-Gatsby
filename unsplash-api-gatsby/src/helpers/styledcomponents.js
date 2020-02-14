@@ -5,6 +5,7 @@
 
 import { Grid } from "@material-ui/core"
 import styled from "styled-components"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -19,6 +20,19 @@ export const StyledMainContainer = styled(FlexCenterGrid)`
   height: 100vh;
   padding-top: 5em;
 `
+export const StyledAvatar = styled(LazyLoadImage)`
+  width: ${props => props.pageimages ? "3em" : null};
+  height: ${props => props.mobilenavbar ? "3em" : null};
+  border-radius: 50%;
+  border: 3px solid #fff;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    border: 3px solid red;
+  }
+`
+
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
