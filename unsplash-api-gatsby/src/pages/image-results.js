@@ -4,12 +4,12 @@
 import { useQuery } from "@apollo/react-hooks"
 import React from "react"
 import { SEARCH_IMAGES_BY_KEYWORD } from "../apollo/queries"
+import { Footer } from "../components/footer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import { Footer } from "../components/footer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

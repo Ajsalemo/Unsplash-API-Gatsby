@@ -1,42 +1,29 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { useQuery } from "@apollo/react-hooks"
-import React, { Fragment } from "react"
-import { RANDOM_PHOTO_QUERY } from "../apollo/queries"
-import { LoadingContainer } from "../components/loadingcontainer"
-import { MainNavbar } from "../components/mainnavbar"
-import { MainPageImages } from "../components/mainpageimages"
-import { StyledMainContainer } from "../helpers/styledcomponents"
-import { getProfile } from "../utils/auth"
-import { Footer } from "../components/footer"
+import firebase from "firebase/app"
+import "firebase/firestore"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const Main = state => {
-  const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
-  if (error) return `Error: ${error.message}`
-  if (loading) return <LoadingContainer />
-  return (
-    <Fragment>
-      <StyledMainContainer container>
-        <MainNavbar user={getProfile()} />
-        <MainPageImages
-          images={data.randomPhotoQuery}
-          location={state.location.pathname}
-          user={getProfile()}
-        />
-        <Footer />
-      </StyledMainContainer>
-    </Fragment>
-  )
+const firebaseConfig = {
+    apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+    authDomain: process.env.GATSBY_FIRE_AUTH_DOMAIN,
+    databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
+    projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.GATSBY_FIREBASE_STOREAGE_BUCKET,
+    messagingSenderId: process.env.GATSBY_FIREBASE_SENDING_ID,
+    appId: process.env.GATSBY_FIREBASE_ID,
+    measurementId: process.env.GATSBY_FIREBASE_MEASUREMENT_ID
 }
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig)
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export default Main
+export default firebase
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
