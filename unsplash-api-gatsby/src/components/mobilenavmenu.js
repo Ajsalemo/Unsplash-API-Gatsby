@@ -92,7 +92,7 @@ export const MobileNavMenu = ({ user }) => {
         onClick={handleToggle}
       >
         {user.name ? (
-          <StyledAvatar src={user.picture} mobilenavbar />
+          <StyledAvatar src={user.picture} mobilenavbar={1} />
         ) : (
           <MediaMenuIcon icon={faBars} />
         )}

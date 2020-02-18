@@ -1,18 +1,23 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import firebase from "firebase"
 import React, { Fragment, useEffect } from "react"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
+import firebase from "../utils/firebase"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Account = () => {
-  const user = getProfile()
-  const db = firebase.firestore().collection("users").doc(user.name)
   useEffect(() => {
+    if (!isAuthenticated()) {
+      login()
+      return <p>Redirecting to login...</p>
+    }
+    const user = getProfile()
+    const db = firebase.firestore().collection("users").doc(user.name)
+
     db.get()
       .then(doc => {
         if (doc.exists) {
@@ -25,12 +30,8 @@ const Account = () => {
         }
       })
       .catch(err => console.log(err))
-  }, [db])
+  }, [])
 
-  if (!isAuthenticated()) {
-    login()
-    return <p>Redirecting to login...</p>
-  }
   return (
     <Fragment>
       <StyledMainContainer container>

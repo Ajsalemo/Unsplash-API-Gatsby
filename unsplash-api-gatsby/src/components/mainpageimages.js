@@ -99,7 +99,7 @@ export const MainPageImages = ({
               effect="blur"
             />
             <UserInformationGrid item>
-              <StyledAvatar src={src.user.profile_image.small} pageimages />
+              <StyledAvatar src={src.user.profile_image.small} pageimages={1} />
               <ImageCredit>
                 Photo by{" "}
                 <a
@@ -118,7 +118,6 @@ export const MainPageImages = ({
           </div>
         ))
       )}
-      {console.log(user)}
       {/* If the query returns no results then do not display the pagination component */}
       {totalPages === 0 || location === "/main" ? null : (
         <Pagination totalPages={totalPages} fetchMore={fetchMore} />
