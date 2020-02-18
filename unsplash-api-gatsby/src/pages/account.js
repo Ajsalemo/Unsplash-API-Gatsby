@@ -1,21 +1,42 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import React from "react"
-import { isAuthenticated, login } from "../utils/auth"
+import firebase from "firebase"
+import React, { Fragment, useEffect } from "react"
+import { StyledMainContainer } from "../helpers/styledcomponents"
+import { getProfile, isAuthenticated, login } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Account = () => {
+  const user = getProfile()
+  const db = firebase.firestore().collection("users").doc(user.name)
+  useEffect(() => {
+    db.get()
+      .then(doc => {
+        if (doc.exists) {
+          const documentResult = doc.data()
+          for (const property in documentResult) {
+            console.log(`${property}: ${documentResult[property]}`)
+          }
+        } else {
+          console.log("No document")
+        }
+      })
+      .catch(err => console.log(err))
+  }, [db])
+
   if (!isAuthenticated()) {
     login()
     return <p>Redirecting to login...</p>
   }
   return (
-    <div>
-      <p>This is going to be a protected route.</p>
-    </div>
+    <Fragment>
+      <StyledMainContainer container>
+        <p>This is going to be a protected route.</p>
+      </StyledMainContainer>
+    </Fragment>
   )
 }
 

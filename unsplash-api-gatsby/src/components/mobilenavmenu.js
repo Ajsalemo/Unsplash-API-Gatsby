@@ -141,7 +141,13 @@ export const MobileNavMenu = ({ user }) => {
                   </Link>
                   {/* If a user is logged in, then render these conditional components */}
                   {user.name ? (
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <Link
+                      to="/account"
+                      onClick={handleClose}
+                      style={{ textDecoration: "none", color: "#fff" }}
+                    >
+                      <MenuItem onClick={handleClose}>Account</MenuItem>
+                    </Link>
                   ) : null}
                   {user.name ? (
                     <MenuItem onClick={() => logout()}>Sign out</MenuItem>
