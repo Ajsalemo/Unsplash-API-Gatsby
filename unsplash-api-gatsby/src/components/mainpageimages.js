@@ -9,18 +9,13 @@ import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { FlexCenterGrid, StyledAvatar } from "../helpers/styledcomponents"
+import { FlexCenterGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const StyledLazyLoadedImage = styled(LazyLoadImage)`
-  border: 2px solid #fff;
-  border-radius: 4%;
-  margin: 0.4em;
-`
 const MainPageImagesGrid = styled(FlexCenterGrid)`
   background-color: #1e172f;
   padding-bottom: 3.5em;
