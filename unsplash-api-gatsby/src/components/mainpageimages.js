@@ -5,21 +5,21 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import React from "react"
-import { LazyLoadImage } from "react-lazy-load-image-component"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { FlexCenterGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  FlexCenterGrid,
+  StyledAvatar,
+  StyledLazyLoadedImage,
+  ImagesSubGrid,
+} from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const MainPageImagesGrid = styled(FlexCenterGrid)`
-  background-color: #1e172f;
-  padding-bottom: 3.5em;
-`
 const ImageCredit = styled.span`
   color: #fff;
   margin-top: -0.5em;
@@ -52,12 +52,12 @@ const clickToLike = (user, src) => {
     .doc(user.name)
     // Set the field to a dynamic value, which is the image being liked by the user
     // This is so all liked images are saved under the users name
-    // If the field doesn't exist, Firestore will create it 
+    // If the field doesn't exist, Firestore will create it
     .set(
       {
         [imageSrc]: src.urls.raw,
       },
-      // Merge a new unuiqely created field into the document 
+      // Merge a new unuiqely created field into the document
       {
         merge: true,
       }
@@ -73,7 +73,7 @@ export const MainPageImages = ({
   location,
   user,
 }) => (
-  <MainPageImagesGrid item lg={12}>
+  <ImagesSubGrid item lg={12}>
     <Grid
       item
       style={{ textAlign: "center", backgroundColor: "#1e172f" }}
@@ -105,10 +105,16 @@ export const MainPageImages = ({
                   {src.user.name}
                 </a>
               </ImageCredit>
-              <LikePhotoIcon
-                icon={faHeart}
-                onClick={() => clickToLike(user, src)}
-              />
+              {/* 
+                If a user is logged in, display the icon to "Like" images
+                Else if there is no signed in user, do not display it
+              */}
+              {user.name ? (
+                <LikePhotoIcon
+                  icon={faHeart}
+                  onClick={() => clickToLike(user, src)}
+                />
+              ) : null}
             </UserInformationGrid>
           </div>
         ))
@@ -118,7 +124,7 @@ export const MainPageImages = ({
         <Pagination totalPages={totalPages} fetchMore={fetchMore} />
       )}
     </Grid>
-  </MainPageImagesGrid>
+  </ImagesSubGrid>
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

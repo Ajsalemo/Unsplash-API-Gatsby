@@ -40,7 +40,9 @@ export const TotalResultsHeader = ({ keyword, totalResults }) => (
       <TotalResultsGrid>
         <KeywordTypography variant="h2">{keyword}</KeywordTypography>
         <Typography variant="subtitle1">
-          Your search produced {generatedResultsNumber(totalResults)}
+          {totalResults
+            ? `Your search produced ${generatedResultsNumber(totalResults)}`
+            : null}
         </Typography>
       </TotalResultsGrid>
     </Toolbar>

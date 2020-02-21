@@ -15,6 +15,7 @@ import { getProfile } from "../utils/auth"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const ImageResults = state => {
+  const user = getProfile()
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     SEARCH_IMAGES_BY_KEYWORD,
     {
@@ -28,7 +29,7 @@ const ImageResults = state => {
   if (error) return `Error: ${error.message}`
   return (
     <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
+      <MainNavbar user={user} />
       <TotalResultsHeader
         keyword={state.location.state.search}
         totalResults={data.searchImagesByKeyword.total}
@@ -39,6 +40,7 @@ const ImageResults = state => {
         images={data.searchImagesByKeyword.results}
         totalPages={data.searchImagesByKeyword.total_pages}
         fetchMore={fetchMore}
+        user={user}
       />
       <Footer />
     </StyledMainContainer>

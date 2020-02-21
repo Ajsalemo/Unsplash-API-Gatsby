@@ -2,17 +2,25 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import React, { Fragment, useEffect, useState } from "react"
-import { StyledMainContainer, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  StyledMainContainer,
+  StyledLazyLoadedImage,
+  ImagesSubGrid
+} from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
 import firebase from "../utils/firebase"
 import { Grid } from "@material-ui/core"
+import { MainNavbar } from "../components/mainnavbar"
+import { TotalResultsHeader } from "../components/totalresultsheader"
+import { Footer } from "../components/footer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Account = () => {
   const [savedImages, setSavedImages] = useState(null)
-  
+  const user = getProfile()
+
   useEffect(() => {
     // If an un authenticated user tries to access this route, then push them to the login page for Auth0
     if (!isAuthenticated()) {
@@ -20,33 +28,48 @@ const Account = () => {
       return <p>Redirecting to login...</p>
     }
     // Instantiate the user and database variables
-    const user = getProfile()
-    const db = firebase.firestore().collection("users").doc(user.name)
+    const db = firebase
+      .firestore()
+      .collection("users")
+      .doc(user.name)
     const savedImagesArray = []
-    db.get() 
+    db.get()
       .then(doc => {
         if (doc.exists) {
           const documentResult = doc.data()
           // If the document exists, loop through the properties within the object
           for (const property in documentResult) {
             // This pushes the custom component into the empty savedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-            savedImagesArray.push(<StyledLazyLoadedImage src={`${documentResult[property]}&h=330&w=330&fit=crop`} />)
+            savedImagesArray.push(
+              <StyledLazyLoadedImage
+                src={`${documentResult[property]}&h=330&w=330&fit=crop`}
+              />
+            )
           }
-          // Invoke the state setting function to set "savedImages" state to the savedImagesArray 
+          // Invoke the state setting function to set "savedImages" state to the savedImagesArray
           setSavedImages(savedImagesArray)
         } else {
           console.log("No document")
         }
       })
       .catch(err => console.log(err))
+  }, [user.name])
 
-  }, [])
   return (
     <Fragment>
       <StyledMainContainer container>
-        <Grid item lg={12}>
-          {savedImages}
-        </Grid>
+        <MainNavbar user={getProfile()} />
+        <TotalResultsHeader keyword={"Your saved images"} />
+        <ImagesSubGrid item lg={12}>
+          <Grid
+            item
+            style={{ textAlign: "center", paddingBottom: "3.5em" }}
+            lg={10}
+          >
+            {savedImages}
+          </Grid>
+        </ImagesSubGrid>
+        <Footer />
       </StyledMainContainer>
     </Fragment>
   )
