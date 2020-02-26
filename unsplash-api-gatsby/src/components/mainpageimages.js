@@ -8,7 +8,11 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  ImagesSubGrid,
+  StyledAvatar,
+  StyledLazyLoadedImage,
+} from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 
@@ -43,24 +47,25 @@ const LikePhotoIcon = styled(FontAwesomeIcon)`
 const clickToLike = (user, src) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
-  firebase
+  const firebaseData = firebase
     .firestore()
-    // Target the "users" collection in Firestore
     .collection("users")
-    // Set the document to a dynamic value, in this, the user email
     .doc(user.name)
-    // Set the field to a dynamic value, which is the image being liked by the user
-    // This is so all liked images are saved under the users name
-    // If the field doesn't exist, Firestore will create it
-    .set(
-      {
-        [imageSrc]: src.urls.raw,
-      },
-      // Merge a new unuiqely created field into the document
-      {
-        merge: true,
-      }
-    )
+
+  // Target the "users" collection in Firestore
+  // Set the document to a dynamic value, in this, the user email
+  // Set the field to a dynamic value, which is the image being liked by the user
+  // This is so all liked images are saved under the users name
+  // If the field doesn't exist, Firestore will create it
+  firebaseData.set(
+    {
+      [imageSrc]: src.urls.raw,
+    },
+    // Merge a new unuiqely created field into the document
+    {
+      merge: true,
+    }
+  )
 }
 
 export const MainPageImages = ({
@@ -108,7 +113,7 @@ export const MainPageImages = ({
         {loading || networkStatus === 4 || checkSavedImages === null ? (
           <LoadingContainer />
         ) : (
-          images.map(src => (
+          images.map((src, i) => (
             <div
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={src.id}
@@ -135,24 +140,26 @@ export const MainPageImages = ({
                   </a>
                 </ImageCredit>
                 {/* 
-                If a user is logged in, display the icon to "Like" images
-                Else if there is no signed in user, do not display it
-              */}
-                {user.name ? (
-                  // TO-DO
-                  // Abstract this into its own component
-                  // These conditionals will ideally check whether or not an image was saved by the user already
-                  // If they have been then display a different color icon and invoke a 'unlike' function on-click
-                  checkSavedImages === src.urls.custom ||
-                  checkSavedImages === src.urls.raw ? (
-                    <LikePhotoIcon icon={faHeart} unlikephoto={1} />
-                  ) : (
-                    <LikePhotoIcon
-                      icon={faHeart}
-                      onClick={() => clickToLike(user, src)}
-                    />
-                  )
-                ) : null}
+                  If a user is logged in, display the icon to "Like" images
+                  Else if there is no signed in user, do not display it
+                */}
+                {user.name
+                  ? // TO-DO
+                    // Abstract this into its own component
+                    // These conditionals will ideally check whether or not an image was saved by the user already
+                    // If they have been then display a different color icon and invoke a 'unlike' function on-click
+                    checkSavedImages.length
+                    ? checkSavedImages.map(savedImage =>
+                        savedImage === src.urls.raw ? (
+                          <LikePhotoIcon unlikephoto={1} icon={faHeart} />
+                        ) : null
+                      )
+                    : null
+                  : null}
+                <LikePhotoIcon
+                  icon={faHeart}
+                  onClick={() => clickToLike(user, src)}
+                />
               </UserInformationGrid>
             </div>
           ))
