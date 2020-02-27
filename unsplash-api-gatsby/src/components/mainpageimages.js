@@ -1,15 +1,19 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  ImagesSubGrid,
+  StyledAvatar,
+  StyledLazyLoadedImage,
+} from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
-import { ChoosePhoto } from "./choosephoto"
 import { LoadingContainer } from "./loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -34,11 +38,51 @@ const LikePhotoIcon = styled(FontAwesomeIcon)`
   &:hover {
     cursor: pointer;
     transition: all 0.5s ease-in-out;
-    transform: scale(1.3);
+    transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
   }
 `
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+const clickToLike = (user, src) => {
+  // set the raw URL to a variable
+  const imageSrc = src.urls.raw
+  const filterIllegalChars = imageSrc.replace(/\//g, "|")
+  const firebaseData = firebase
+    .firestore()
+    .collection("users")
+    .doc(user.name)
+
+  firebaseData.get().then(doc => {
+    if (doc.exists) {
+      const imageDocument = doc.data()
+      for (const field in imageDocument) {
+        if (field === filterIllegalChars) {
+          console.log(`${filterIllegalChars}: ${field}`)
+          console.log(true)
+          firebaseData.update({
+            [field]: firebase.firestore.FieldValue.delete(), 
+          })
+        } else {
+          // Target the "users" collection in Firestore
+          // Set the document to a dynamic value, in this, the user email
+          // Set the field to a dynamic value, which is the image being liked by the user
+          // This is so all liked images are saved under the users name
+          // If the field doesn't exist, Firestore will create it
+          firebaseData.set(
+            {
+              [filterIllegalChars]: imageSrc,
+            },
+            // Merge a new unuiqely created field into the document
+            {
+              merge: true,
+            }
+          )
+        }
+      }
+    }
+  })
+}
 
 export const MainPageImages = ({
   images,
@@ -112,20 +156,26 @@ export const MainPageImages = ({
                   </a>
                 </ImageCredit>
                 {/* 
-                If a user is logged in, display the icon to "Like" images
-                Else if there is no signed in user, do not display it
-              */}
-                {user.name ? (
-                  // TO-DO
-                  // Abstract this into its own component
-                  // These conditionals will ideally check whether or not an image was saved by the user already
-                  // If they have been then display a different color icon and invoke a 'unlike' function on-click
-                  <ChoosePhoto
-                    checkSavedImages={checkSavedImages}
-                    src={src}
-                    user={user}
-                  />
-                ) : null}
+                  If a user is logged in, display the icon to "Like" images
+                  Else if there is no signed in user, do not display it
+                */}
+                {user.name
+                  ? // TO-DO
+                    // Abstract this into its own component
+                    // These conditionals will ideally check whether or not an image was saved by the user already
+                    // If they have been then display a different color icon and invoke a 'unlike' function on-click
+                    checkSavedImages.length
+                    ? checkSavedImages.map(savedImage =>
+                        savedImage === src.urls.raw ? (
+                          <LikePhotoIcon unlikephoto={1} icon={faHeart} />
+                        ) : null
+                      )
+                    : null
+                  : null}
+                <LikePhotoIcon
+                  icon={faHeart}
+                  onClick={() => clickToLike(user, src)}
+                />
               </UserInformationGrid>
             </div>
           ))
