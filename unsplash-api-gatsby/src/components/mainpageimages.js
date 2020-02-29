@@ -47,6 +47,8 @@ const LikePhotoIcon = styled(FontAwesomeIcon)`
 const clickToLike = (user, src) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
+  // Filter out illegal characters, in this case the "/" character and replace it with "|"
+  // Firebase doesn't allow fields with illegal charcters to be updated
   const filterIllegalChars = imageSrc.replace(/\//g, "|")
   const firebaseData = firebase
     .firestore()
@@ -54,14 +56,19 @@ const clickToLike = (user, src) => {
     .doc(user.name)
 
   firebaseData.get().then(doc => {
+    // This checks if the document exists
     if (doc.exists) {
       const imageDocument = doc.data()
+      // Loop through the document object from Firestore
       for (const field in imageDocument) {
+        // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
+        // This acts as a sort of 'toggle' between liking and not liking a photo
         if (field === filterIllegalChars) {
-          console.log(`${filterIllegalChars}: ${field}`)
-          console.log(true)
-          firebaseData.update({
+          firebaseData.set({
             [field]: firebase.firestore.FieldValue.delete(), 
+          },
+          {
+            merge: true
           })
         } else {
           // Target the "users" collection in Firestore
