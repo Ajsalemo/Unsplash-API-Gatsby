@@ -78,7 +78,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
           <FontAwesomeIcon icon={faAngleDoubleLeft} style={{ color: "#fff" }} />
         </PaginatedButton>
       )}
-      {paginationButtonArray.map(page =>
+      {paginationButtonArray.map((page, i) =>
         // If ellipsis is showing, do not make it clickable(for now)
         page === "..." ? (
           <span style={{ color: "#fff", alignSelf: "center" }} key={"page-span"}>{page}</span>

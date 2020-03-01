@@ -8,11 +8,7 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import {
-  ImagesSubGrid,
-  StyledAvatar,
-  StyledLazyLoadedImage,
-} from "../helpers/styledcomponents"
+import { ImagesSubGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 
@@ -64,12 +60,14 @@ const clickToLike = (user, src) => {
         // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
         // This acts as a sort of 'toggle' between liking and not liking a photo
         if (field === filterIllegalChars) {
-          firebaseData.set({
-            [field]: firebase.firestore.FieldValue.delete(), 
-          },
-          {
-            merge: true
-          })
+          firebaseData.set(
+            {
+              [field]: firebase.firestore.FieldValue.delete(),
+            },
+            {
+              merge: true,
+            }
+          )
         } else {
           // Target the "users" collection in Firestore
           // Set the document to a dynamic value, in this, the user email
@@ -91,6 +89,14 @@ const clickToLike = (user, src) => {
   })
 }
 
+const displaySavedImages = (checkSavedImages, src) =>
+  // These conditionals will ideally check whether or not an image was saved by the user already
+  checkSavedImages.map((savedImage, i) =>
+    savedImage === src.urls.raw ? (
+      <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
+    ) : null
+  )
+
 export const MainPageImages = ({
   images,
   totalPages,
@@ -101,12 +107,12 @@ export const MainPageImages = ({
   user,
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
+  const db = firebase
+    .firestore()
+    .collection("users")
+    .doc(user.name)
 
   useEffect(() => {
-    const db = firebase
-      .firestore()
-      .collection("users")
-      .doc(user.name)
     const checkSavedImagesArray = []
     db.get()
       .then(doc => {
@@ -124,7 +130,7 @@ export const MainPageImages = ({
         }
       })
       .catch(err => console.log(err))
-  }, [user.name])
+  }, [user.name, db])
 
   return (
     <ImagesSubGrid item lg={12}>
@@ -166,22 +172,14 @@ export const MainPageImages = ({
                   If a user is logged in, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
                 */}
-                {user.name
-                  ? // TO-DO
-                    // Abstract this into its own component
-                    // These conditionals will ideally check whether or not an image was saved by the user already
-                    // If they have been then display a different color icon and invoke a 'unlike' function on-click
-                    checkSavedImages.length
-                    ? checkSavedImages.map(savedImage =>
-                        savedImage === src.urls.raw ? (
-                          <LikePhotoIcon unlikephoto={1} icon={faHeart} />
-                        ) : null
-                      )
-                    : null
-                  : null}
+                {user.name ? displaySavedImages(checkSavedImages, src) : null}
                 <LikePhotoIcon
                   icon={faHeart}
-                  onClick={() => clickToLike(user, src)}
+                  onClick={() => {
+                    clickToLike(user, src)
+                    // Call the function to map over saved images again, when a new image is saved or deleted
+                    displaySavedImages(checkSavedImages, src)
+                  }}
                 />
               </UserInformationGrid>
             </div>
@@ -189,7 +187,7 @@ export const MainPageImages = ({
         )}
         {/* If the query returns no results then do not display the pagination component */}
         {totalPages === 0 || location === "/main" ? null : (
-          <Pagination totalPages={totalPages} fetchMore={fetchMore} />
+          <Pagination totalPages={totalPages} fetchMore={fetchMore} key={totalPages} />
         )}
       </Grid>
     </ImagesSubGrid>
