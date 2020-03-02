@@ -8,7 +8,11 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  ImagesSubGrid,
+  StyledAvatar,
+  StyledLazyLoadedImage,
+} from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 
@@ -89,13 +93,15 @@ const clickToLike = (user, src) => {
   })
 }
 
-const displaySavedImages = (checkSavedImages, src) =>
+const displaySavedImages = (checkSavedImages, src, user) =>
   // These conditionals will ideally check whether or not an image was saved by the user already
-  checkSavedImages.map((savedImage, i) =>
-    savedImage === src.urls.raw ? (
-      <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
-    ) : null
-  )
+  checkSavedImages !== null && user.name
+    ? checkSavedImages.map((savedImage, i) =>
+        savedImage === src.urls.raw ? (
+          <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
+        ) : null
+      )
+    : null
 
 export const MainPageImages = ({
   images,
@@ -107,30 +113,34 @@ export const MainPageImages = ({
   user,
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
-  const db = firebase
-    .firestore()
-    .collection("users")
-    .doc(user.name)
 
   useEffect(() => {
-    const checkSavedImagesArray = []
-    db.get()
-      .then(doc => {
-        if (doc.exists) {
-          const accountDocumentResult = doc.data()
-          // If the document exists, loop through the properties within the object
-          for (const property in accountDocumentResult) {
-            // This pushes the custom component into the empty checkSavedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-            checkSavedImagesArray.push(accountDocumentResult[property])
+    if (user.name) {
+      const db = firebase
+        .firestore()
+        .collection("users")
+        .doc(user.name)
+
+      const checkSavedImagesArray = []
+
+      db.get()
+        .then(doc => {
+          if (doc.exists) {
+            const accountDocumentResult = doc.data()
+            // If the document exists, loop through the properties within the object
+            for (const property in accountDocumentResult) {
+              // This pushes the custom component into the empty checkSavedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
+              checkSavedImagesArray.push(accountDocumentResult[property])
+            }
+            // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
+            setCheckSavedImages(checkSavedImagesArray)
+          } else {
+            console.log("No document")
           }
-          // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
-          setCheckSavedImages(checkSavedImagesArray)
-        } else {
-          console.log("No document")
-        }
-      })
-      .catch(err => console.log(err))
-  }, [user.name, db])
+        })
+        .catch(err => console.log(err))
+    }
+  }, [user.name])
 
   return (
     <ImagesSubGrid item lg={12}>
@@ -139,7 +149,7 @@ export const MainPageImages = ({
         style={{ textAlign: "center", backgroundColor: "#1e172f" }}
         lg={10}
       >
-        {loading || networkStatus === 4 || checkSavedImages === null ? (
+        {loading || networkStatus === 4 ? (
           <LoadingContainer />
         ) : (
           images.map((src, i) => (
@@ -172,22 +182,28 @@ export const MainPageImages = ({
                   If a user is logged in, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
                 */}
-                {user.name ? displaySavedImages(checkSavedImages, src) : null}
-                <LikePhotoIcon
-                  icon={faHeart}
-                  onClick={() => {
-                    clickToLike(user, src)
-                    // Call the function to map over saved images again, when a new image is saved or deleted
-                    displaySavedImages(checkSavedImages, src)
-                  }}
-                />
+                {displaySavedImages(checkSavedImages, src, user)}
+                {user.name ? (
+                  <LikePhotoIcon
+                    icon={faHeart}
+                    onClick={() => {
+                      clickToLike(user, src)
+                      // Call the function to map over saved images again, when a new image is saved or deleted
+                      displaySavedImages(checkSavedImages, src, user)
+                    }}
+                  />
+                ) : null}
               </UserInformationGrid>
             </div>
           ))
         )}
         {/* If the query returns no results then do not display the pagination component */}
         {totalPages === 0 || location === "/main" ? null : (
-          <Pagination totalPages={totalPages} fetchMore={fetchMore} key={totalPages} />
+          <Pagination
+            totalPages={totalPages}
+            fetchMore={fetchMore}
+            key={totalPages}
+          />
         )}
       </Grid>
     </ImagesSubGrid>
