@@ -2,38 +2,19 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
-import styled, { css, keyframes } from "styled-components"
+import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import {
-  ImagesSubGrid,
-  StyledAvatar,
-  StyledLazyLoadedImage,
-} from "../helpers/styledcomponents"
+import { ImagesSubGrid, LikePhotoIcon, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
+import { SavedImageIcon } from "./savedimageicon"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-const likeIconTransitionIn = keyframes`
-  0% {
-    opacity: .1;
-  }
-  100% {
-    opacity: 1;
-  }
-`
-const likeIconTransitionOut = keyframes`
-  0% {
-    opacity: .1;
-  }
-  100% {
-    opacity: 1;
-  }
-`
+
 const ImageCredit = styled.span`
   color: #fff;
   margin-top: -0.5em;
@@ -46,27 +27,9 @@ const UserInformationGrid = styled(Grid)`
   align-items: center;
   padding-bottom: 3.5em;
 `
-const LikePhotoIcon = styled(FontAwesomeIcon)`
-  animation: ${props =>
-    props.unlikephoto
-      ? css`
-          ${likeIconTransitionIn}
-        `
-      : css`
-          ${likeIconTransitionOut}
-        `};
-  color: ${props => (props.unlikephoto ? "red" : "white")};}
-  transition: all 0.5s ease-in-out;
-  transform: scale(1);
-  &:hover {
-    cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
-  }
-`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const clickToLike = (user, src, checkSavedImages) => {
+const clickToLike = (user, src) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -142,16 +105,6 @@ const clickToLike = (user, src, checkSavedImages) => {
     }
   })
 }
-
-const displaySavedImages = (checkSavedImages, src, user) =>
-  // These conditionals will ideally check whether or not an image was saved by the user already
-  checkSavedImages !== null && user.name
-    ? checkSavedImages.map((savedImage, i) =>
-        savedImage === src.urls.raw ? (
-          <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
-        ) : null
-      )
-    : null
 
 export const MainPageImages = ({
   images,
@@ -233,7 +186,11 @@ export const MainPageImages = ({
                   If a user is logged in, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
                 */}
-                {displaySavedImages(checkSavedImages, src, user)}
+                <SavedImageIcon 
+                  checkSavedImages={checkSavedImages}
+                  src={src}
+                  user={user}
+                />
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}

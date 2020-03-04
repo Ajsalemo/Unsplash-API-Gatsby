@@ -4,8 +4,9 @@
 // General consolidated styles that can be shared between components
 
 import { Grid } from "@material-ui/core"
-import styled from "styled-components"
 import { LazyLoadImage } from "react-lazy-load-image-component"
+import styled, { css, keyframes } from "styled-components"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -41,6 +42,39 @@ export const ImagesSubGrid = styled(FlexCenterGrid)`
   background-color: #1e172f;
   padding-bottom: 3.5em;
 `
-
+const likeIconTransitionIn = keyframes`
+  0% {
+    opacity: .1;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+const likeIconTransitionOut = keyframes`
+  0% {
+    opacity: .1;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+export const LikePhotoIcon = styled(FontAwesomeIcon)`
+  animation: ${props =>
+    props.unlikephoto
+      ? css`
+          ${likeIconTransitionIn}
+        `
+      : css`
+          ${likeIconTransitionOut}
+        `};
+  color: ${props => (props.unlikephoto ? "red" : "white")};}
+  transition: all 0.5s ease-in-out;
+  transform: scale(1);
+  &:hover {
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
