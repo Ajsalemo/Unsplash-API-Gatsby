@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import { Pagination } from "../components/pagination"
 import {
   ImagesSubGrid,
@@ -18,7 +18,22 @@ import { LoadingContainer } from "./loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
+const likeIconTransitionIn = keyframes`
+  0% {
+    opacity: .1;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+const likeIconTransitionOut = keyframes`
+  0% {
+    opacity: .1;
+  }
+  100% {
+    opacity: 1;
+  }
+`
 const ImageCredit = styled.span`
   color: #fff;
   margin-top: -0.5em;
@@ -32,7 +47,15 @@ const UserInformationGrid = styled(Grid)`
   padding-bottom: 3.5em;
 `
 const LikePhotoIcon = styled(FontAwesomeIcon)`
-  color: ${props => (props.unlikephoto ? "red" : "white")};
+  animation: ${props =>
+    props.unlikephoto
+      ? css`
+          ${likeIconTransitionIn}
+        `
+      : css`
+          ${likeIconTransitionOut}
+        `};
+  color: ${props => (props.unlikephoto ? "red" : "white")};}
   transition: all 0.5s ease-in-out;
   transform: scale(1);
   &:hover {
@@ -41,10 +64,9 @@ const LikePhotoIcon = styled(FontAwesomeIcon)`
     transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
   }
 `
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const clickToLike = (user, src) => {
+const clickToLike = (user, src, checkSavedImages) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -106,6 +128,17 @@ const clickToLike = (user, src) => {
           }
         }
       }
+      // If a document doesn't exist yet then create it when a user saves their first photo
+    } else {
+      return firebaseData.set(
+        {
+          [filterIllegalChars]: imageSrc,
+        },
+        // Merge a new unuiqely created field into the document
+        {
+          merge: true,
+        }
+      )
     }
   })
 }
@@ -204,7 +237,7 @@ export const MainPageImages = ({
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}
-                    onClick={() => clickToLike(user, src)}
+                    onClick={() => clickToLike(user, src, checkSavedImages)}
                   />
                 ) : null}
               </UserInformationGrid>
