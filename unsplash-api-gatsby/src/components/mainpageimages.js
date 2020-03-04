@@ -33,16 +33,14 @@ const UserInformationGrid = styled(Grid)`
   padding-bottom: 3.5em;
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+// Set the firebase collection to a variable
+const db = firebase.firestore().collection("users")
 
 const getSavedImages = (user, setCheckSavedImages) => {
-  const db = firebase
-    .firestore()
-    .collection("users")
-    .doc(user.name)
-
   const checkSavedImagesArray = []
 
-  db.get({ source: "server" })
+  db.doc(user.name)
+    .get({ source: "server" })
     .then(doc => {
       if (doc.exists) {
         const accountDocumentResult = doc.data()
@@ -66,12 +64,8 @@ const clickToLike = (user, src, setCheckSavedImages) => {
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
   // Firebase doesn't allow fields with illegal charcters to be updated
   const filterIllegalChars = imageSrc.replace(/\//g, "|")
-  const firebaseData = firebase
-    .firestore()
-    .collection("users")
-    .doc(user.name)
 
-  firebaseData.get({ source: "server" }).then(doc => {
+  db.doc(user.name).get({ source: "server" }).then(doc => {
     // This checks if the document exists
     if (doc.exists) {
       const imageDocument = doc.data()
@@ -82,7 +76,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
         imageDocument.constructor === Object
       ) {
         return (
-          firebaseData.set(
+          db.doc(user.name).set(
             {
               [filterIllegalChars]: imageSrc,
             },
@@ -101,7 +95,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
           if (field === filterIllegalChars) {
             console.log(true)
             return (
-              firebaseData.set(
+              db.doc(user.name).set(
                 {
                   [field]: firebase.firestore.FieldValue.delete(),
                 },
@@ -118,7 +112,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
             // This is so all liked images are saved under the users name
             // If the field doesn't exist, Firestore will create it
             return (
-              firebaseData.set(
+              db.doc(user.name).set(
                 {
                   [filterIllegalChars]: imageSrc,
                 },
@@ -135,7 +129,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
       // If a document doesn't exist yet then create it when a user saves their first photo
     } else {
       return (
-        firebaseData.set(
+        db.doc(user.name).set(
           {
             [filterIllegalChars]: imageSrc,
           },
@@ -178,7 +172,7 @@ export const MainPageImages = ({
         {loading || networkStatus === 4 ? (
           <LoadingContainer />
         ) : (
-          images.map((src, i) => (
+          images.map(src => (
             <div
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={src.id}

@@ -44,11 +44,11 @@ export const ImagesSubGrid = styled(FlexCenterGrid)`
 `
 export const LikePhotoIcon = styled(FontAwesomeIcon)`
   color: ${props => (props.unlikephoto ? "red" : "white")};}
-  transition: all 1s ease-in-out;
+  transition: all 0.5s ease-in-out;
   transform: scale(1);
   &:hover {
     cursor: pointer;
-    transition: all 1s ease-in-out;
+    transition: all 0.5s ease-in-out;
     transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
   }
 `
