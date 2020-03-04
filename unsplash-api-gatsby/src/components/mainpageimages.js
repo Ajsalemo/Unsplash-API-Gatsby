@@ -59,34 +59,51 @@ const clickToLike = (user, src) => {
     // This checks if the document exists
     if (doc.exists) {
       const imageDocument = doc.data()
-      // Loop through the document object from Firestore
-      for (const field in imageDocument) {
-        // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
-        // This acts as a sort of 'toggle' between liking and not liking a photo
-        if (field === filterIllegalChars) {
-          firebaseData.set(
-            {
-              [field]: firebase.firestore.FieldValue.delete(),
-            },
-            {
-              merge: true,
-            }
-          )
-        } else {
-          // Target the "users" collection in Firestore
-          // Set the document to a dynamic value, in this, the user email
-          // Set the field to a dynamic value, which is the image being liked by the user
-          // This is so all liked images are saved under the users name
-          // If the field doesn't exist, Firestore will create it
-          firebaseData.set(
-            {
-              [filterIllegalChars]: imageSrc,
-            },
-            // Merge a new unuiqely created field into the document
-            {
-              merge: true,
-            }
-          )
+      // If imageDocument is an empty object, then the below "for in" loop in the else block cannot loop through the database object from firestore, which in turn will not let any documents be added to firestore
+      // This if statement tests whether or not it's empty, if it is - it will let the user be able to add documents with empty firestore data, which then in turn lets the rest of the code run
+      if (
+        Object.entries(imageDocument).length === 0 &&
+        imageDocument.constructor === Object
+      ) {
+        return firebaseData.set(
+          {
+            [filterIllegalChars]: imageSrc,
+          },
+          // Merge a new unuiqely created field into the document
+          {
+            merge: true,
+          }
+        )
+      } else {
+        // Loop through the document object from Firestore
+        for (const field in imageDocument) {
+          // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
+          // This acts as a sort of 'toggle' between liking and not liking a photo
+          if (field === filterIllegalChars) {
+            return firebaseData.set(
+              {
+                [field]: firebase.firestore.FieldValue.delete(),
+              },
+              {
+                merge: true,
+              }
+            )
+          } else {
+            // Target the "users" collection in Firestore
+            // Set the document to a dynamic value, in this, the user email
+            // Set the field to a dynamic value, which is the image being liked by the user
+            // This is so all liked images are saved under the users name
+            // If the field doesn't exist, Firestore will create it
+            return firebaseData.set(
+              {
+                [filterIllegalChars]: imageSrc,
+              },
+              // Merge a new unuiqely created field into the document
+              {
+                merge: true,
+              }
+            )
+          }
         }
       }
     }
@@ -115,6 +132,7 @@ export const MainPageImages = ({
   const [checkSavedImages, setCheckSavedImages] = useState(null)
 
   useEffect(() => {
+    // Check if the user exists before reaching out to firestore to retrieve user information
     if (user.name) {
       const db = firebase
         .firestore()
@@ -186,11 +204,7 @@ export const MainPageImages = ({
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}
-                    onClick={() => {
-                      clickToLike(user, src)
-                      // Call the function to map over saved images again, when a new image is saved or deleted
-                      displaySavedImages(checkSavedImages, src, user)
-                    }}
+                    onClick={() => clickToLike(user, src)}
                   />
                 ) : null}
               </UserInformationGrid>
