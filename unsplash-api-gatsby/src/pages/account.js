@@ -1,18 +1,15 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import React, { Fragment, useEffect, useState } from "react"
-import {
-  StyledMainContainer,
-  StyledLazyLoadedImage,
-  ImagesSubGrid
-} from "../helpers/styledcomponents"
-import { getProfile, isAuthenticated, login } from "../utils/auth"
-import firebase from "../utils/firebase"
 import { Grid } from "@material-ui/core"
+import React, { Fragment, useEffect, useState } from "react"
+import { Footer } from "../components/footer"
+import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { TotalResultsHeader } from "../components/totalresultsheader"
-import { Footer } from "../components/footer"
+import { ImagesSubGrid, StyledLazyLoadedImage, StyledMainContainer } from "../helpers/styledcomponents"
+import { getProfile, isAuthenticated, login } from "../utils/auth"
+import firebase from "../utils/firebase"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -25,7 +22,7 @@ const Account = () => {
     // If an un authenticated user tries to access this route, then push them to the login page for Auth0
     if (!isAuthenticated()) {
       login()
-      return <p>Redirecting to login...</p>
+      return <LoadingContainer />
     }
     // Instantiate the user and database variables
     const db = firebase

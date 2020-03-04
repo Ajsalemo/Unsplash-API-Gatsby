@@ -7,7 +7,12 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, LikePhotoIcon, StyledAvatar, StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import {
+  ImagesSubGrid,
+  LikePhotoIcon,
+  StyledAvatar,
+  StyledLazyLoadedImage,
+} from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { LoadingContainer } from "./loadingcontainer"
 import { SavedImageIcon } from "./savedimageicon"
@@ -29,7 +34,33 @@ const UserInformationGrid = styled(Grid)`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const clickToLike = (user, src) => {
+const getSavedImages = (user, setCheckSavedImages) => {
+  const db = firebase
+    .firestore()
+    .collection("users")
+    .doc(user.name)
+
+  const checkSavedImagesArray = []
+
+  db.get({ source: "server" })
+    .then(doc => {
+      if (doc.exists) {
+        const accountDocumentResult = doc.data()
+        // If the document exists, loop through the properties within the object
+        for (const property in accountDocumentResult) {
+          // This pushes the custom component into the empty checkSavedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
+          checkSavedImagesArray.push(accountDocumentResult[property])
+        }
+        // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
+        setCheckSavedImages(checkSavedImagesArray)
+      } else {
+        console.log("No document")
+      }
+    })
+    .catch(err => console.log(err))
+}
+
+const clickToLike = (user, src, setCheckSavedImages) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -40,7 +71,7 @@ const clickToLike = (user, src) => {
     .collection("users")
     .doc(user.name)
 
-  firebaseData.get().then(doc => {
+  firebaseData.get({ source: "server" }).then(doc => {
     // This checks if the document exists
     if (doc.exists) {
       const imageDocument = doc.data()
@@ -50,14 +81,17 @@ const clickToLike = (user, src) => {
         Object.entries(imageDocument).length === 0 &&
         imageDocument.constructor === Object
       ) {
-        return firebaseData.set(
-          {
-            [filterIllegalChars]: imageSrc,
-          },
-          // Merge a new unuiqely created field into the document
-          {
-            merge: true,
-          }
+        return (
+          firebaseData.set(
+            {
+              [filterIllegalChars]: imageSrc,
+            },
+            // Merge a new unuiqely created field into the document
+            {
+              merge: true,
+            }
+          ),
+          getSavedImages(user, setCheckSavedImages)
         )
       } else {
         // Loop through the document object from Firestore
@@ -65,13 +99,17 @@ const clickToLike = (user, src) => {
           // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
           // This acts as a sort of 'toggle' between liking and not liking a photo
           if (field === filterIllegalChars) {
-            return firebaseData.set(
-              {
-                [field]: firebase.firestore.FieldValue.delete(),
-              },
-              {
-                merge: true,
-              }
+            console.log(true)
+            return (
+              firebaseData.set(
+                {
+                  [field]: firebase.firestore.FieldValue.delete(),
+                },
+                {
+                  merge: true,
+                }
+              ),
+              getSavedImages(user, setCheckSavedImages)
             )
           } else {
             // Target the "users" collection in Firestore
@@ -79,28 +117,34 @@ const clickToLike = (user, src) => {
             // Set the field to a dynamic value, which is the image being liked by the user
             // This is so all liked images are saved under the users name
             // If the field doesn't exist, Firestore will create it
-            return firebaseData.set(
-              {
-                [filterIllegalChars]: imageSrc,
-              },
-              // Merge a new unuiqely created field into the document
-              {
-                merge: true,
-              }
+            return (
+              firebaseData.set(
+                {
+                  [filterIllegalChars]: imageSrc,
+                },
+                // Merge a new unuiqely created field into the document
+                {
+                  merge: true,
+                }
+              ),
+              getSavedImages(user, setCheckSavedImages)
             )
           }
         }
       }
       // If a document doesn't exist yet then create it when a user saves their first photo
     } else {
-      return firebaseData.set(
-        {
-          [filterIllegalChars]: imageSrc,
-        },
-        // Merge a new unuiqely created field into the document
-        {
-          merge: true,
-        }
+      return (
+        firebaseData.set(
+          {
+            [filterIllegalChars]: imageSrc,
+          },
+          // Merge a new unuiqely created field into the document
+          {
+            merge: true,
+          }
+        ),
+        getSavedImages(user, setCheckSavedImages)
       )
     }
   })
@@ -120,31 +164,9 @@ export const MainPageImages = ({
   useEffect(() => {
     // Check if the user exists before reaching out to firestore to retrieve user information
     if (user.name) {
-      const db = firebase
-        .firestore()
-        .collection("users")
-        .doc(user.name)
-
-      const checkSavedImagesArray = []
-
-      db.get()
-        .then(doc => {
-          if (doc.exists) {
-            const accountDocumentResult = doc.data()
-            // If the document exists, loop through the properties within the object
-            for (const property in accountDocumentResult) {
-              // This pushes the custom component into the empty checkSavedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-              checkSavedImagesArray.push(accountDocumentResult[property])
-            }
-            // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
-            setCheckSavedImages(checkSavedImagesArray)
-          } else {
-            console.log("No document")
-          }
-        })
-        .catch(err => console.log(err))
+      getSavedImages(user, setCheckSavedImages)
     }
-  }, [user.name])
+  }, [user])
 
   return (
     <ImagesSubGrid item lg={12}>
@@ -186,7 +208,7 @@ export const MainPageImages = ({
                   If a user is logged in, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
                 */}
-                <SavedImageIcon 
+                <SavedImageIcon
                   checkSavedImages={checkSavedImages}
                   src={src}
                   user={user}
@@ -194,7 +216,7 @@ export const MainPageImages = ({
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}
-                    onClick={() => clickToLike(user, src, checkSavedImages)}
+                    onClick={() => clickToLike(user, src, setCheckSavedImages)}
                   />
                 ) : null}
               </UserInformationGrid>
