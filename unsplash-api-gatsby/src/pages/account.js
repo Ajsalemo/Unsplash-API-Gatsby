@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Grid } from "@material-ui/core"
+import { Grid, CircularProgress } from "@material-ui/core"
 import React, { Fragment, useEffect, useState } from "react"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
@@ -44,7 +44,6 @@ const dbUserAccount = firebase.firestore().collection("users")
 
 const getUserAccountImages = (user, setSavedImages) => {
   const savedImagesArray = []
-
   dbUserAccount
     .doc(user.name)
     .get()
@@ -65,11 +64,11 @@ const getUserAccountImages = (user, setSavedImages) => {
     .catch(err => console.log(err))
 }
 
-const deleteSavedImage = (user, src, setSavedImages) => {
+const deleteSavedImage = (user, src, setSavedImages, setLoading) => {
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
   // Firebase doesn't allow fields with illegal charcters to be updated
   const filterCharsInUserAccount = src.replace(/\//g, "|")
-
+  setLoading(true)
   dbUserAccount
     .doc(user.name)
     .get({ source: "server" })
@@ -87,7 +86,8 @@ const deleteSavedImage = (user, src, setSavedImages) => {
                   merge: true,
                 }
               ),
-              getUserAccountImages(user, setSavedImages)
+              getUserAccountImages(user, setSavedImages),
+              setLoading(false)
             )
           }
         }
@@ -97,8 +97,8 @@ const deleteSavedImage = (user, src, setSavedImages) => {
 
 const Account = () => {
   const [savedImages, setSavedImages] = useState(null)
+  const [loading, setLoading] = useState(false)
   const user = getProfile()
-
   useEffect(() => {
     // If an un authenticated user tries to access this route, then push them to the login page for Auth0
     if (!isAuthenticated()) {
@@ -125,7 +125,21 @@ const Account = () => {
                     <StyledLazyLoadedImage
                       src={`${src}&h=330&w=330&fit=crop`}
                     />
-                    <DeleteIcon icon={faTrashAlt} onClick={() => deleteSavedImage(user, src, setSavedImages)} />
+                    {loading ? (
+                      <CircularProgress style={{ color: "#fff" }} />
+                    ) : (
+                      <DeleteIcon
+                        icon={faTrashAlt}
+                        onClick={() =>
+                          deleteSavedImage(
+                            user,
+                            src,
+                            setSavedImages,
+                            setLoading
+                          )
+                        }
+                      />
+                    )}
                   </UserAccountImagesGrid>
                 ))
               : null}
