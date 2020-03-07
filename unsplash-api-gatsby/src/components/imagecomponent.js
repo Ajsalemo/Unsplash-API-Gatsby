@@ -1,25 +1,20 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import React from "react"
-import { LikePhotoIcon } from "../helpers/styledcomponents"
+import { StyledLazyLoadedImage } from "../helpers/styledcomponents"
+import placeholder from "../images/placeholder.jpg"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const SavedImageIcon = ({ checkSavedImages, src, user, loadingLikeIcon }) => 
-  // These conditionals will ideally check whether or not an image was saved by the user already
-  checkSavedImages !== null && user.name
-    ? checkSavedImages.map((savedImage, i) =>
-        savedImage === src.urls.raw ? (
-          <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
-        ) : null
-      )
-    : null
-
+export const ImageComponent = ({ src }) => (
+    <StyledLazyLoadedImage
+        src={src}
+        effect="blur"
+        placeholderSrc={placeholder}
+    />
+)
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-

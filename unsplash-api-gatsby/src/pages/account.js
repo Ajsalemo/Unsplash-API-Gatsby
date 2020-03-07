@@ -1,22 +1,19 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Grid, CircularProgress } from "@material-ui/core"
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { CircularProgress, Grid } from "@material-ui/core"
 import React, { Fragment, useEffect, useState } from "react"
+import styled from "styled-components"
 import { Footer } from "../components/footer"
+import { ImageComponent } from "../components/imagecomponent"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { TotalResultsHeader } from "../components/totalresultsheader"
-import {
-  ImagesSubGrid,
-  StyledLazyLoadedImage,
-  StyledMainContainer,
-} from "../helpers/styledcomponents"
+import { ImagesSubGrid, StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
 import firebase from "../utils/firebase"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
-import styled from "styled-components"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -120,9 +117,9 @@ const Account = () => {
             lg={10}
           >
             {savedImages !== null
-              ? savedImages.map(src => (
-                  <UserAccountImagesGrid item>
-                    <StyledLazyLoadedImage
+              ? savedImages.map((src, i) => (
+                  <UserAccountImagesGrid item key={i}>
+                    <ImageComponent
                       src={`${src}&h=330&w=330&fit=crop`}
                     />
                     {loading ? (

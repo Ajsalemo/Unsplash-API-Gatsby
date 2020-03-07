@@ -7,13 +7,9 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import {
-  ImagesSubGrid,
-  LikePhotoIcon,
-  StyledAvatar,
-  StyledLazyLoadedImage,
-} from "../helpers/styledcomponents"
+import { ImagesSubGrid, LikePhotoIcon, StyledAvatar } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
+import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
 import { SavedImageIcon } from "./savedimageicon"
 
@@ -36,7 +32,7 @@ const UserInformationGrid = styled(Grid)`
 // Set the firebase collection to a variable
 const db = firebase.firestore().collection("users")
 
-const getSavedImages = (user, setCheckSavedImages) => {
+const getSavedImages = (user, setCheckSavedImages, setLoadingFirebase) => {
   const checkSavedImagesArray = []
 
   db.doc(user.name)
@@ -151,7 +147,7 @@ export const MainPageImages = ({
   loading,
   networkStatus,
   location,
-  user,
+  user
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
 
@@ -177,11 +173,10 @@ export const MainPageImages = ({
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={src.id}
             >
-              <StyledLazyLoadedImage
+              <ImageComponent
                 alt={""}
                 // Render whichever one of the image src paramters that gets passed through
                 src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
-                effect="blur"
               />
               <UserInformationGrid item>
                 <StyledAvatar
@@ -229,6 +224,7 @@ export const MainPageImages = ({
     </ImagesSubGrid>
   )
 }
+
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
