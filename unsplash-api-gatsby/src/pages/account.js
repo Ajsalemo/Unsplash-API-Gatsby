@@ -34,13 +34,13 @@ const UserAccountImagesGrid = styled(Grid)`
   align-items: center;
   padding-bottom: 1em;
 `
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const dbUserAccount = firebase.firestore().collection("users")
 
-const getUserAccountImages = (user, setSavedImages) => {
+const getUserAccountImages = (user, setSavedImages, setLoading) => {
   const savedImagesArray = []
+  setLoading(true)
   dbUserAccount
     .doc(user.name)
     .get()
@@ -53,6 +53,7 @@ const getUserAccountImages = (user, setSavedImages) => {
           savedImagesArray.push(documentResult[property])
         }
         // Invoke the state setting function to set "savedImages" state to the savedImagesArray
+        setLoading(false)
         setSavedImages(savedImagesArray)
       } else {
         console.log("No document")
@@ -83,7 +84,7 @@ const deleteSavedImage = (user, src, setSavedImages, setLoading) => {
                   merge: true,
                 }
               ),
-              getUserAccountImages(user, setSavedImages),
+              getUserAccountImages(user, setSavedImages, setLoading),
               setLoading(false)
             )
           }
@@ -102,7 +103,7 @@ const Account = () => {
       login()
       return <LoadingContainer />
     }
-    getUserAccountImages(user, setSavedImages)
+    getUserAccountImages(user, setSavedImages, setLoading)
   }, [user])
 
   return (
@@ -119,11 +120,9 @@ const Account = () => {
             {savedImages !== null
               ? savedImages.map((src, i) => (
                   <UserAccountImagesGrid item key={i}>
-                    <ImageComponent
-                      src={`${src}&h=330&w=330&fit=crop`}
-                    />
+                    <ImageComponent src={`${src}&h=330&w=330&fit=crop`} />
                     {loading ? (
-                      <CircularProgress style={{ color: "#fff" }} />
+                      <CircularProgress size="10px" style={{ color: "#fff" }} />
                     ) : (
                       <DeleteIcon
                         icon={faTrashAlt}

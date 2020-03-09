@@ -32,8 +32,9 @@ const UserInformationGrid = styled(Grid)`
 // Set the firebase collection to a variable
 const db = firebase.firestore().collection("users")
 
-const getSavedImages = (user, setCheckSavedImages, setLoadingFirebase) => {
+const getSavedImages = (user, setCheckSavedImages, setloadingSavedImage) => {
   const checkSavedImagesArray = []
+  setloadingSavedImage(true)
 
   db.doc(user.name)
     .get({ source: "server" })
@@ -47,6 +48,7 @@ const getSavedImages = (user, setCheckSavedImages, setLoadingFirebase) => {
         }
         // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
         setCheckSavedImages(checkSavedImagesArray)
+        setloadingSavedImage(false)
       } else {
         console.log("No document")
       }
@@ -54,7 +56,7 @@ const getSavedImages = (user, setCheckSavedImages, setLoadingFirebase) => {
     .catch(err => console.log(err))
 }
 
-const clickToLike = (user, src, setCheckSavedImages) => {
+const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -81,7 +83,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
               merge: true,
             }
           ),
-          getSavedImages(user, setCheckSavedImages)
+          getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
         )
       } else {
         // Loop through the document object from Firestore
@@ -99,7 +101,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
                   merge: true,
                 }
               ),
-              getSavedImages(user, setCheckSavedImages)
+              getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
             )
           } else {
             // Target the "users" collection in Firestore
@@ -117,7 +119,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
                   merge: true,
                 }
               ),
-              getSavedImages(user, setCheckSavedImages)
+              getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
             )
           }
         }
@@ -134,7 +136,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
             merge: true,
           }
         ),
-        getSavedImages(user, setCheckSavedImages)
+        getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
       )
     }
   })
@@ -150,11 +152,12 @@ export const MainPageImages = ({
   user
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
+  const [loadingSavedImage, setloadingSavedImage] = useState(false)
 
   useEffect(() => {
     // Check if the user exists before reaching out to firestore to retrieve user information
     if (user.name) {
-      getSavedImages(user, setCheckSavedImages)
+      getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
     }
   }, [user])
 
@@ -199,13 +202,14 @@ export const MainPageImages = ({
                 */}
                 <SavedImageIcon
                   checkSavedImages={checkSavedImages}
+                  loadingSavedImage={loadingSavedImage}
                   src={src}
                   user={user}
                 />
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}
-                    onClick={() => clickToLike(user, src, setCheckSavedImages)}
+                    onClick={() => clickToLike(user, src, setCheckSavedImages, setloadingSavedImage)}
                   />
                 ) : null}
               </UserInformationGrid>

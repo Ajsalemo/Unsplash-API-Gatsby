@@ -58,7 +58,9 @@ export const Navbar = ({ user }) => (
       <ParentNavDiv>
         <NavbarSiteName variant="h1">Something like Unsplash</NavbarSiteName>
         <ParentNavGrid item xs={10} sm={8} md={4} lg={4}>
-          <NavLink to="/main">Continue</NavLink>
+          <NavLink to="/main">
+            <Button style={{ color: "#fff" }}>Continue</Button>
+          </NavLink>
           {!user ? (
             <Button style={{ color: "#fff" }} onClick={() => login()}>
               Sign in

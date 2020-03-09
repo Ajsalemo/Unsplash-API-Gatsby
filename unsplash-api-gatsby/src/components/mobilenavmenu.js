@@ -12,14 +12,13 @@ import {
   MenuList,
   Paper,
   Popper,
-  Typography,
 } from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
-import { login, logout } from "../utils/auth"
 import { StyledAvatar } from "../helpers/styledcomponents"
+import { login, logout } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -100,7 +99,7 @@ export const MobileNavMenu = ({ user }) => {
       {!user.name ? (
         <NonMobileNavLinks>
           <ConditionalDesktopLink to="/main">
-            <Typography>Home</Typography>
+            <Button style={{ color: "#fff", padding: "0em" }}>Home</Button>
           </ConditionalDesktopLink>
           <Button
             style={{ color: "#fff", padding: "0em" }}
