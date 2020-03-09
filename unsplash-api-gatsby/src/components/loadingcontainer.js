@@ -22,7 +22,7 @@ export const LoadingContainer = () => (
     <Typography style={{ color: "#fff", paddingRight: "0.3em" }}>
       Loading...
     </Typography>
-    <CircularProgress />
+    <CircularProgress style={{ color: "#fff" }} />
   </LoadingContainerGrid>
 )
 

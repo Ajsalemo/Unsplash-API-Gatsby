@@ -17,7 +17,7 @@ import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
-import { StyledAvatar } from "../helpers/styledcomponents"
+import { StyledAvatar } from "./styledavatar"
 import { login, logout } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

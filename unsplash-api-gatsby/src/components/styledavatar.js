@@ -1,38 +1,37 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-// General consolidated styles that can be shared between components
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Grid } from "@material-ui/core"
+import React from "react"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 import styled from "styled-components"
+import placeholder from "../images/placeholder.jpg"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const FlexCenterGrid = styled(Grid)`
-  display: flex;
-  justify-content: center;
-`
-
-export const StyledMainContainer = styled(FlexCenterGrid)`
-  background-color: #1e172f;
-  height: 100vh;
-  padding-top: 5em;
-`
-export const ImagesSubGrid = styled(FlexCenterGrid)`
-  background-color: #1e172f;
-  padding-bottom: 3.5em;
-`
-export const LikePhotoIcon = styled(FontAwesomeIcon)`
-  color: ${props => (props.unlikephoto ? "red" : "white")};
-  transition: all 0.5s ease-in-out;
-  transform: scale(1);
+const StyledAvatarComponent = styled(LazyLoadImage)`
+  width: ${props => (props.pageimages ? "3em" : null)};
+  height: ${props => (props.mobilenavbar ? "3em" : null)};
+  border-radius: 50%;
+  border: 3px solid #fff;
+  transition: all 0.5s ease-in-out !important;
   &:hover {
-    cursor: ${props => (props.unlikephoto ? "initial" : "pointer")};
-    transition: all 0.5s ease-in-out;
-    transform: ${props => (props.unlikephoto ? "scale(1)" : "scale(1.3)")};
+    transition: all 0.5s ease-in-out !important;
+    cursor: pointer;
+    border: 3px solid red;
   }
 `
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+export const StyledAvatar = ({ src, pageimages, mobilenavbar }) => (
+  <StyledAvatarComponent
+    src={src}
+    effect="blur"
+    placeholderSrc={placeholder}
+    pageimages={pageimages}
+    mobilenavbar={mobilenavbar}
+  />
+)
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

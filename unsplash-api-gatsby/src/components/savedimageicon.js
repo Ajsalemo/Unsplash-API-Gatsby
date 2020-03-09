@@ -2,9 +2,9 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
+import { CircularProgress } from "@material-ui/core"
 import React from "react"
 import { LikePhotoIcon } from "../helpers/styledcomponents"
-import { CircularProgress } from "@material-ui/core"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -16,15 +16,13 @@ export const SavedImageIcon = ({
   loadingSavedImage,
 }) =>
   // These conditionals will ideally check whether or not an image was saved by the user already
-  loadingSavedImage ? (
-    <CircularProgress size="10px"  style={{ color: "#fff" }} />
-  ) : checkSavedImages !== null && user.name ? (
-    checkSavedImages.map((savedImage, i) =>
-      savedImage === src.urls.raw ? (
-        <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
-      ) : null
-    )
-  ) : null
+  checkSavedImages !== null && user.name
+    ? checkSavedImages.map((savedImage, i) =>
+        savedImage === src.urls.raw ? (
+          loadingSavedImage ? <CircularProgress size="10px" style={{ color: "#fff" }} key={`${i}.id`}/> : <LikePhotoIcon unlikephoto={1} icon={faHeart} key={i} />
+        ) : null
+      )
+    : null
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

@@ -38,6 +38,11 @@ const SubmitButton = styled.button`
     cursor: pointer;
   }
 `
+const FormikForm = styled(Form)`
+  @media (min-width: 600px) {
+    width: 18em;
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const SearchFormValidationSchema = Yup.object().shape({
@@ -67,8 +72,15 @@ export const SearchForm = () => {
         return
       }}
     >
-      {({ isSubmitting, values, handleChange, errors, touched, setFieldValue }) => (
-        <Form>
+      {({
+        isSubmitting,
+        values,
+        handleChange,
+        errors,
+        touched,
+        setFieldValue,
+      }) => (
+        <FormikForm>
           <StyledTextField
             id="main-nav"
             placeholder="Search for images"
@@ -93,22 +105,23 @@ export const SearchForm = () => {
                   </SubmitButton>
                 </InputAdornment>
               ),
+              endAdornment:
+                /* Button to let the user clear the current text values of the search form */
+                values.search ? (
+                  <SubmitButton
+                    type="reset"
+                    values={values.search}
+                    onClick={() => setFieldValue("search", "")}
+                  >
+                    x
+                  </SubmitButton>
+                ) : null,
             }}
           />
-          {/* Button to let the user clear the current text values of the search form */}
-          {values.search ? (
-            <SubmitButton 
-              type="reset" 
-              values={values.search}
-              onClick={() => setFieldValue("search", "")}
-            >
-              x
-            </SubmitButton>
-          ) : null}
           {errors.search && touched.search ? (
             <ErrorMessage errors={errors} />
           ) : null}
-        </Form>
+        </FormikForm>
       )}
     </Formik>
   )

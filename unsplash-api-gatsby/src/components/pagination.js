@@ -90,7 +90,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
               fetchMoreResults(page, fetchMore)
             }}
             selectedpage={currentPage === page ? 1 : 0}
-            key={page}
+            key={i}
           >
             <Typography variant="subtitle2">{page}</Typography>
           </PaginatedButton>

@@ -7,11 +7,12 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, LikePhotoIcon, StyledAvatar } from "../helpers/styledcomponents"
+import { ImagesSubGrid, LikePhotoIcon } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
 import { SavedImageIcon } from "./savedimageicon"
+import { StyledAvatar } from "./styledavatar"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -91,7 +92,6 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
           // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
           // This acts as a sort of 'toggle' between liking and not liking a photo
           if (field === filterIllegalChars) {
-            console.log(true)
             return (
               db.doc(user.name).set(
                 {
@@ -171,7 +171,7 @@ export const MainPageImages = ({
         {loading || networkStatus === 4 ? (
           <LoadingContainer />
         ) : (
-          images.map(src => (
+          images.map((src, i) => (
             <div
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={src.id}
@@ -205,6 +205,7 @@ export const MainPageImages = ({
                   loadingSavedImage={loadingSavedImage}
                   src={src}
                   user={user}
+                  key={i}
                 />
                 {user.name ? (
                   <LikePhotoIcon
@@ -221,7 +222,6 @@ export const MainPageImages = ({
           <Pagination
             totalPages={totalPages}
             fetchMore={fetchMore}
-            key={totalPages}
           />
         )}
       </Grid>
