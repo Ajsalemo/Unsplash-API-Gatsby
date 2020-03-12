@@ -26,6 +26,7 @@ export const RANDOM_PHOTO_QUERY = gql`
         __typename
         id
         name
+        username
         profile_image @type(name: "profile image") {
           small
         }

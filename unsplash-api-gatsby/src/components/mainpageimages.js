@@ -13,6 +13,7 @@ import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
 import { SavedImageIcon } from "./savedimageicon"
 import { StyledAvatar } from "./styledavatar"
+import { Link } from "gatsby"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -64,16 +65,70 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
   // Firebase doesn't allow fields with illegal charcters to be updated
   const filterIllegalChars = imageSrc.replace(/\//g, "|")
 
-  db.doc(user.name).get({ source: "server" }).then(doc => {
-    // This checks if the document exists
-    if (doc.exists) {
-      const imageDocument = doc.data()
-      // If imageDocument is an empty object, then the below "for in" loop in the else block cannot loop through the database object from firestore, which in turn will not let any documents be added to firestore
-      // This if statement tests whether or not it's empty, if it is - it will let the user be able to add documents with empty firestore data, which then in turn lets the rest of the code run
-      if (
-        Object.entries(imageDocument).length === 0 &&
-        imageDocument.constructor === Object
-      ) {
+  db.doc(user.name)
+    .get({ source: "server" })
+    .then(doc => {
+      // This checks if the document exists
+      if (doc.exists) {
+        const imageDocument = doc.data()
+        // If imageDocument is an empty object, then the below "for in" loop in the else block cannot loop through the database object from firestore, which in turn will not let any documents be added to firestore
+        // This if statement tests whether or not it's empty, if it is - it will let the user be able to add documents with empty firestore data, which then in turn lets the rest of the code run
+        if (
+          Object.entries(imageDocument).length === 0 &&
+          imageDocument.constructor === Object
+        ) {
+          return (
+            db.doc(user.name).set(
+              {
+                [filterIllegalChars]: imageSrc,
+              },
+              // Merge a new unuiqely created field into the document
+              {
+                merge: true,
+              }
+            ),
+            getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+          )
+        } else {
+          // Loop through the document object from Firestore
+          for (const field in imageDocument) {
+            // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
+            // This acts as a sort of 'toggle' between liking and not liking a photo
+            if (field === filterIllegalChars) {
+              return (
+                db.doc(user.name).set(
+                  {
+                    [field]: firebase.firestore.FieldValue.delete(),
+                  },
+                  {
+                    merge: true,
+                  }
+                ),
+                getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+              )
+            } else {
+              // Target the "users" collection in Firestore
+              // Set the document to a dynamic value, in this, the user email
+              // Set the field to a dynamic value, which is the image being liked by the user
+              // This is so all liked images are saved under the users name
+              // If the field doesn't exist, Firestore will create it
+              return (
+                db.doc(user.name).set(
+                  {
+                    [filterIllegalChars]: imageSrc,
+                  },
+                  // Merge a new unuiqely created field into the document
+                  {
+                    merge: true,
+                  }
+                ),
+                getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+              )
+            }
+          }
+        }
+        // If a document doesn't exist yet then create it when a user saves their first photo
+      } else {
         return (
           db.doc(user.name).set(
             {
@@ -86,60 +141,8 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
           ),
           getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
         )
-      } else {
-        // Loop through the document object from Firestore
-        for (const field in imageDocument) {
-          // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
-          // This acts as a sort of 'toggle' between liking and not liking a photo
-          if (field === filterIllegalChars) {
-            return (
-              db.doc(user.name).set(
-                {
-                  [field]: firebase.firestore.FieldValue.delete(),
-                },
-                {
-                  merge: true,
-                }
-              ),
-              getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
-            )
-          } else {
-            // Target the "users" collection in Firestore
-            // Set the document to a dynamic value, in this, the user email
-            // Set the field to a dynamic value, which is the image being liked by the user
-            // This is so all liked images are saved under the users name
-            // If the field doesn't exist, Firestore will create it
-            return (
-              db.doc(user.name).set(
-                {
-                  [filterIllegalChars]: imageSrc,
-                },
-                // Merge a new unuiqely created field into the document
-                {
-                  merge: true,
-                }
-              ),
-              getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
-            )
-          }
-        }
       }
-      // If a document doesn't exist yet then create it when a user saves their first photo
-    } else {
-      return (
-        db.doc(user.name).set(
-          {
-            [filterIllegalChars]: imageSrc,
-          },
-          // Merge a new unuiqely created field into the document
-          {
-            merge: true,
-          }
-        ),
-        getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
-      )
-    }
-  })
+    })
 }
 
 export const MainPageImages = ({
@@ -149,7 +152,7 @@ export const MainPageImages = ({
   loading,
   networkStatus,
   location,
-  user
+  user,
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
   const [loadingSavedImage, setloadingSavedImage] = useState(false)
@@ -182,10 +185,12 @@ export const MainPageImages = ({
                 src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
               />
               <UserInformationGrid item>
-                <StyledAvatar
-                  src={src.user.profile_image.small}
-                  pageimages={1}
-                />
+                <Link to="/users" state={src.user}>
+                  <StyledAvatar
+                    src={src.user.profile_image.small}
+                    pageimages={1}
+                  />
+                </Link>
                 <ImageCredit>
                   Photo by{" "}
                   <a
@@ -210,7 +215,14 @@ export const MainPageImages = ({
                 {user.name ? (
                   <LikePhotoIcon
                     icon={faHeart}
-                    onClick={() => clickToLike(user, src, setCheckSavedImages, setloadingSavedImage)}
+                    onClick={() =>
+                      clickToLike(
+                        user,
+                        src,
+                        setCheckSavedImages,
+                        setloadingSavedImage
+                      )
+                    }
                   />
                 ) : null}
               </UserInformationGrid>
@@ -219,16 +231,12 @@ export const MainPageImages = ({
         )}
         {/* If the query returns no results then do not display the pagination component */}
         {totalPages === 0 || location === "/main" ? null : (
-          <Pagination
-            totalPages={totalPages}
-            fetchMore={fetchMore}
-          />
+          <Pagination totalPages={totalPages} fetchMore={fetchMore} />
         )}
       </Grid>
     </ImagesSubGrid>
   )
 }
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

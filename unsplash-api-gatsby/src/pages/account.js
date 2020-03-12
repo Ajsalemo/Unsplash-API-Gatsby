@@ -4,7 +4,7 @@
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CircularProgress, Grid } from "@material-ui/core"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Footer } from "../components/footer"
 import { ImageComponent } from "../components/imagecomponent"
@@ -107,43 +107,36 @@ const Account = () => {
   }, [user])
 
   return (
-    <Fragment>
-      <StyledMainContainer container>
-        <MainNavbar user={getProfile()} />
-        <TotalResultsHeader keyword={"Your saved images"} />
-        <ImagesSubGrid item lg={12}>
-          <Grid
-            item
-            style={{ textAlign: "center", paddingBottom: "3.5em" }}
-            lg={10}
-          >
-            {savedImages !== null
-              ? savedImages.map((src, i) => (
-                  <UserAccountImagesGrid item key={i}>
-                    <ImageComponent src={`${src}&h=330&w=330&fit=crop`} />
-                    {loading ? (
-                      <CircularProgress size="10px" style={{ color: "#fff" }} />
-                    ) : (
-                      <DeleteIcon
-                        icon={faTrashAlt}
-                        onClick={() =>
-                          deleteSavedImage(
-                            user,
-                            src,
-                            setSavedImages,
-                            setLoading
-                          )
-                        }
-                      />
-                    )}
-                  </UserAccountImagesGrid>
-                ))
-              : null}
-          </Grid>
-        </ImagesSubGrid>
-        <Footer />
-      </StyledMainContainer>
-    </Fragment>
+    <StyledMainContainer container>
+      <MainNavbar user={getProfile()} />
+      <TotalResultsHeader keyword={"Your saved images"} />
+      <ImagesSubGrid item lg={12}>
+        <Grid
+          item
+          style={{ textAlign: "center", paddingBottom: "3.5em" }}
+          lg={10}
+        >
+          {savedImages !== null
+            ? savedImages.map((src, i) => (
+                <UserAccountImagesGrid item key={i}>
+                  <ImageComponent src={`${src}&h=330&w=330&fit=crop`} />
+                  {loading ? (
+                    <CircularProgress size="10px" style={{ color: "#fff" }} />
+                  ) : (
+                    <DeleteIcon
+                      icon={faTrashAlt}
+                      onClick={() =>
+                        deleteSavedImage(user, src, setSavedImages, setLoading)
+                      }
+                    />
+                  )}
+                </UserAccountImagesGrid>
+              ))
+            : null}
+        </Grid>
+      </ImagesSubGrid>
+      <Footer />
+    </StyledMainContainer>
   )
 }
 
