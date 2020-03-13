@@ -77,5 +77,28 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
     }
   }
 `
+export const GET_USER_PROFILE = gql`
+  query getUserProfile {
+    getUserProfile(username: $username)
+      @rest(type: "User Profile Information", path: "users/{args.username}") {
+      id
+      username
+      name
+      instagram_username
+      twitter_username
+      portfolio_url
+      bio
+      location
+      total_likes
+      total_photos
+      followers_count
+      following_count
+      downloads
+      profile_image @type(name: "user profile image") {
+        large
+      }
+    }
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

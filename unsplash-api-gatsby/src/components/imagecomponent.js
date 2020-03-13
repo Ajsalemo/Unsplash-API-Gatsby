@@ -11,15 +11,16 @@ import placeholder from "../images/placeholder.jpg"
 
 export const StyledLazyLoadedImage = styled(LazyLoadImage)`
   border: 2px solid #fff;
-  border-radius: 4%;
+  border-radius: ${props => props.userprofile ? "50%" : "4%"};
   margin: 0.4em;
-  height: 330px;
-  width: 330px;
+  height: ${props => props.userprofile ? null : "330px"};
+  width: ${props => props.userprofile ? null : "330px"};
+  margin-bottom: ${props => props.userprofile ? "2em" : null};
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const ImageComponent = ({ src }) => (
-  <StyledLazyLoadedImage src={src} effect="blur" placeholderSrc={placeholder} />
+export const ImageComponent = ({ src, userprofile }) => (
+  <StyledLazyLoadedImage src={src} effect="blur" placeholderSrc={placeholder} userprofile={userprofile} />
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
