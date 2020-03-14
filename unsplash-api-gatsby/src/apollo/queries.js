@@ -100,5 +100,29 @@ export const GET_USER_PROFILE = gql`
     }
   }
 `
+export const GET_USERS_PHOTOS = gql`
+  query getUserPhotos {
+    getUserPhotos(username: $username)
+      @rest(type: "User Profile Photos", path: "users/{args.username}/photos") {
+      id
+      likes
+      description
+      urls @type(name: "user photos ") {
+        __typename
+        raw
+      }
+      user @type(name: "user public profile") {
+        __typename
+        name
+        profile_image @type(name: "public profile image") {
+          small
+        }
+        links @type(name: "public profile links") {
+          html
+        }
+      }
+    }
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

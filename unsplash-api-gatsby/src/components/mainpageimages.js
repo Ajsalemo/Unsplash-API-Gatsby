@@ -3,7 +3,7 @@
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Fragment } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
@@ -185,22 +185,27 @@ export const MainPageImages = ({
                 src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
               />
               <UserInformationGrid item>
-                <Link to="/users" state={src.user}>
-                  <StyledAvatar
-                    src={src.user.profile_image.small}
-                    pageimages={1}
-                  />
-                </Link>
-                <ImageCredit>
-                  Photo by{" "}
-                  <a
-                    href={src.user.links.html}
-                    style={{ color: "#fff" }}
-                    rel="noopener noreferrer"
-                  >
-                    {src.user.name}
-                  </a>
-                </ImageCredit>
+                {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
+                {location !== "/users" ? (
+                  <Fragment>
+                    <Link to="/users" state={src.user}>
+                      <StyledAvatar
+                        src={src.user.profile_image.small}
+                        pageimages={1}
+                      />
+                    </Link>
+                    <ImageCredit>
+                      Photo by{" "}
+                      <a
+                        href={src.user.links.html}
+                        style={{ color: "#fff" }}
+                        rel="noopener noreferrer"
+                      >
+                        {src.user.name}
+                      </a>
+                    </ImageCredit>
+                  </Fragment>
+                ) : null}
                 {/* 
                   If a user is logged in, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
