@@ -7,6 +7,8 @@ import React from "react"
 import styled from "styled-components"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
 import { login } from "../utils/auth"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -43,12 +45,6 @@ const LandingpageMainText = styled(Typography)`
 const ButtonGrid = styled(FlexCenterGrid)`
   flex-direction: column;
 `
-const LandingLinks = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-`
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const SignIn = ({ user }) => (
@@ -61,12 +57,13 @@ export const SignIn = ({ user }) => (
     <ButtonGrid>
       {user.name ? null : (
         <Button style={{ color: "#fff" }} onClick={() => login()}>
-          Sign in
+          Log in/Sign up
         </Button>
       )}
-      <LandingLinks to="/main" style={{ color: "#fff" }}>
-        Continue
-      </LandingLinks>
+      <Link to="/main" style={{ color: "#fff", fontWeight: "bold" }}>
+        Continue to site without logging in
+        <FontAwesomeIcon icon={faArrowAltCircleRight} style={{ marginLeft: "0.5em" }} />
+      </Link>
     </ButtonGrid>
   </SignInDiv>
 )

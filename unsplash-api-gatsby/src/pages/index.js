@@ -13,7 +13,7 @@ import { getProfile } from "../utils/auth"
 
 const IndexPage = ({ data }) => (
   <Grid item style={{ backgroundColor: "#000", position: "relative" }}>
-    <Navbar user={getProfile()} />
+    <Navbar />
     <EmblaCarouselComponent data={data} user={getProfile()} />
   </Grid>
 )

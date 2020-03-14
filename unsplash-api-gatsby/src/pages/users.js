@@ -14,6 +14,7 @@ import { PublicProfileStats } from "../components/publicprofilestats"
 import { UserProfileAvatar } from "../components/userprofileavatar"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -52,7 +53,7 @@ const Users = state => {
   })
 
   if (getUserProfileError || getUserImagesError)
-    return `Error: ${getUserProfileError.message}`
+    return <ErrorComponent />
   if (getUserProfileLoading || getUserImagesLoading) return <LoadingContainer />
 
   return (

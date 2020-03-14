@@ -10,6 +10,7 @@ import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -26,7 +27,7 @@ const ImageResults = state => {
       fetchPolicy: "cache-and-network",
     }
   )
-  if (error) return `Error: ${error.message}`
+  if (error) return <ErrorComponent />
   return (
     <StyledMainContainer container>
       <MainNavbar user={user} />

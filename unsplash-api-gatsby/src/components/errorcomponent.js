@@ -1,43 +1,49 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { useQuery } from "@apollo/react-hooks"
+import { Grid } from "@material-ui/core"
+import { Link } from "gatsby"
 import React, { Fragment } from "react"
-import { RANDOM_PHOTO_QUERY } from "../apollo/queries"
+import styled from "styled-components"
 import { Footer } from "../components/footer"
-import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
-import { MainPageImages } from "../components/mainpageimages"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const Main = state => {
-  const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
-  if (error) return <ErrorComponent />
-  if (loading) return <LoadingContainer />
-  return (
-    <Fragment>
-      <StyledMainContainer container>
-        <MainNavbar user={getProfile()} />
-        <MainPageImages
-          images={data.randomPhotoQuery}
-          location={state.location.pathname}
-          user={getProfile()}
-        />
-        <Footer />
-      </StyledMainContainer>
-    </Fragment>
-  )
-}
+const NotFoundGrid = styled(Grid)`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #fff;
+`
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+export const ErrorComponent = () => (
+  <Fragment>
+    <StyledMainContainer container>
+      <MainNavbar user={getProfile()} />
+      <NotFoundGrid item>
+        <h1>An error occured</h1>
+        <p>Something went wrong.</p>
+        <p>
+          Try searching for another photo or go <Link to="/main" style={{ color: "#fff" }}>home</Link>.
+        </p>
+      </NotFoundGrid>
+      <Footer />
+    </StyledMainContainer>
+  </Fragment>
+)
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export default Main
+export default ErrorComponent
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

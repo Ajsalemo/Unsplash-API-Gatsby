@@ -12,7 +12,7 @@ import { FlexCenterGrid } from "../helpers/styledcomponents"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const PublicProfileStats = ({ userInfoStats }) => (
-  <Grid item>
+  <Grid item style={{ paddingBottom: "4em" }}>
     <Typography
       style={{ color: "#fff" }}
       variant="subtitle2"

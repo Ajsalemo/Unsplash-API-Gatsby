@@ -28,7 +28,7 @@ export const MainNavbar = ({ user }) => (
   >
     <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
       <SearchForm />
-      <Link to="/" style={{ textDecoration: "none" }}>
+      <Link to="/main" style={{ textDecoration: "none" }}>
         <NavbarSitename>Something like Unsplash</NavbarSitename>
       </Link>
       <MobileNavMenu user={user} />

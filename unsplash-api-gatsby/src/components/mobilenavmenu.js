@@ -3,22 +3,13 @@
 
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  Button,
-  ClickAwayListener,
-  Grid,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from "@material-ui/core"
+import { Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
-import { StyledAvatar } from "./styledavatar"
 import { login, logout } from "../utils/auth"
+import { StyledAvatar } from "./styledavatar"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -37,18 +28,14 @@ const MediaMenuIcon = styled(FontAwesomeIcon)`
     display: none;
   }
 `
-const NonMobileNavLinks = styled(Grid)`
+const LogInNavButton = styled(Button)`
   display: none;
+  color: #fff;
   @media (min-width: 708px) {
-    display: flex;
+    color: #fff;
+    display: initial;
   }
 `
-const ConditionalDesktopLink = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-  padding: 0em 0.4em;
-`
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // The below logic was taken straight out of Material-UI's Menu Component example on their site
 export const MobileNavMenu = ({ user }) => {
@@ -97,17 +84,7 @@ export const MobileNavMenu = ({ user }) => {
         )}
       </Button>
       {!user.name ? (
-        <NonMobileNavLinks>
-          <ConditionalDesktopLink to="/main">
-            <Button style={{ color: "#fff", padding: "0em" }}>Home</Button>
-          </ConditionalDesktopLink>
-          <Button
-            style={{ color: "#fff", padding: "0em" }}
-            onClick={() => login()}
-          >
-            Sign in
-          </Button>
-        </NonMobileNavLinks>
+        <LogInNavButton onClick={() => login()}>Log in</LogInNavButton>
       ) : null}
       <Popper
         open={open}
