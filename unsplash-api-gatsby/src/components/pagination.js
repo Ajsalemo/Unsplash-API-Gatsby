@@ -44,6 +44,7 @@ const fetchMoreResults = (page, fetchMore) => {
 // fetchMore is a method of Apollo Client
 export const Pagination = ({ totalPages, fetchMore }) => {
   const [currentPage, getCurrentPage] = useState(0)
+  console.log(currentPage)
   const delta = 3
   // Empty array to house the total amount of pages
   const paginationButtonArray = []

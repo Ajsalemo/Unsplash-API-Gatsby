@@ -32,6 +32,7 @@ const Users = state => {
     loading: getUserProfileLoading,
     error: getUserProfileError,
     data: getUserProfileData,
+    networkStatus: getUserProfileNetworkStatus,
   } = useQuery(GET_USER_PROFILE, {
     variables: {
       username: state.location.state.username,
@@ -44,9 +45,13 @@ const Users = state => {
     loading: getUserImagesLoading,
     error: getUserImagesError,
     data: getUserImagesData,
+    networkStatus: getUserImagesNetworkStatus,
+    fetchMore,
   } = useQuery(GET_USERS_PHOTOS, {
     variables: {
       username: state.location.state.username,
+      // Start the query at page one - if not specified, the network request errors out
+      page: 1,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
@@ -54,8 +59,13 @@ const Users = state => {
 
   if (getUserProfileError || getUserImagesError)
     return <ErrorComponent />
-  if (getUserProfileLoading || getUserImagesLoading) return <LoadingContainer />
+  if (getUserProfileLoading) return <LoadingContainer />
 
+  // This query doesn't return a 'total pages' property
+  // So to find the total pages, we do the total photos divided by the default of 10 images per page
+  // Math ceiling is used to round up any floating numbers to the next whole number
+  const roundTotalPhotos = Math.ceil(getUserProfileData.getUserProfile.total_photos / 10)
+  
   return (
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
@@ -63,8 +73,12 @@ const Users = state => {
         <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
         <PublicProfileStats userInfoStats={getUserProfileData.getUserProfile} />
         <MainPageImages
+          loading={getUserImagesLoading}
+          networkStatus={getUserProfileNetworkStatus || getUserImagesNetworkStatus}
           images={getUserImagesData.getUserPhotos}
           location={state.location.pathname}
+          fetchMore={fetchMore}
+          totalPages={roundTotalPhotos}
           user={getProfile()}
         />
       </UsersProfileGrid>

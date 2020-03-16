@@ -90,10 +90,10 @@ export const GET_USER_PROFILE = gql`
       bio
       location
       total_likes
-      total_photos
       followers_count
       following_count
       downloads
+      total_photos
       profile_image @type(name: "user profile image") {
         large
       }
@@ -102,8 +102,8 @@ export const GET_USER_PROFILE = gql`
 `
 export const GET_USERS_PHOTOS = gql`
   query getUserPhotos {
-    getUserPhotos(username: $username)
-      @rest(type: "User Profile Photos", path: "users/{args.username}/photos") {
+    getUserPhotos(username: $username, page: $page)
+      @rest(type: "User Profile Photos", path: "users/{args.username}/photos?page={args.page}") {
       id
       likes
       description
