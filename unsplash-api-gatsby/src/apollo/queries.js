@@ -61,6 +61,7 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
           __typename
           id
           name
+          username
           profile_image @type(name: "profile image") {
             small
           }

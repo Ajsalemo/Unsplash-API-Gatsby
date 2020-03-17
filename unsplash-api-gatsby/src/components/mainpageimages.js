@@ -3,7 +3,8 @@
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from "@material-ui/core"
-import React, { useEffect, useState, Fragment } from "react"
+import { Link } from "gatsby"
+import React, { Fragment, useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
@@ -13,7 +14,6 @@ import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
 import { SavedImageIcon } from "./savedimageicon"
 import { StyledAvatar } from "./styledavatar"
-import { Link } from "gatsby"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -153,6 +153,7 @@ export const MainPageImages = ({
   networkStatus,
   location,
   user,
+  username
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
   const [loadingSavedImage, setloadingSavedImage] = useState(false)
@@ -188,7 +189,8 @@ export const MainPageImages = ({
                 {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
                 {location !== "/users" ? (
                   <Fragment>
-                    <Link to="/users" state={src.user}>
+                    {/* Pass whichever of the two props that currently exist  */}
+                    <Link to="/users" state={src.user || src.user.username}>
                       <StyledAvatar
                         src={src.user.profile_image.small}
                         pageimages={1}

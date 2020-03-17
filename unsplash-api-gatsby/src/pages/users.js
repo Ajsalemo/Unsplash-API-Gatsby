@@ -6,6 +6,7 @@ import { Grid } from "@material-ui/core"
 import React from "react"
 import styled from "styled-components"
 import { GET_USERS_PHOTOS, GET_USER_PROFILE } from "../apollo/queries"
+import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
@@ -14,7 +15,6 @@ import { PublicProfileStats } from "../components/publicprofilestats"
 import { UserProfileAvatar } from "../components/userprofileavatar"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -28,6 +28,8 @@ const UsersProfileGrid = styled(Grid)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Users = state => {
+  const user = getProfile()
+
   const {
     loading: getUserProfileLoading,
     error: getUserProfileError,
@@ -59,7 +61,8 @@ const Users = state => {
 
   if (getUserProfileError || getUserImagesError)
     return <ErrorComponent />
-  if (getUserProfileLoading) return <LoadingContainer />
+  // If the 'User profile' query is loading, or if the "getUserImagesData.getUserPhotos" propery is still empty, return the loading container until either resolve
+  if (getUserProfileLoading || !getUserImagesData) return <LoadingContainer />
 
   // This query doesn't return a 'total pages' property
   // So to find the total pages, we do the total photos divided by the default of 10 images per page
@@ -68,18 +71,18 @@ const Users = state => {
   
   return (
     <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
+      <MainNavbar user={user} />
       <UsersProfileGrid item>
         <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
         <PublicProfileStats userInfoStats={getUserProfileData.getUserProfile} />
         <MainPageImages
-          loading={getUserImagesLoading}
+          loading={getUserImagesLoading || getUserProfileLoading}
           networkStatus={getUserProfileNetworkStatus || getUserImagesNetworkStatus}
           images={getUserImagesData.getUserPhotos}
           location={state.location.pathname}
           fetchMore={fetchMore}
           totalPages={roundTotalPhotos}
-          user={getProfile()}
+          user={user}
         />
       </UsersProfileGrid>
       <Footer />

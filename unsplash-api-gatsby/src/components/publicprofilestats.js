@@ -7,8 +7,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid, Typography } from "@material-ui/core"
 import React from "react"
 import { FlexCenterGrid } from "../helpers/styledcomponents"
+import styled from "styled-components"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+const ProfileStatsLinks = styled.a`
+  color: #fff;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 export const PublicProfileStats = ({ userInfoStats }) => (
@@ -34,14 +45,13 @@ export const PublicProfileStats = ({ userInfoStats }) => (
           icon={faInstagram}
           style={{ marginRight: "0.7em", color: "#fccc63" }}
         />
-        <a
+        <ProfileStatsLinks
           href={`https://www.instagram.com/${userInfoStats.instagram_username}`}
           rel="noopener noreferrer"
           target="_blank"
-          style={{ color: "#fff", textDecoration: "none" }}
         >
           {userInfoStats.instagram_username}
-        </a>
+        </ProfileStatsLinks>
       </Typography>
     ) : null}
     {userInfoStats.twitter_username !== null ? (
@@ -50,14 +60,13 @@ export const PublicProfileStats = ({ userInfoStats }) => (
           icon={faTwitter}
           style={{ marginRight: "0.7em", color: "#1DA1F2" }}
         />
-        <a
+        <ProfileStatsLinks
           href={`https://www.twitter.com/${userInfoStats.instagram_username}`}
           rel="noopener noreferrer"
           target="_blank"
-          style={{ color: "#fff", textDecoration: "none" }}
         >
           {userInfoStats.twitter_username}
-        </a>
+        </ProfileStatsLinks>
       </Typography>
     ) : null}
     <Typography style={{ color: "#fff" }} variant="subtitle2">
