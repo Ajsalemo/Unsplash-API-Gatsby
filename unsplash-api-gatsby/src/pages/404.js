@@ -25,6 +25,7 @@ const NotFoundGrid = styled(Grid)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const NotFoundPage = () => (
+  
   <Fragment>
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />

@@ -2,44 +2,52 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { useQuery } from "@apollo/react-hooks"
-import React, { Fragment } from "react"
-import { RANDOM_PHOTO_QUERY } from "../apollo/queries"
+import React from "react"
+import { GET_USERS_LIKED_PHOTOS } from "../apollo/queries"
 import ErrorComponent from "../components/errorcomponent"
-import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
-import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
-import { StyledMainContainer } from "../helpers/styledcomponents"
-import { getProfile } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const Main = state => {
-  const user = getProfile()
+export const UserLikedPhotos = ({
+  username,
+  location,
+  user,
+  totalPages,
+  chooseImagePanelView,
+}) => {
+  const { loading, error, data, networkStatus, fetchMore } = useQuery(
+    GET_USERS_LIKED_PHOTOS,
+    {
+      variables: {
+        username: username,
+        // Start the query at page one - if not specified, the network request errors out
+        page: 1,
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "cache-and-network",
+    }
+  )
 
-  const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
-  if (error) return <ErrorComponent />
   if (loading) return <LoadingContainer />
+  if (error) return <ErrorComponent />
+  console.log(data.getUserLikedPhotos)
   return (
-    <Fragment>
-      <StyledMainContainer container>
-        <MainNavbar user={user} />
-        <MainPageImages
-          images={data.randomPhotoQuery}
-          location={state.location.pathname}
-          user={user}
-        />
-        <Footer />
-      </StyledMainContainer>
-    </Fragment>
+    <MainPageImages
+      loading={loading}
+      networkStatus={networkStatus}
+      images={data.getUserLikedPhotos}
+      username={username}
+      location={location}
+      fetchMore={fetchMore}
+      totalPages={totalPages}
+      user={user}
+      chooseImagePanelView={chooseImagePanelView}
+    />
   )
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-export default Main
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

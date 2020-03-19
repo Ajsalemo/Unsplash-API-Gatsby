@@ -4,19 +4,22 @@
 import { useQuery } from "@apollo/react-hooks"
 import React from "react"
 import { SEARCH_IMAGES_BY_KEYWORD } from "../apollo/queries"
+import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import ErrorComponent from "../components/errorcomponent"
+import { LoadingContainer } from "../components/loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
 
 const ImageResults = state => {
   const user = getProfile()
+
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     SEARCH_IMAGES_BY_KEYWORD,
     {
@@ -28,6 +31,7 @@ const ImageResults = state => {
     }
   )
   if (error) return <ErrorComponent />
+  if (loading) return <LoadingContainer />
   return (
     <StyledMainContainer container>
       <MainNavbar user={user} />
