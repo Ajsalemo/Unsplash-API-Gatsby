@@ -28,6 +28,8 @@ const UsersProfileGrid = styled(Grid)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Users = state => {
+  const user = getProfile()
+
   const {
     loading: getUserProfileLoading,
     error: getUserProfileError,
@@ -58,14 +60,14 @@ const Users = state => {
 
   return (
     <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
+      <MainNavbar user={user} />
       <UsersProfileGrid item>
         <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
         <PublicProfileStats userInfoStats={getUserProfileData.getUserProfile} />
         <MainPageImages
           images={getUserImagesData.getUserPhotos}
           location={state.location.pathname}
-          user={getProfile()}
+          user={user}
         />
       </UsersProfileGrid>
       <Footer />
