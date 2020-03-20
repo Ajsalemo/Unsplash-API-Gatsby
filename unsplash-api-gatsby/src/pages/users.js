@@ -135,6 +135,7 @@ const Users = state => {
               getUserProfileData.getUserProfile.total_photos
             )}
             user={user}
+            chooseImagePanelView={chooseImagePanelView}
           />
         ) : (
           <UserLikedPhotos

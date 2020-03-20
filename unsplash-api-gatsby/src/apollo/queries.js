@@ -135,6 +135,7 @@ export const GET_USERS_LIKED_PHOTOS = gql`
       user @type(name: "Get_Users_Liked_Photos_User") {
         __typename
         name
+        username
         profile_image @type(name: "Get_Users_Liked_Photos_User_Profile_Image") {
           small
         }

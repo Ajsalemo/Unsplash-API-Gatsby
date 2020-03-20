@@ -33,7 +33,6 @@ export const UserLikedPhotos = ({
 
   if (loading) return <LoadingContainer />
   if (error) return <ErrorComponent />
-  console.log(data.getUserLikedPhotos)
   return (
     <MainPageImages
       loading={loading}

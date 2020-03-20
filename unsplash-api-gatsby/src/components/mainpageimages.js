@@ -12,7 +12,6 @@ import { ImagesSubGrid, LikePhotoIcon } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
-import { SavedImageIcon } from "./savedimageicon"
 import { StyledAvatar } from "./styledavatar"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -80,7 +79,13 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
           return (
             db.doc(user.name).set(
               {
-                [filterIllegalChars]: imageSrc,
+                [filterIllegalChars]: {
+                  image: imageSrc,
+                  avatar: src.user.profile_image.small,
+                  href: src.user.links.html,
+                  username: src.user.username || src.user,
+                  name: src.user.name
+                },
               },
               // Merge a new unuiqely created field into the document
               {
@@ -115,7 +120,13 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
               return (
                 db.doc(user.name).set(
                   {
-                    [filterIllegalChars]: imageSrc,
+                    [filterIllegalChars]: {
+                      image: imageSrc,
+                      avatar: src.user.profile_image.small,
+                      href: src.user.links.html,
+                      username: src.user.username || src.user,
+                      name: src.user.name
+                    },
                   },
                   // Merge a new unuiqely created field into the document
                   {
@@ -132,7 +143,13 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
         return (
           db.doc(user.name).set(
             {
-              [filterIllegalChars]: imageSrc,
+              [filterIllegalChars]: {
+                image: imageSrc,
+                avatar: src.user.profile_image.small,
+                href: src.user.links.html,
+                username: src.user.username || src.user,
+                name: src.user.name
+              },
             },
             // Merge a new unuiqely created field into the document
             {
@@ -187,39 +204,32 @@ export const MainPageImages = ({
               />
               <UserInformationGrid item>
                 {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
-                {location !== "/users" ? (
+                {!chooseImagePanelView ? (
                   <Fragment>
-                    {/* Pass whichever of the two props that currently exist  */}
+                    {/* Pass whichever of the three props that currently exist  */}
                     <Link to="/users" state={src.user || src.user.username}>
                       <StyledAvatar
-                        src={src.user.profile_image.small}
+                        src={src.avatar || src.user.profile_image.small}
                         pageimages={1}
                       />
                     </Link>
                     <ImageCredit>
                       Photo by{" "}
                       <a
-                        href={src.user.links.html}
+                        href={src.href || src.user.links.html}
                         style={{ color: "#fff" }}
                         rel="noopener noreferrer"
                       >
-                        {src.user.name}
+                        {src.name || src.user.name}
                       </a>
                     </ImageCredit>
                   </Fragment>
                 ) : null}
                 {/* 
-                  If a user is logged in, display the icon to "Like" images
+                  If a user is logged in, and is not viewing their account already, display the icon to "Like" images
                   Else if there is no signed in user, do not display it
                 */}
-                <SavedImageIcon
-                  checkSavedImages={checkSavedImages}
-                  loadingSavedImage={loadingSavedImage}
-                  src={src}
-                  user={user}
-                  key={i}
-                />
-                {user.name ? (
+                {user.name && location !== "/account" ? (
                   <LikePhotoIcon
                     icon={faHeart}
                     onClick={() =>
@@ -236,8 +246,8 @@ export const MainPageImages = ({
             </div>
           ))
         )}
-        {/* If the query returns no results then do not display the pagination component */}
-        {totalPages === 0 || location === "/main" ? null : (
+        {/* If the query returns no results, or matches either of the two listed routes, then do not display the pagination component */}
+        {totalPages === 0 || location === "/main" || location === "/account" ? null : (
           <Pagination totalPages={totalPages} fetchMore={fetchMore} />
         )}
       </Grid>

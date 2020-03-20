@@ -1,17 +1,15 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { CircularProgress, Grid } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Footer } from "../components/footer"
-import { ImageComponent } from "../components/imagecomponent"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
+import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
-import { ImagesSubGrid, StyledMainContainer } from "../helpers/styledcomponents"
+import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
 import firebase from "../utils/firebase"
 
@@ -27,12 +25,6 @@ const DeleteIcon = styled(FontAwesomeIcon)`
     transform: scale(1.2);
     transition: all 0.5s ease-in-out;
   }
-`
-const UserAccountImagesGrid = styled(Grid)`
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 1em;
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
@@ -93,7 +85,7 @@ const deleteSavedImage = (user, src, setSavedImages, setLoading) => {
     })
 }
 
-const Account = () => {
+const Account = ({ location }) => {
   const [savedImages, setSavedImages] = useState(null)
   const [loading, setLoading] = useState(false)
   const user = getProfile()
@@ -110,31 +102,20 @@ const Account = () => {
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
       <TotalResultsHeader keyword={"Your saved images"} />
-      <ImagesSubGrid item lg={12}>
-        <Grid
-          item
-          style={{ textAlign: "center", paddingBottom: "3.5em" }}
-          lg={10}
-        >
-          {savedImages !== null
-            ? savedImages.map((src, i) => (
-                <UserAccountImagesGrid item key={i}>
-                  <ImageComponent src={`${src}&h=330&w=330&fit=crop`} />
-                  {loading ? (
-                    <CircularProgress size="10px" style={{ color: "#fff" }} />
-                  ) : (
-                    <DeleteIcon
-                      icon={faTrashAlt}
-                      onClick={() =>
-                        deleteSavedImage(user, src, setSavedImages, setLoading)
-                      }
-                    />
-                  )}
-                </UserAccountImagesGrid>
-              ))
-            : null}
-        </Grid>
-      </ImagesSubGrid>
+      {savedImages !== null ? (
+        <MainPageImages
+          loading={loading}
+          images={savedImages}
+          user={user}
+          location={location.pathname}
+        />
+      ) : /* <DeleteIcon
+                icon={faTrashAlt}
+                onClick={() =>
+                  deleteSavedImage(user, src, setSavedImages, setLoading)
+                }
+              /> */
+      null}
       <Footer />
     </StyledMainContainer>
   )
