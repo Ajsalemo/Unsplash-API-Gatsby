@@ -67,7 +67,7 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
           }
           links @type(name: "Search_Images_By_Keyword_User_Links") {
             __typename
-            self
+            html
           }
         }
         urls @type(name: "Search_Images_By_Keyword_URLS") {

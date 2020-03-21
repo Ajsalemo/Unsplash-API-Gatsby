@@ -80,11 +80,15 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
             db.doc(user.name).set(
               {
                 [filterIllegalChars]: {
-                  image: imageSrc,
-                  avatar: src.user.profile_image.small,
-                  href: src.user.links.html,
-                  username: src.user.username || src.user,
-                  name: src.user.name
+                  urls: {
+                    raw: imageSrc,
+                  },
+                  user: {
+                    avatar: src.user.profile_image.small,
+                    href: src.user.links.html,
+                    username: src.user.username || src.user,
+                    name: src.user.name,
+                  },
                 },
               },
               // Merge a new unuiqely created field into the document
@@ -121,11 +125,15 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
                 db.doc(user.name).set(
                   {
                     [filterIllegalChars]: {
-                      image: imageSrc,
-                      avatar: src.user.profile_image.small,
-                      href: src.user.links.html,
-                      username: src.user.username || src.user,
-                      name: src.user.name
+                      urls: {
+                        raw: imageSrc,
+                      },
+                      user: {
+                        avatar: src.user.profile_image.small,
+                        href: src.user.links.html,
+                        username: src.user.username || src.user,
+                        name: src.user.name,
+                      },
                     },
                   },
                   // Merge a new unuiqely created field into the document
@@ -144,11 +152,15 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
           db.doc(user.name).set(
             {
               [filterIllegalChars]: {
-                image: imageSrc,
-                avatar: src.user.profile_image.small,
-                href: src.user.links.html,
-                username: src.user.username || src.user,
-                name: src.user.name
+                urls: {
+                  raw: imageSrc,
+                },
+                user: {
+                  avatar: src.user.profile_image.small,
+                  href: src.user.links.html,
+                  username: src.user.username || src.user,
+                  name: src.user.name,
+                },
               },
             },
             // Merge a new unuiqely created field into the document
@@ -195,12 +207,12 @@ export const MainPageImages = ({
           images.map((src, i) => (
             <div
               style={{ display: "inline-flex", flexDirection: "column" }}
-              key={src.id}
+              key={i}
             >
               <ImageComponent
                 alt={""}
                 // Render whichever one of the image src paramters that gets passed through
-                src={src.urls.custom || `${src.urls.raw}&h=330&w=330&fit=crop`}
+                src={`${src.urls.raw}&h=330&w=330&fit=crop` || src.urls.custom}
               />
               <UserInformationGrid item>
                 {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
@@ -209,18 +221,19 @@ export const MainPageImages = ({
                     {/* Pass whichever of the three props that currently exist  */}
                     <Link to="/users" state={src.user || src.user.username}>
                       <StyledAvatar
-                        src={src.avatar || src.user.profile_image.small}
+                        src={src.user.avatar || src.user.profile_image.small}
                         pageimages={1}
                       />
                     </Link>
                     <ImageCredit>
                       Photo by{" "}
                       <a
-                        href={src.href || src.user.links.html}
+                        href={src.user.href || src.user.links.html}
                         style={{ color: "#fff" }}
                         rel="noopener noreferrer"
                       >
-                        {src.name || src.user.name}
+                        {src.user.name}
+                        {console.log(src)}
                       </a>
                     </ImageCredit>
                   </Fragment>
@@ -247,7 +260,9 @@ export const MainPageImages = ({
           ))
         )}
         {/* If the query returns no results, or matches either of the two listed routes, then do not display the pagination component */}
-        {totalPages === 0 || location === "/main" || location === "/account" ? null : (
+        {totalPages === 0 ||
+        location === "/main" ||
+        location === "/account" ? null : (
           <Pagination totalPages={totalPages} fetchMore={fetchMore} />
         )}
       </Grid>
