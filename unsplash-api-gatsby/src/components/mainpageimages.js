@@ -1,7 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { faHeart } from "@fortawesome/free-solid-svg-icons"
+import { faHeart, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { Fragment, useEffect, useState } from "react"
@@ -29,13 +30,22 @@ const UserInformationGrid = styled(Grid)`
   align-items: center;
   padding-bottom: 3.5em;
 `
+const DeleteIcon = styled(FontAwesomeIcon)`
+  color: red;
+  transform: scale(1);
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    transition: all 0.5s ease-in-out;
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // Set the firebase collection to a variable
 const db = firebase.firestore().collection("users")
 
-const getSavedImages = (user, setCheckSavedImages, setloadingSavedImage) => {
+const getSavedImages = (user, setCheckSavedImages) => {
   const checkSavedImagesArray = []
-  setloadingSavedImage(true)
 
   db.doc(user.name)
     .get({ source: "server" })
@@ -49,7 +59,6 @@ const getSavedImages = (user, setCheckSavedImages, setloadingSavedImage) => {
         }
         // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
         setCheckSavedImages(checkSavedImagesArray)
-        setloadingSavedImage(false)
       } else {
         console.log("No document")
       }
@@ -57,7 +66,7 @@ const getSavedImages = (user, setCheckSavedImages, setloadingSavedImage) => {
     .catch(err => console.log(err))
 }
 
-const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
+const clickToLike = (user, src, setCheckSavedImages) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -96,7 +105,7 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
                 merge: true,
               }
             ),
-            getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+            getSavedImages(user, setCheckSavedImages)
           )
         } else {
           // Loop through the document object from Firestore
@@ -113,7 +122,7 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
                     merge: true,
                   }
                 ),
-                getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+                getSavedImages(user, setCheckSavedImages)
               )
             } else {
               // Target the "users" collection in Firestore
@@ -141,7 +150,7 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
                     merge: true,
                   }
                 ),
-                getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+                getSavedImages(user, setCheckSavedImages)
               )
             }
           }
@@ -168,8 +177,37 @@ const clickToLike = (user, src, setCheckSavedImages, setloadingSavedImage) => {
               merge: true,
             }
           ),
-          getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+          getSavedImages(user, setCheckSavedImages)
         )
+      }
+    })
+}
+
+const deleteSavedImage = (user, src) => {
+  // Filter out illegal characters, in this case the "/" character and replace it with "|"
+  // Firebase doesn't allow fields with illegal charcters to be updated
+  const filterCharsInUserAccount = src.urls.raw.replace(/\//g, "|")
+
+  db
+    .doc(user.name)
+    .get({ source: "server" })
+    .then(doc => {
+      if (doc.exists) {
+        const accountImages = doc.data()
+        for (const likedImages in accountImages) {
+          if (likedImages === filterCharsInUserAccount) {
+            return (
+              db.doc(user.name).set(
+                {
+                  [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
+                },
+                {
+                  merge: true,
+                }
+              )
+            )
+          }
+        }
       }
     })
 }
@@ -185,12 +223,11 @@ export const MainPageImages = ({
   chooseImagePanelView,
 }) => {
   const [checkSavedImages, setCheckSavedImages] = useState(null)
-  const [loadingSavedImage, setloadingSavedImage] = useState(false)
 
   useEffect(() => {
     // Check if the user exists before reaching out to firestore to retrieve user information
     if (user.name) {
-      getSavedImages(user, setCheckSavedImages, setloadingSavedImage)
+      getSavedImages(user, setCheckSavedImages)
     }
   }, [user])
 
@@ -233,7 +270,6 @@ export const MainPageImages = ({
                         rel="noopener noreferrer"
                       >
                         {src.user.name}
-                        {console.log(src)}
                       </a>
                     </ImageCredit>
                   </Fragment>
@@ -250,9 +286,14 @@ export const MainPageImages = ({
                         user,
                         src,
                         setCheckSavedImages,
-                        setloadingSavedImage
                       )
                     }
+                  />
+                // If a user is already viewing their account, then display the 'delete' icons instead of the 'like' icons for their photos
+                ) : user.name && location === "/account" ? (
+                  <DeleteIcon 
+                    icon={faTrashAlt}
+                    onClick={() => deleteSavedImage(user, src)}
                   />
                 ) : null}
               </UserInformationGrid>

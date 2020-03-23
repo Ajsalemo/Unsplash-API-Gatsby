@@ -1,9 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useEffect, useState } from "react"
-import styled from "styled-components"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
@@ -14,18 +12,6 @@ import { getProfile, isAuthenticated, login } from "../utils/auth"
 import firebase from "../utils/firebase"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-const DeleteIcon = styled(FontAwesomeIcon)`
-  color: red;
-  transform: scale(1);
-  transition: all 0.5s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-    transition: all 0.5s ease-in-out;
-  }
-`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const dbUserAccount = firebase.firestore().collection("users")
@@ -54,37 +40,6 @@ const getUserAccountImages = (user, setSavedImages, setLoading) => {
     .catch(err => console.log(err))
 }
 
-const deleteSavedImage = (user, src, setSavedImages, setLoading) => {
-  // Filter out illegal characters, in this case the "/" character and replace it with "|"
-  // Firebase doesn't allow fields with illegal charcters to be updated
-  const filterCharsInUserAccount = src.replace(/\//g, "|")
-  setLoading(true)
-  dbUserAccount
-    .doc(user.name)
-    .get({ source: "server" })
-    .then(doc => {
-      if (doc.exists) {
-        const accountImages = doc.data()
-        for (const likedImages in accountImages) {
-          if (likedImages === filterCharsInUserAccount) {
-            return (
-              dbUserAccount.doc(user.name).set(
-                {
-                  [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
-                },
-                {
-                  merge: true,
-                }
-              ),
-              getUserAccountImages(user, setSavedImages, setLoading),
-              setLoading(false)
-            )
-          }
-        }
-      }
-    })
-}
-
 const Account = ({ location }) => {
   const [savedImages, setSavedImages] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -100,7 +55,7 @@ const Account = ({ location }) => {
 
   return (
     <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
+      <MainNavbar user={user} />
       <TotalResultsHeader keyword={"Your saved images"} />
       {savedImages !== null ? (
         <MainPageImages
@@ -109,13 +64,7 @@ const Account = ({ location }) => {
           user={user}
           location={location.pathname}
         />
-      ) : /* <DeleteIcon
-                icon={faTrashAlt}
-                onClick={() =>
-                  deleteSavedImage(user, src, setSavedImages, setLoading)
-                }
-              /> */
-      null}
+      ) : null}
       <Footer />
     </StyledMainContainer>
   )
