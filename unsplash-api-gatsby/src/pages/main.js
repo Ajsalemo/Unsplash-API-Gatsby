@@ -2,7 +2,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { useQuery } from "@apollo/react-hooks"
-import React, { Fragment } from "react"
+import React from "react"
 import { RANDOM_PHOTO_QUERY } from "../apollo/queries"
 import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
@@ -22,7 +22,7 @@ const Main = state => {
   if (error) return <ErrorComponent />
   if (loading) return <LoadingContainer />
   return (
-    <Fragment>
+    <>
       <StyledMainContainer container>
         <MainNavbar user={user} />
         <MainPageImages
@@ -32,7 +32,7 @@ const Main = state => {
         />
         <Footer />
       </StyledMainContainer>
-    </Fragment>
+    </>
   )
 }
 

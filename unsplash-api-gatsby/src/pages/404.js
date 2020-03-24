@@ -3,7 +3,7 @@
 
 import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
-import React, { Fragment } from "react"
+import React from "react"
 import styled from "styled-components"
 import { Footer } from "../components/footer"
 import { MainNavbar } from "../components/mainnavbar"
@@ -25,8 +25,7 @@ const NotFoundGrid = styled(Grid)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const NotFoundPage = () => (
-  
-  <Fragment>
+  <>
     <StyledMainContainer container>
       <MainNavbar user={getProfile()} />
       <NotFoundGrid item>
@@ -38,7 +37,7 @@ const NotFoundPage = () => (
       </NotFoundGrid>
       <Footer />
     </StyledMainContainer>
-  </Fragment>
+  </>
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

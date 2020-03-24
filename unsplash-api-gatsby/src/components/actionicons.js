@@ -1,34 +1,41 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import Carousel from "@brainhubeu/react-carousel"
-import "@brainhubeu/react-carousel/lib/style.css"
-import Img from "gatsby-image"
+import { faHeart, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
-import { SignIn } from "./signin"
+import styled from "styled-components"
+import { LikePhotoIcon } from "../helpers/styledcomponents"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const EmblaCarouselComponent = ({ data, user }) => (
-  <>
-    <Carousel animationSpeed={1500} autoPlay={5000} infinite>
-      {data.allImageSharp.edges.map(src => (
-        <Img
-          fluid={src.node.fluid}
-          key={src.node.id}
-          style={{ height: "100vh", position: "static", opacity: "0.4" }}
-        />
-      ))}
-    </Carousel>
-    <SignIn user={user} />
-  </>
-)
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-export default EmblaCarouselComponent
+const DeleteIcon = styled(FontAwesomeIcon)`
+  color: red;
+  transform: scale(1);
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    transition: all 0.5s ease-in-out;
+  }
+`
+export const ActionIcons = ({
+  location,
+  user,
+  src,
+  setCheckSavedImages,
+  clickToLike,
+  deleteSavedImage,
+}) =>
+  // If a user is logged in, and is not viewing their account already, display the icon to "Like" images
+  // Else if there is no signed in user, do not display it
+  user.name && location !== "/account" ? (
+    <LikePhotoIcon icon={faHeart} onClick={clickToLike} />
+  ) : // If a user is already viewing their account, then display the 'delete' icons instead of the 'like' icons for their photos
+  user.name && location === "/account" ? (
+    <DeleteIcon icon={faTrashAlt} onClick={deleteSavedImage} />
+  ) : null
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

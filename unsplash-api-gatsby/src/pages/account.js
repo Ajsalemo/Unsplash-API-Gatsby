@@ -6,6 +6,7 @@ import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
+import { NoImages } from "../components/noimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
@@ -58,12 +59,16 @@ const Account = ({ location }) => {
       <MainNavbar user={user} />
       <TotalResultsHeader keyword={"Your saved images"} />
       {savedImages !== null ? (
-        <MainPageImages
-          loading={loading}
-          images={savedImages}
-          user={user}
-          location={location.pathname}
-        />
+        <>
+          <MainPageImages
+            loading={loading}
+            images={savedImages}
+            user={user}
+            location={location.pathname}
+          />
+          {/* If there are no saved images for the user on their account, render this component */}
+          <NoImages savedImages={savedImages} />
+        </>
       ) : null}
       <Footer />
     </StyledMainContainer>

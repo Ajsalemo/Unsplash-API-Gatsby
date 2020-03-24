@@ -1,16 +1,15 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { faHeart, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, LikePhotoIcon } from "../helpers/styledcomponents"
+import { ImagesSubGrid } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
+import { ActionIcons } from "./actionicons"
 import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
 import { StyledAvatar } from "./styledavatar"
@@ -29,16 +28,6 @@ const UserInformationGrid = styled(Grid)`
   justify-content: space-evenly;
   align-items: center;
   padding-bottom: 3.5em;
-`
-const DeleteIcon = styled(FontAwesomeIcon)`
-  color: red;
-  transform: scale(1);
-  transition: all 0.5s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-    transition: all 0.5s ease-in-out;
-  }
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // Set the firebase collection to a variable
@@ -108,52 +97,33 @@ const clickToLike = (user, src, setCheckSavedImages) => {
             getSavedImages(user, setCheckSavedImages)
           )
         } else {
-          // Loop through the document object from Firestore
-          for (const field in imageDocument) {
-            // If the image url that is being passed through this function equals one that's already saved, then delete the saved image url
-            // This acts as a sort of 'toggle' between liking and not liking a photo
-            if (field === filterIllegalChars) {
-              return (
-                db.doc(user.name).set(
-                  {
-                    [field]: firebase.firestore.FieldValue.delete(),
+          // Target the "users" collection in Firestore
+          // Set the document to a dynamic value, in this, the user email
+          // Set the field to a dynamic value, which is the image being liked by the user
+          // This is so all liked images are saved under the users name
+          // If the field doesn't exist, Firestore will create it
+          return (
+            db.doc(user.name).set(
+              {
+                [filterIllegalChars]: {
+                  urls: {
+                    raw: imageSrc,
                   },
-                  {
-                    merge: true,
-                  }
-                ),
-                getSavedImages(user, setCheckSavedImages)
-              )
-            } else {
-              // Target the "users" collection in Firestore
-              // Set the document to a dynamic value, in this, the user email
-              // Set the field to a dynamic value, which is the image being liked by the user
-              // This is so all liked images are saved under the users name
-              // If the field doesn't exist, Firestore will create it
-              return (
-                db.doc(user.name).set(
-                  {
-                    [filterIllegalChars]: {
-                      urls: {
-                        raw: imageSrc,
-                      },
-                      user: {
-                        avatar: src.user.profile_image.small,
-                        href: src.user.links.html,
-                        username: src.user.username || src.user,
-                        name: src.user.name,
-                      },
-                    },
+                  user: {
+                    avatar: src.user.profile_image.small,
+                    href: src.user.links.html,
+                    username: src.user.username || src.user,
+                    name: src.user.name,
                   },
-                  // Merge a new unuiqely created field into the document
-                  {
-                    merge: true,
-                  }
-                ),
-                getSavedImages(user, setCheckSavedImages)
-              )
-            }
-          }
+                },
+              },
+              // Merge a new unuiqely created field into the document
+              {
+                merge: true,
+              }
+            ),
+            getSavedImages(user, setCheckSavedImages)
+          )
         }
         // If a document doesn't exist yet then create it when a user saves their first photo
       } else {
@@ -188,23 +158,20 @@ const deleteSavedImage = (user, src) => {
   // Firebase doesn't allow fields with illegal charcters to be updated
   const filterCharsInUserAccount = src.urls.raw.replace(/\//g, "|")
 
-  db
-    .doc(user.name)
+  db.doc(user.name)
     .get({ source: "server" })
     .then(doc => {
       if (doc.exists) {
         const accountImages = doc.data()
         for (const likedImages in accountImages) {
           if (likedImages === filterCharsInUserAccount) {
-            return (
-              db.doc(user.name).set(
-                {
-                  [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
-                },
-                {
-                  merge: true,
-                }
-              )
+            return db.doc(user.name).set(
+              {
+                [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
+              },
+              {
+                merge: true,
+              }
             )
           }
         }
@@ -254,7 +221,7 @@ export const MainPageImages = ({
               <UserInformationGrid item>
                 {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
                 {!chooseImagePanelView ? (
-                  <Fragment>
+                  <>
                     {/* Pass whichever of the three props that currently exist  */}
                     <Link to="/users" state={src.user || src.user.username}>
                       <StyledAvatar
@@ -272,30 +239,16 @@ export const MainPageImages = ({
                         {src.user.name}
                       </a>
                     </ImageCredit>
-                  </Fragment>
+                  </>
                 ) : null}
-                {/* 
-                  If a user is logged in, and is not viewing their account already, display the icon to "Like" images
-                  Else if there is no signed in user, do not display it
-                */}
-                {user.name && location !== "/account" ? (
-                  <LikePhotoIcon
-                    icon={faHeart}
-                    onClick={() =>
-                      clickToLike(
-                        user,
-                        src,
-                        setCheckSavedImages,
-                      )
-                    }
-                  />
-                // If a user is already viewing their account, then display the 'delete' icons instead of the 'like' icons for their photos
-                ) : user.name && location === "/account" ? (
-                  <DeleteIcon 
-                    icon={faTrashAlt}
-                    onClick={() => deleteSavedImage(user, src)}
-                  />
-                ) : null}
+                <ActionIcons
+                  location={location}
+                  user={user}
+                  src={src}
+                  setCheckSavedImages={setCheckSavedImages}
+                  clickToLike={() => clickToLike(user, src, setCheckSavedImages)}
+                  deleteSavedImage={() => deleteSavedImage(user, src)}
+                />
               </UserInformationGrid>
             </div>
           ))

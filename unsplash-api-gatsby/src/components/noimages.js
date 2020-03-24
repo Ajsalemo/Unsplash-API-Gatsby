@@ -5,45 +5,37 @@ import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
-import { Footer } from "../components/footer"
-import { MainNavbar } from "../components/mainnavbar"
-import { StyledMainContainer } from "../helpers/styledcomponents"
-import { getProfile } from "../utils/auth"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const NotFoundGrid = styled(Grid)`
+const NoImagesGrid = styled(Grid)`
   height: 100%;
+  width: 100%;
+  background-color: #1e172f;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   text-align: center;
   color: #fff;
+  padding-top: 4em;
 `
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const ErrorComponent = () => (
-  <>
-    <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
-      <NotFoundGrid item>
-        <h1>An error occured</h1>
-        <p>Something went wrong.</p>
-        <p>
-          Try searching for another photo or go <Link to="/main" style={{ color: "#fff" }}>home</Link>.
-        </p>
-      </NotFoundGrid>
-      <Footer />
-    </StyledMainContainer>
-  </>
-)
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-export default ErrorComponent
+export const NoImages = ({ savedImages }) =>
+  // If there are no saved images for the user on their account, render this component
+  savedImages.length === 0 ? (
+    <NoImagesGrid item>
+      <h1>You currently have no images saved</h1>
+      <p>
+        Try searching for a photo or go{" "}
+        <Link to="/main" style={{ color: "#fff" }}>
+          home
+        </Link>
+        .
+      </p>
+    </NoImagesGrid>
+  ) : null
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

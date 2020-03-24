@@ -14,7 +14,6 @@ export const FlexCenterGrid = styled(Grid)`
   display: flex;
   justify-content: center;
 `
-
 export const StyledMainContainer = styled(FlexCenterGrid)`
   background-color: #1e172f;
   height: 100vh;
