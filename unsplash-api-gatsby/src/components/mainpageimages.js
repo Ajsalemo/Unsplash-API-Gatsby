@@ -3,7 +3,7 @@
 
 import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
@@ -33,29 +33,7 @@ const UserInformationGrid = styled(Grid)`
 // Set the firebase collection to a variable
 const db = firebase.firestore().collection("users")
 
-const getSavedImages = (user, setCheckSavedImages) => {
-  const checkSavedImagesArray = []
-
-  db.doc(user.name)
-    .get({ source: "server" })
-    .then(doc => {
-      if (doc.exists) {
-        const accountDocumentResult = doc.data()
-        // If the document exists, loop through the properties within the object
-        for (const property in accountDocumentResult) {
-          // This pushes the custom component into the empty checkSavedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-          checkSavedImagesArray.push(accountDocumentResult[property])
-        }
-        // Invoke the state setting function to set "checkSavedImages" state to the checkSavedImagesArray
-        setCheckSavedImages(checkSavedImagesArray)
-      } else {
-        console.log("No document")
-      }
-    })
-    .catch(err => console.log(err))
-}
-
-const clickToLike = (user, src, setCheckSavedImages) => {
+const clickToLike = (user, src) => {
   // set the raw URL to a variable
   const imageSrc = src.urls.raw
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
@@ -93,8 +71,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
               {
                 merge: true,
               }
-            ),
-            getSavedImages(user, setCheckSavedImages)
+            )
           )
         } else {
           // Target the "users" collection in Firestore
@@ -121,8 +98,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
               {
                 merge: true,
               }
-            ),
-            getSavedImages(user, setCheckSavedImages)
+            )
           )
         }
         // If a document doesn't exist yet then create it when a user saves their first photo
@@ -146,8 +122,7 @@ const clickToLike = (user, src, setCheckSavedImages) => {
             {
               merge: true,
             }
-          ),
-          getSavedImages(user, setCheckSavedImages)
+          )
         )
       }
     })
@@ -189,15 +164,6 @@ export const MainPageImages = ({
   user,
   chooseImagePanelView,
 }) => {
-  const [checkSavedImages, setCheckSavedImages] = useState(null)
-
-  useEffect(() => {
-    // Check if the user exists before reaching out to firestore to retrieve user information
-    if (user.name) {
-      getSavedImages(user, setCheckSavedImages)
-    }
-  }, [user])
-
   return (
     <ImagesSubGrid item lg={12}>
       <Grid
@@ -244,9 +210,7 @@ export const MainPageImages = ({
                 <ActionIcons
                   location={location}
                   user={user}
-                  src={src}
-                  setCheckSavedImages={setCheckSavedImages}
-                  clickToLike={() => clickToLike(user, src, setCheckSavedImages)}
+                  clickToLike={() => clickToLike(user, src)}
                   deleteSavedImage={() => deleteSavedImage(user, src)}
                 />
               </UserInformationGrid>

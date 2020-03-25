@@ -23,8 +23,6 @@ const DeleteIcon = styled(FontAwesomeIcon)`
 export const ActionIcons = ({
   location,
   user,
-  src,
-  setCheckSavedImages,
   clickToLike,
   deleteSavedImage,
 }) =>
