@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+import { CircularProgress } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
@@ -69,7 +70,10 @@ const Account = ({ location }) => {
           {/* If there are no saved images for the user on their account, render this component */}
           <NoImages savedImages={savedImages} />
         </>
-      ) : null}
+      ) : (
+        // While we're waiting for a response to be returned from firebase, show a loading indicator
+        <CircularProgress style={{ color: "#fff" }} />
+      )}
       <Footer />
     </StyledMainContainer>
   )

@@ -52,59 +52,7 @@ const clickToLike = (user, src) => {
           Object.entries(imageDocument).length === 0 &&
           imageDocument.constructor === Object
         ) {
-          return (
-            db.doc(user.name).set(
-              {
-                [filterIllegalChars]: {
-                  urls: {
-                    raw: imageSrc,
-                  },
-                  user: {
-                    avatar: src.user.profile_image.small,
-                    href: src.user.links.html,
-                    username: src.user.username || src.user,
-                    name: src.user.name,
-                  },
-                },
-              },
-              // Merge a new unuiqely created field into the document
-              {
-                merge: true,
-              }
-            )
-          )
-        } else {
-          // Target the "users" collection in Firestore
-          // Set the document to a dynamic value, in this, the user email
-          // Set the field to a dynamic value, which is the image being liked by the user
-          // This is so all liked images are saved under the users name
-          // If the field doesn't exist, Firestore will create it
-          return (
-            db.doc(user.name).set(
-              {
-                [filterIllegalChars]: {
-                  urls: {
-                    raw: imageSrc,
-                  },
-                  user: {
-                    avatar: src.user.profile_image.small,
-                    href: src.user.links.html,
-                    username: src.user.username || src.user,
-                    name: src.user.name,
-                  },
-                },
-              },
-              // Merge a new unuiqely created field into the document
-              {
-                merge: true,
-              }
-            )
-          )
-        }
-        // If a document doesn't exist yet then create it when a user saves their first photo
-      } else {
-        return (
-          db.doc(user.name).set(
+          return db.doc(user.name).set(
             {
               [filterIllegalChars]: {
                 urls: {
@@ -123,6 +71,52 @@ const clickToLike = (user, src) => {
               merge: true,
             }
           )
+        } else {
+          // Target the "users" collection in Firestore
+          // Set the document to a dynamic value, in this, the user email
+          // Set the field to a dynamic value, which is the image being liked by the user
+          // This is so all liked images are saved under the users name
+          // If the field doesn't exist, Firestore will create it
+          return db.doc(user.name).set(
+            {
+              [filterIllegalChars]: {
+                urls: {
+                  raw: imageSrc,
+                },
+                user: {
+                  avatar: src.user.profile_image.small,
+                  href: src.user.links.html,
+                  username: src.user.username || src.user,
+                  name: src.user.name,
+                },
+              },
+            },
+            // Merge a new unuiqely created field into the document
+            {
+              merge: true,
+            }
+          )
+        }
+        // If a document doesn't exist yet then create it when a user saves their first photo
+      } else {
+        return db.doc(user.name).set(
+          {
+            [filterIllegalChars]: {
+              urls: {
+                raw: imageSrc,
+              },
+              user: {
+                avatar: src.user.profile_image.small,
+                href: src.user.links.html,
+                username: src.user.username || src.user,
+                name: src.user.name,
+              },
+            },
+          },
+          // Merge a new unuiqely created field into the document
+          {
+            merge: true,
+          }
         )
       }
     })
@@ -211,7 +205,7 @@ export const MainPageImages = ({
                   location={location}
                   user={user}
                   clickToLike={() => clickToLike(user, src)}
-                  deleteSavedImage={() => deleteSavedImage(user, src)}
+                  deleteSavedImage={() => deleteSavedImage(user, src, loading)}
                 />
               </UserInformationGrid>
             </div>
