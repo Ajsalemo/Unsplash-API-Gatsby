@@ -24,7 +24,7 @@ export const ImagesSubGrid = styled(FlexCenterGrid)`
   padding-bottom: 3.5em;
 `
 export const LikePhotoIcon = styled(FontAwesomeIcon)`
-  color: ${props => (props.unlikephoto ? "red" : "white")};
+  color: ${props => (props.liked ? "red" : "white")};
   transition: all 0.5s ease-in-out;
   transform: scale(1);
   &:hover {
