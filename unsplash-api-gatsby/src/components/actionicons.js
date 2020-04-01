@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import styled from "styled-components"
 import { LikePhotoIcon } from "../helpers/styledcomponents"
-import { CircularProgress } from "@material-ui/core"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -45,8 +44,8 @@ export const ActionIcons = ({
       user.name &&
       location !== "/account"
     ) {
-      return <LikePhotoIcon icon={faHeart} onClick={clickToLike} liked={1} />
-    }
+      return <LikePhotoIcon icon={faHeart} onClick={deleteSavedImage} liked={1} />
+    } 
   }
   return (
     // If a user is logged in, and is not viewing their account already, display the icon to "Like" images

@@ -44,7 +44,6 @@ export const MainPageImages = ({
   // Set the firebase collection to a variable
   const db = firebase.firestore().collection("users")
   const [userImages, setUserImages] = useState([])
-
   const retrieveUserSavedImages = user => {
     const savedImagesArray = []
     db.doc(user.name)
@@ -84,24 +83,27 @@ export const MainPageImages = ({
             Object.entries(imageDocument).length === 0 &&
             imageDocument.constructor === Object
           ) {
-            return db.doc(user.name).set(
-              {
-                [filterIllegalChars]: {
-                  urls: {
-                    raw: imageSrc,
-                  },
-                  user: {
-                    avatar: src.user.profile_image.small,
-                    href: src.user.links.html,
-                    username: src.user.username || src.user,
-                    name: src.user.name,
+            return (
+              retrieveUserSavedImages(user),
+              db.doc(user.name).set(
+                {
+                  [filterIllegalChars]: {
+                    urls: {
+                      raw: imageSrc,
+                    },
+                    user: {
+                      avatar: src.user.profile_image.small,
+                      href: src.user.links.html,
+                      username: src.user.username || src.user,
+                      name: src.user.name,
+                    },
                   },
                 },
-              },
-              // Merge a new unuiqely created field into the document
-              {
-                merge: true,
-              }
+                // Merge a new unuiqely created field into the document
+                {
+                  merge: true,
+                }
+              )
             )
           } else {
             // Target the "users" collection in Firestore
@@ -109,7 +111,34 @@ export const MainPageImages = ({
             // Set the field to a dynamic value, which is the image being liked by the user
             // This is so all liked images are saved under the users name
             // If the field doesn't exist, Firestore will create it
-            return db.doc(user.name).set(
+            return (
+              retrieveUserSavedImages(user),
+              db.doc(user.name).set(
+                {
+                  [filterIllegalChars]: {
+                    urls: {
+                      raw: imageSrc,
+                    },
+                    user: {
+                      avatar: src.user.profile_image.small,
+                      href: src.user.links.html,
+                      username: src.user.username || src.user,
+                      name: src.user.name,
+                    },
+                  },
+                },
+                // Merge a new unuiqely created field into the document
+                {
+                  merge: true,
+                }
+              )
+            )
+          }
+          // If a document doesn't exist yet then create it when a user saves their first photo
+        } else {
+          return (
+            retrieveUserSavedImages(user),
+            db.doc(user.name).set(
               {
                 [filterIllegalChars]: {
                   urls: {
@@ -128,27 +157,6 @@ export const MainPageImages = ({
                 merge: true,
               }
             )
-          }
-          // If a document doesn't exist yet then create it when a user saves their first photo
-        } else {
-          return db.doc(user.name).set(
-            {
-              [filterIllegalChars]: {
-                urls: {
-                  raw: imageSrc,
-                },
-                user: {
-                  avatar: src.user.profile_image.small,
-                  href: src.user.links.html,
-                  username: src.user.username || src.user,
-                  name: src.user.name,
-                },
-              },
-            },
-            // Merge a new unuiqely created field into the document
-            {
-              merge: true,
-            }
           )
         }
       })
@@ -166,13 +174,16 @@ export const MainPageImages = ({
           const accountImages = doc.data()
           for (const likedImages in accountImages) {
             if (likedImages === filterCharsInUserAccount) {
-              return db.doc(user.name).set(
-                {
-                  [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
-                },
-                {
-                  merge: true,
-                }
+              return (
+                retrieveUserSavedImages(user),
+                db.doc(user.name).set(
+                  {
+                    [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
+                  },
+                  {
+                    merge: true,
+                  }
+                )
               )
             }
           }
@@ -182,7 +193,7 @@ export const MainPageImages = ({
 
   useEffect(() => {
     retrieveUserSavedImages(user)
-  }, [])
+  })
 
   return (
     <ImagesSubGrid item lg={12}>
@@ -233,7 +244,7 @@ export const MainPageImages = ({
                   src={src}
                   userImages={userImages}
                   clickToLike={() => clickToLike(user, src)}
-                  deleteSavedImage={() => deleteSavedImage(user, src, loading)}
+                  deleteSavedImage={() => deleteSavedImage(user, src)}
                 />
               </UserInformationGrid>
             </div>
