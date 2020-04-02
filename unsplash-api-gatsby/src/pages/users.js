@@ -66,7 +66,7 @@ const Users = state => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   })
-
+  
   const {
     loading: getUserImagesLoading,
     error: getUserImagesError,

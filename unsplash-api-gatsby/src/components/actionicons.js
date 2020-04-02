@@ -44,18 +44,23 @@ export const ActionIcons = ({
       user.name &&
       location !== "/account"
     ) {
-      return <LikePhotoIcon icon={faHeart} onClick={deleteSavedImage} liked={1} />
-    } 
+      return (
+        <LikePhotoIcon icon={faHeart} onClick={deleteSavedImage} liked={1} />
+      )
+    }
   }
+  
   return (
     // If a user is logged in, and is not viewing their account already, display the icon to "Like" images
     // Else if there is no signed in user, do not display it
-    user.name && location !== "/account" ? (
-      <LikePhotoIcon icon={faHeart} onClick={clickToLike} liked={0} />
-    ) : (
-      // If a user is already viewing their account, then display the 'delete' icons instead of the 'like' icons for their photos
-      <DeleteIcon icon={faTrashAlt} onClick={deleteSavedImage} />
-    )
+    user.name ? (
+      user.name && location !== "/account" ? (
+        <LikePhotoIcon icon={faHeart} onClick={clickToLike} liked={0} />
+      ) : (
+        // If a user is already viewing their account, then display the 'delete' icons instead of the 'like' icons for their photos
+        <DeleteIcon icon={faTrashAlt} onClick={deleteSavedImage} />
+      )
+    ) : null
   )
 }
 

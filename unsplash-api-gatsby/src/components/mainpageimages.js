@@ -44,24 +44,27 @@ export const MainPageImages = ({
   // Set the firebase collection to a variable
   const db = firebase.firestore().collection("users")
   const [userImages, setUserImages] = useState([])
+  console.log(images)
   const retrieveUserSavedImages = user => {
     const savedImagesArray = []
-    db.doc(user.name)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          const documentResult = doc.data()
-          // If the document exists, loop through the properties within the object
-          for (const property in documentResult) {
-            // This pushes the custom component into the empty savedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-            savedImagesArray.push(documentResult[property])
+    if (user.name) {
+      db.doc(user.name)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            const documentResult = doc.data()
+            // If the document exists, loop through the properties within the object
+            for (const property in documentResult) {
+              // This pushes the custom component into the empty savedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
+              savedImagesArray.push(documentResult[property])
+            }
+            setUserImages(savedImagesArray)
+          } else {
+            console.log("No document")
           }
-          setUserImages(savedImagesArray)
-        } else {
-          console.log("No document")
-        }
-      })
-      .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+    }
   }
 
   const clickToLike = (user, src) => {
@@ -193,8 +196,8 @@ export const MainPageImages = ({
 
   useEffect(() => {
     retrieveUserSavedImages(user)
-  })
-
+  }, [])
+  console.log(images)
   return (
     <ImagesSubGrid item lg={12}>
       <Grid

@@ -3,7 +3,16 @@
 
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core"
+import {
+  Button,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  Typography,
+} from "@material-ui/core"
 import { Link } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
@@ -36,12 +45,18 @@ const LogInNavButton = styled(Button)`
     display: initial;
   }
 `
+const DisplayNameMenuItem = styled(MenuItem)`
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #fff;
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // The below logic was taken straight out of Material-UI's Menu Component example on their site
 export const MobileNavMenu = ({ user }) => {
+  const displayName = user.nickname ? user.nickname : user.name
   const [open, setOpen] = useState(false)
   const anchorRef = useRef(null)
-
+  
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen)
   }
@@ -108,6 +123,10 @@ export const MobileNavMenu = ({ user }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
+                  <DisplayNameMenuItem>
+                    <Typography variant="subtitle2">Hello,</Typography>
+                    <Typography variant="subtitle2">{displayName}</Typography>
+                  </DisplayNameMenuItem>
                   <Link
                     to="/main"
                     onClick={handleClose}
