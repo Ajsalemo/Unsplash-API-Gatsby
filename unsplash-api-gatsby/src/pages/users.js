@@ -93,7 +93,7 @@ const Users = state => {
   const roundTotalPhotos = totalPhoto => {
     return Math.ceil(totalPhoto / 10)
   }
-
+  
   return (
     <StyledMainContainer container>
       <MainNavbar user={user} />

@@ -17,7 +17,6 @@ export const UserLikedPhotos = ({
   user,
   totalPages,
   chooseImagePanelView,
-  getUserImagesLoading,
 }) => {
   const { loading, error, data, networkStatus, fetchMore } = useQuery(
     GET_USERS_LIKED_PHOTOS,

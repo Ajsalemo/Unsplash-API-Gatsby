@@ -1,7 +1,6 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { CircularProgress } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
@@ -20,17 +19,15 @@ const dbUserAccount = firebase.firestore().collection("users")
 
 const getUserAccountImages = (user, setSavedImages, setLoading) => {
   setLoading(true)
-  dbUserAccount
-    .doc(user.name)
-    .onSnapshot(snap => {
-        const savedImagesArray = []
-        const documentResult = snap.data()
-        for (const property in documentResult) {
-            savedImagesArray.push(documentResult[property])
-        }
-        setLoading(false)
-        setSavedImages(savedImagesArray)
-    })
+  dbUserAccount.doc(user.name).onSnapshot(snap => {
+    const savedImagesArray = []
+    const documentResult = snap.data()
+    for (const property in documentResult) {
+      savedImagesArray.push(documentResult[property])
+    }
+    setLoading(false)
+    setSavedImages(savedImagesArray)
+  })
 }
 
 const Account = ({ location }) => {
@@ -44,10 +41,9 @@ const Account = ({ location }) => {
       login()
       return <LoadingContainer />
     }
-
     getUserAccountImages(user, setSavedImages, setLoading)
   }, [user])
-
+  
   return (
     <StyledMainContainer container>
       <MainNavbar user={user} />
@@ -65,7 +61,7 @@ const Account = ({ location }) => {
         </>
       ) : (
         // While we're waiting for a response to be returned from firebase, show a loading indicator
-        <CircularProgress style={{ color: "#fff" }} />
+        <LoadingContainer />
       )}
       <Footer />
     </StyledMainContainer>

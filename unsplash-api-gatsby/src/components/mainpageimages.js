@@ -44,7 +44,7 @@ export const MainPageImages = ({
   // Set the firebase collection to a variable
   const db = firebase.firestore().collection("users")
   const [userImages, setUserImages] = useState([])
-  console.log(images)
+
   const retrieveUserSavedImages = user => {
     const savedImagesArray = []
     if (user.name) {
@@ -73,7 +73,7 @@ export const MainPageImages = ({
     // Filter out illegal characters, in this case the "/" character and replace it with "|"
     // Firebase doesn't allow fields with illegal charcters to be updated
     const filterIllegalChars = imageSrc.replace(/\//g, "|")
-
+    
     db.doc(user.name)
       .get({ source: "server" })
       .then(doc => {
@@ -97,7 +97,7 @@ export const MainPageImages = ({
                     user: {
                       avatar: src.user.profile_image.small,
                       href: src.user.links.html,
-                      username: src.user.username || src.user,
+                      username: src.user.username,
                       name: src.user.name,
                     },
                   },
@@ -195,9 +195,11 @@ export const MainPageImages = ({
   }
 
   useEffect(() => {
-    retrieveUserSavedImages(user)
+    if(location === "/image-results" || location === "/main") {
+      retrieveUserSavedImages(user)
+    }
   }, [])
-  console.log(images)
+
   return (
     <ImagesSubGrid item lg={12}>
       <Grid
