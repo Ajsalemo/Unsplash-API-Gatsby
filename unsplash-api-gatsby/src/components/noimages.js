@@ -22,9 +22,9 @@ const NoImagesGrid = styled(Grid)`
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const NoImages = ({ savedImages }) =>
+export const NoImages = ({ userImages }) =>
   // If there are no saved images for the user on their account, render this component
-  savedImages.length === 0 ? (
+  userImages.length === 0 ? (
     <NoImagesGrid item>
       <h1>You currently have no images saved</h1>
       <p>

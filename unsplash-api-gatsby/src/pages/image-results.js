@@ -4,18 +4,16 @@
 import { useQuery } from "@apollo/react-hooks"
 import React from "react"
 import { SEARCH_IMAGES_BY_KEYWORD } from "../apollo/queries"
-import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
+import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import { LoadingContainer } from "../components/loadingcontainer"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
 
 const ImageResults = state => {
   const user = getProfile()
@@ -30,8 +28,9 @@ const ImageResults = state => {
       fetchPolicy: "cache-and-network",
     }
   )
-  if (error) return <ErrorComponent />
+
   if (loading) return <LoadingContainer />
+
   return (
     <StyledMainContainer container>
       <MainNavbar user={user} />
@@ -40,6 +39,7 @@ const ImageResults = state => {
         totalResults={data.searchImagesByKeyword.total}
       />
       <MainPageImages
+        error={error}
         loading={loading}
         networkStatus={networkStatus}
         images={data.searchImagesByKeyword.results}

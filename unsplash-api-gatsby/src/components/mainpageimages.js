@@ -10,8 +10,10 @@ import { Pagination } from "../components/pagination"
 import { ImagesSubGrid } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { ActionIcons } from "./actionicons"
+import ErrorComponent from "./errorcomponent"
 import { ImageComponent } from "./imagecomponent"
 import { LoadingContainer } from "./loadingcontainer"
+import { NoImages } from "./noimages"
 import { StyledAvatar } from "./styledavatar"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -40,11 +42,15 @@ export const MainPageImages = ({
   location,
   user,
   chooseImagePanelView,
+  error,
 }) => {
   // Set the firebase collection to a variable
   const db = firebase.firestore().collection("users")
   const [userImages, setUserImages] = useState([])
-
+  // If the route path is the user account page, use the images that are set in state from there
+  // Else if it isn't the account route, use the images being pulled from Unsplash
+  const displayImages = location === "/account" ? userImages : images
+  
   const retrieveUserSavedImages = user => {
     const savedImagesArray = []
     if (user.name) {
@@ -58,7 +64,7 @@ export const MainPageImages = ({
               // This pushes the custom component into the empty savedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
               savedImagesArray.push(documentResult[property])
             }
-            setUserImages(savedImagesArray)
+            setUserImages([...savedImagesArray])
           } else {
             console.log("No document")
           }
@@ -73,7 +79,7 @@ export const MainPageImages = ({
     // Filter out illegal characters, in this case the "/" character and replace it with "|"
     // Firebase doesn't allow fields with illegal charcters to be updated
     const filterIllegalChars = imageSrc.replace(/\//g, "|")
-    
+
     db.doc(user.name)
       .get({ source: "server" })
       .then(doc => {
@@ -195,10 +201,17 @@ export const MainPageImages = ({
   }
 
   useEffect(() => {
-    if(location === "/image-results" || location === "/main") {
-      retrieveUserSavedImages(user)
-    }
+    retrieveUserSavedImages(user)
   }, [])
+
+  // If an error is thrown trying to display images(Ex. search query not found), then display the Error Component
+  if (error) {
+    return <ErrorComponent />
+  } else if (location === "/account" && displayImages.length === 0) {
+    return <NoImages userImages={userImages} />
+  } else if (location === "/users" && displayImages.length === 0) {
+    return null
+  }
 
   return (
     <ImagesSubGrid item lg={12}>
@@ -207,10 +220,10 @@ export const MainPageImages = ({
         style={{ textAlign: "center", backgroundColor: "#1e172f" }}
         lg={10}
       >
-        {loading || networkStatus === 4 ? (
+        {loading || networkStatus === 4 || displayImages === undefined ? (
           <LoadingContainer />
         ) : (
-          images.map((src, i) => (
+          displayImages.map((src, i) => (
             <div
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={i}
