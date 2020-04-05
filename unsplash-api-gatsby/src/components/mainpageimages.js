@@ -228,11 +228,13 @@ export const MainPageImages = ({
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={i}
             >
-              <ImageComponent
-                alt={""}
-                // Render whichever one of the image src paramters that gets passed through
-                src={`${src.urls.raw}&h=330&w=330&fit=crop` || src.urls.custom}
-              />
+              <Link to="/images" state={src}>
+                <ImageComponent
+                  alt={""}
+                  // Render whichever one of the image src paramters that gets passed through
+                  src={`${src.urls.raw}&h=330&w=330&fit=crop` || src.urls.custom}
+                />
+              </Link>
               <UserInformationGrid item>
                 {/* If the person using the application is viewing the owner of the photos profile, then hide their avatar for their pictures(while on their user profile) */}
                 {!chooseImagePanelView ? (

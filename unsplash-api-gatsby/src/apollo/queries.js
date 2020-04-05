@@ -151,5 +151,34 @@ export const GET_USERS_LIKED_PHOTOS = gql`
     }
   }
 `
+export const GET_SPECIFIED_PHOTO = gql`
+  query getSpecifiedPhoto {
+    getSpecifiedPhoto(id: $id)
+      @rest(type: "Get_Specified_Photo", path: "/photos/{args.id}") {
+      id
+      likes
+      description
+      width
+      height
+      downloads
+      user @type(name: "Get_Specified_Photo_User") {
+        __typename
+        name
+        username
+        profile_image @type(name: "Get_Specified_Photo_User_Profile_Image") {
+          small
+        }
+        links @type(name: "Get_Specified_Photo_User_Links") {
+          html
+        }
+      }
+      urls @type(name: "Get_Specified_Photo_URLS") {
+        __typename
+        raw
+        regular
+      }
+    }
+  }
+`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
