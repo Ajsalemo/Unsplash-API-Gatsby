@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid } from "../helpers/styledcomponents"
+import { ImagesSubGrid, ImageCredit } from "../helpers/styledcomponents"
 import firebase from "../utils/firebase"
 import { ActionIcons } from "./actionicons"
 import ErrorComponent from "./errorcomponent"
@@ -19,12 +19,6 @@ import { StyledAvatar } from "./styledavatar"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const ImageCredit = styled.span`
-  color: #fff;
-  margin-top: -0.5em;
-  padding-left: 1em;
-  font-size: 0.8em;
-`
 const UserInformationGrid = styled(Grid)`
   display: flex;
   justify-content: space-evenly;
@@ -228,7 +222,7 @@ export const MainPageImages = ({
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={i}
             >
-              <Link to="/images" state={src}>
+              <Link to="/images" state={{ user: src, userSavedImages: userImages }}>
                 <ImageComponent
                   alt={""}
                   // Render whichever one of the image src paramters that gets passed through
