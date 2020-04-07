@@ -4,11 +4,10 @@
 import { useQuery } from "@apollo/react-hooks"
 import { Grid } from "@material-ui/core"
 import { Link } from "gatsby"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import styled from "styled-components"
 import { GET_SPECIFIED_PHOTO } from "../apollo/queries"
-import { ActionIcons } from "../components/actionicons"
 import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
@@ -40,7 +39,6 @@ const ImageAuthorGrid = styled(Grid)`
 
 const Images = state => {
   const user = getProfile()
-
   const { loading, error, data } = useQuery(GET_SPECIFIED_PHOTO, {
     variables: {
       id: state.location.state.user.id,
@@ -48,6 +46,44 @@ const Images = state => {
     fetchPolicy: "cache-and-network",
   })
 
+  const chooseImageBasedOnSize = size => {
+    if (size.width <= 600) {
+      return `${data.getSpecifiedPhoto.urls.raw}&h=330&w=330&fit=crop`
+    } else if (size.width > 600 && size.width < 1140) {
+      return `${data.getSpecifiedPhoto.urls.raw}&h=600&w=600&fit=crop`
+    } else {
+      return data.getSpecifiedPhoto.urls.regular
+    }
+  }
+
+  const useWindowSize = () => {
+    const isClient = typeof window === "object"
+
+    const getSize = () => {
+      return {
+        width: isClient ? window.innerWidth : undefined,
+      }
+    }
+
+    const [windowSize, setWindowSize] = useState(getSize)
+
+    useEffect(() => {
+      if (!isClient) {
+        return false
+      }
+
+      const handleResize = () => {
+        setWindowSize(getSize())
+      }
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }, []) // Empty array ensures that effect is only run on mount and unmount
+    return windowSize
+  }
+
+  const size = useWindowSize()
+  console.log(state)
   if (loading) return <LoadingContainer />
   if (error) return <ErrorComponent />
 
@@ -56,7 +92,7 @@ const Images = state => {
       <MainNavbar user={user} />
       <SingleLoadedImageGrid item>
         <LazyLoadImage
-          src={data.getSpecifiedPhoto.urls.regular}
+          src={chooseImageBasedOnSize(size)}
           effect="blur"
           placeholderSrc={placeholder}
         />
@@ -89,12 +125,6 @@ const Images = state => {
               {state.location.state.user.user.name}
             </a>
           </ImageCredit>
-          <ActionIcons
-            location={state.location.pathname}
-            user={user}
-            src={data.getSpecifiedPhoto}
-            userImages={state.location.state.userSavedImages}
-          />
         </ImageAuthorGrid>
       </SingleLoadedImageGrid>
       <Footer />

@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react"
 import "react-lazy-load-image-component/src/effects/blur.css"
 import styled from "styled-components"
 import { Pagination } from "../components/pagination"
-import { ImagesSubGrid, ImageCredit } from "../helpers/styledcomponents"
-import firebase from "../utils/firebase"
+import { ImageCredit, ImagesSubGrid } from "../helpers/styledcomponents"
+import { clickToLike, deleteSavedImage, retrieveUserSavedImages } from "../utils/functions"
 import { ActionIcons } from "./actionicons"
 import ErrorComponent from "./errorcomponent"
 import { ImageComponent } from "./imagecomponent"
@@ -38,166 +38,15 @@ export const MainPageImages = ({
   chooseImagePanelView,
   error,
 }) => {
-  // Set the firebase collection to a variable
-  const db = firebase.firestore().collection("users")
   const [userImages, setUserImages] = useState([])
   // If the route path is the user account page, use the images that are set in state from there
   // Else if it isn't the account route, use the images being pulled from Unsplash
   const displayImages = location === "/account" ? userImages : images
-  
-  const retrieveUserSavedImages = user => {
-    const savedImagesArray = []
-    if (user.name) {
-      db.doc(user.name)
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            const documentResult = doc.data()
-            // If the document exists, loop through the properties within the object
-            for (const property in documentResult) {
-              // This pushes the custom component into the empty savedImagesArray, this also sets the 'src' attribute of the image component to the properties within the firestore document
-              savedImagesArray.push(documentResult[property])
-            }
-            setUserImages([...savedImagesArray])
-          } else {
-            console.log("No document")
-          }
-        })
-        .catch(err => console.log(err))
-    }
-  }
-
-  const clickToLike = (user, src) => {
-    // set the raw URL to a variable
-    const imageSrc = src.urls.raw
-    // Filter out illegal characters, in this case the "/" character and replace it with "|"
-    // Firebase doesn't allow fields with illegal charcters to be updated
-    const filterIllegalChars = imageSrc.replace(/\//g, "|")
-
-    db.doc(user.name)
-      .get({ source: "server" })
-      .then(doc => {
-        // This checks if the document exists
-        if (doc.exists) {
-          const imageDocument = doc.data()
-          // If imageDocument is an empty object, then the below "for in" loop in the else block cannot loop through the database object from firestore, which in turn will not let any documents be added to firestore
-          // This if statement tests whether or not it's empty, if it is - it will let the user be able to add documents with empty firestore data, which then in turn lets the rest of the code run
-          if (
-            Object.entries(imageDocument).length === 0 &&
-            imageDocument.constructor === Object
-          ) {
-            return (
-              retrieveUserSavedImages(user),
-              db.doc(user.name).set(
-                {
-                  [filterIllegalChars]: {
-                    urls: {
-                      raw: imageSrc,
-                    },
-                    user: {
-                      avatar: src.user.profile_image.small,
-                      href: src.user.links.html,
-                      username: src.user.username,
-                      name: src.user.name,
-                    },
-                  },
-                },
-                // Merge a new unuiqely created field into the document
-                {
-                  merge: true,
-                }
-              )
-            )
-          } else {
-            // Target the "users" collection in Firestore
-            // Set the document to a dynamic value, in this, the user email
-            // Set the field to a dynamic value, which is the image being liked by the user
-            // This is so all liked images are saved under the users name
-            // If the field doesn't exist, Firestore will create it
-            return (
-              retrieveUserSavedImages(user),
-              db.doc(user.name).set(
-                {
-                  [filterIllegalChars]: {
-                    urls: {
-                      raw: imageSrc,
-                    },
-                    user: {
-                      avatar: src.user.profile_image.small,
-                      href: src.user.links.html,
-                      username: src.user.username || src.user,
-                      name: src.user.name,
-                    },
-                  },
-                },
-                // Merge a new unuiqely created field into the document
-                {
-                  merge: true,
-                }
-              )
-            )
-          }
-          // If a document doesn't exist yet then create it when a user saves their first photo
-        } else {
-          return (
-            retrieveUserSavedImages(user),
-            db.doc(user.name).set(
-              {
-                [filterIllegalChars]: {
-                  urls: {
-                    raw: imageSrc,
-                  },
-                  user: {
-                    avatar: src.user.profile_image.small,
-                    href: src.user.links.html,
-                    username: src.user.username || src.user,
-                    name: src.user.name,
-                  },
-                },
-              },
-              // Merge a new unuiqely created field into the document
-              {
-                merge: true,
-              }
-            )
-          )
-        }
-      })
-  }
-
-  const deleteSavedImage = (user, src) => {
-    // Filter out illegal characters, in this case the "/" character and replace it with "|"
-    // Firebase doesn't allow fields with illegal charcters to be updated
-    const filterCharsInUserAccount = src.urls.raw.replace(/\//g, "|")
-
-    db.doc(user.name)
-      .get({ source: "server" })
-      .then(doc => {
-        if (doc.exists) {
-          const accountImages = doc.data()
-          for (const likedImages in accountImages) {
-            if (likedImages === filterCharsInUserAccount) {
-              return (
-                retrieveUserSavedImages(user),
-                db.doc(user.name).set(
-                  {
-                    [filterCharsInUserAccount]: firebase.firestore.FieldValue.delete(),
-                  },
-                  {
-                    merge: true,
-                  }
-                )
-              )
-            }
-          }
-        }
-      })
-  }
 
   useEffect(() => {
-    retrieveUserSavedImages(user)
-  }, [])
-
+    retrieveUserSavedImages(user, setUserImages)
+  }, [user])
+  
   // If an error is thrown trying to display images(Ex. search query not found), then display the Error Component
   if (error) {
     return <ErrorComponent />
@@ -257,8 +106,8 @@ export const MainPageImages = ({
                   user={user}
                   src={src}
                   userImages={userImages}
-                  clickToLike={() => clickToLike(user, src)}
-                  deleteSavedImage={() => deleteSavedImage(user, src)}
+                  clickToLike={() => clickToLike(user, src, setUserImages)}
+                  deleteSavedImage={() => deleteSavedImage(user, src, setUserImages)}
                 />
               </UserInformationGrid>
             </div>

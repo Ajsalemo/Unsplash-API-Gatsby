@@ -175,6 +175,7 @@ export const GET_SPECIFIED_PHOTO = gql`
       urls @type(name: "Get_Specified_Photo_URLS") {
         __typename
         raw
+        small
         regular
       }
     }
