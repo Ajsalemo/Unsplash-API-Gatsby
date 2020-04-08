@@ -83,7 +83,7 @@ const Images = state => {
   }
 
   const size = useWindowSize()
-  console.log(state)
+  
   if (loading) return <LoadingContainer />
   if (error) return <ErrorComponent />
 

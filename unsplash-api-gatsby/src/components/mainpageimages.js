@@ -71,7 +71,7 @@ export const MainPageImages = ({
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={i}
             >
-              <Link to="/images" state={{ user: src, userSavedImages: userImages }}>
+              <Link to="/images" state={{ user: src }}>
                 <ImageComponent
                   alt={""}
                   // Render whichever one of the image src paramters that gets passed through

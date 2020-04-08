@@ -36,7 +36,7 @@ export const clickToLike = (user, src, setUserImages) => {
   // Filter out illegal characters, in this case the "/" character and replace it with "|"
   // Firebase doesn't allow fields with illegal charcters to be updated
   const filterIllegalChars = imageSrc.replace(/\//g, "|")
-
+  
   db.doc(user.name)
     .get({ source: "server" })
     .then(doc => {
@@ -54,6 +54,7 @@ export const clickToLike = (user, src, setUserImages) => {
             db.doc(user.name).set(
               {
                 [filterIllegalChars]: {
+                  id: src.id, 
                   urls: {
                     raw: imageSrc,
                   },
@@ -82,6 +83,7 @@ export const clickToLike = (user, src, setUserImages) => {
             db.doc(user.name).set(
               {
                 [filterIllegalChars]: {
+                  id: src.id, 
                   urls: {
                     raw: imageSrc,
                   },
@@ -107,6 +109,7 @@ export const clickToLike = (user, src, setUserImages) => {
           db.doc(user.name).set(
             {
               [filterIllegalChars]: {
+                id: src.id, 
                 urls: {
                   raw: imageSrc,
                 },
