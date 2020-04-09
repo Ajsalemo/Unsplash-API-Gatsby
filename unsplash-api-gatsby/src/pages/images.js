@@ -3,7 +3,7 @@
 
 import { useQuery } from "@apollo/react-hooks"
 import { Grid } from "@material-ui/core"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import React, { useEffect, useState } from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import styled from "styled-components"
@@ -38,10 +38,14 @@ const ImageAuthorGrid = styled(Grid)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Images = state => {
+  // Check whether or not an id being passed in for the photo is valid
+  const isPhotoIdValid = state.location.state ? state.location.state.user.id : navigate("/main")
+
   const user = getProfile()
+
   const { loading, error, data } = useQuery(GET_SPECIFIED_PHOTO, {
     variables: {
-      id: state.location.state.user.id,
+      id: isPhotoIdValid,
     },
     fetchPolicy: "cache-and-network",
   })
@@ -83,7 +87,7 @@ const Images = state => {
   }
 
   const size = useWindowSize()
-  
+
   if (loading) return <LoadingContainer />
   if (error) return <ErrorComponent />
 

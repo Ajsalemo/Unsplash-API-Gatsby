@@ -4,9 +4,10 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: `Flickr API Gatsby`,
-    description: `Inspiration taken from Flickr to create an image viewing app with Gatsby.`,
+    title: `Something like Unsplash`,
+    description: `Inspiration taken from Unsplash to create an image viewing app with Gatsby.`,
     author: `Anthony Salemo`,
+    url: "localhost:8000"
   },
   plugins: [
     {
@@ -19,8 +20,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Flickr API Gatsby`,
-        short_name: `FlickrLA`,
+        name: `Something like Unsplash`,
+        short_name: `Something like Unsplash`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,

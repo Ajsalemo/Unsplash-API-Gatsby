@@ -73,7 +73,6 @@ export const Footer = () => (
         >
           Unsplash
         </FooterLinks>
-        <FooterLinks>Sitemap</FooterLinks>
         <FooterLinks
           href="https://auth0.com/privacy/"
           rel="noopener noreferrer"
