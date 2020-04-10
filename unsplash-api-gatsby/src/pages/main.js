@@ -11,6 +11,7 @@ import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import { SEO } from "../components/SEO"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -21,8 +22,14 @@ const Main = state => {
   const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
   if (error) return <ErrorComponent />
   if (loading) return <LoadingContainer />
+
   return (
     <>
+      <SEO
+        title="Something like Unsplash"
+        description="A site to experiment with Unsplash's API"
+        pathname="/main"
+      />
       <StyledMainContainer container>
         <MainNavbar user={user} />
         <MainPageImages

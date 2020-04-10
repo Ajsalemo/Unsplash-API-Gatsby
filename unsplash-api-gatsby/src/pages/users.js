@@ -16,6 +16,8 @@ import { UserLikedPhotos } from "../components/userlikedphotos"
 import { UserProfileAvatar } from "../components/userprofileavatar"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
+import { SEO } from "../components/SEO"
+import { navigate } from "gatsby"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -50,6 +52,10 @@ const ImageTypography = styled(Typography)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Users = state => {
+  console.log(state)
+  // Check whether or not the username being passed in exists, or is valid
+  const isUsernameValid = state.location.state ? state.location.state.username : navigate("/main")
+
   const user = getProfile()
   const [chooseLikePanelView, setChooseLikePanelView] = useState(false)
   const [chooseImagePanelView, setChooseImagePanelView] = useState(true)
@@ -61,12 +67,12 @@ const Users = state => {
     networkStatus: getUserProfileNetworkStatus,
   } = useQuery(GET_USER_PROFILE, {
     variables: {
-      username: state.location.state.username,
+      username: isUsernameValid,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   })
-  
+
   const {
     loading: getUserImagesLoading,
     error: getUserImagesError,
@@ -75,7 +81,7 @@ const Users = state => {
     fetchMore,
   } = useQuery(GET_USERS_PHOTOS, {
     variables: {
-      username: state.location.state.username,
+      username: isUsernameValid,
       // Start the query at page one - if not specified, the network request errors out
       page: 1,
     },
@@ -93,62 +99,73 @@ const Users = state => {
   const roundTotalPhotos = totalPhoto => {
     return Math.ceil(totalPhoto / 10)
   }
-  
+
   return (
-    <StyledMainContainer container>
-      <MainNavbar user={user} />
-      <UsersProfileGrid item>
-        <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
-        <PublicProfileStats userInfoStats={getUserProfileData.getUserProfile} />
-        <ToggleTypographyGrid item>
-          <ImageTypography
-            variant="subtitle2"
-            chooseimagepanelview={chooseImagePanelView ? 1 : 0}
-            onClick={() => {
-              setChooseImagePanelView(true)
-              setChooseLikePanelView(false)
-            }}
-          >
-            {getUserProfileData.getUserProfile.name}'s Photos
-          </ImageTypography>
-          <LikeTypography
-            variant="subtitle2"
-            chooselikepanelview={chooseLikePanelView ? 1 : 0}
-            onClick={() => {
-              setChooseLikePanelView(true)
-              setChooseImagePanelView(false)
-            }}
-          >
-            Liked Photos
-          </LikeTypography>
-        </ToggleTypographyGrid>
-        {chooseImagePanelView ? (
-          <MainPageImages
-            loading={getUserImagesLoading || getUserProfileLoading}
-            networkStatus={
-              getUserProfileNetworkStatus || getUserImagesNetworkStatus
-            }
-            images={getUserImagesData.getUserPhotos}
-            location={state.location.pathname}
-            fetchMore={fetchMore}
-            totalPages={roundTotalPhotos(
-              getUserProfileData.getUserProfile.total_photos
-            )}
-            user={user}
-            chooseImagePanelView={chooseImagePanelView}
+    <>
+      <SEO
+        title="Something like Unsplash"
+        description="A site to experiment with Unsplash's API"
+        pathname="/users"
+      />
+      <StyledMainContainer container>
+        <MainNavbar user={user} />
+        <UsersProfileGrid item>
+          <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
+          <PublicProfileStats
+            userInfoStats={getUserProfileData.getUserProfile}
           />
-        ) : (
-          <UserLikedPhotos
-            username={state.location.state.username}
-            location={state.location.pathname}
-            user={user}
-            totalPages={roundTotalPhotos(getUserProfileData.getUserProfile.total_likes)}
-            chooseImagePanelView={chooseImagePanelView}
-          />
-        )}
-      </UsersProfileGrid>
-      <Footer />
-    </StyledMainContainer>
+          <ToggleTypographyGrid item>
+            <ImageTypography
+              variant="subtitle2"
+              chooseimagepanelview={chooseImagePanelView ? 1 : 0}
+              onClick={() => {
+                setChooseImagePanelView(true)
+                setChooseLikePanelView(false)
+              }}
+            >
+              {getUserProfileData.getUserProfile.name}'s Photos
+            </ImageTypography>
+            <LikeTypography
+              variant="subtitle2"
+              chooselikepanelview={chooseLikePanelView ? 1 : 0}
+              onClick={() => {
+                setChooseLikePanelView(true)
+                setChooseImagePanelView(false)
+              }}
+            >
+              Liked Photos
+            </LikeTypography>
+          </ToggleTypographyGrid>
+          {chooseImagePanelView ? (
+            <MainPageImages
+              loading={getUserImagesLoading || getUserProfileLoading}
+              networkStatus={
+                getUserProfileNetworkStatus || getUserImagesNetworkStatus
+              }
+              images={getUserImagesData.getUserPhotos}
+              location={state.location.pathname}
+              fetchMore={fetchMore}
+              totalPages={roundTotalPhotos(
+                getUserProfileData.getUserProfile.total_photos
+              )}
+              user={user}
+              chooseImagePanelView={chooseImagePanelView}
+            />
+          ) : (
+            <UserLikedPhotos
+              username={state.location.state.username}
+              location={state.location.pathname}
+              user={user}
+              totalPages={roundTotalPhotos(
+                getUserProfileData.getUserProfile.total_likes
+              )}
+              chooseImagePanelView={chooseImagePanelView}
+            />
+          )}
+        </UsersProfileGrid>
+        <Footer />
+      </StyledMainContainer>
+    </>
   )
 }
 

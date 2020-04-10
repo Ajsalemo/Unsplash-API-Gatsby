@@ -7,15 +7,23 @@ import React from "react"
 import EmblaCarouselComponent from "../components/carousel"
 import { Navbar } from "../components/navbar"
 import { getProfile } from "../utils/auth"
+import { SEO } from "../components/SEO"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const IndexPage = ({ data }) => (
-  <Grid item style={{ backgroundColor: "#000", position: "relative" }}>
-    <Navbar />
-    <EmblaCarouselComponent data={data} user={getProfile()} />
-  </Grid>
+  <>
+    <SEO 
+      title="Something like Unsplash"
+      description="A site to experiment with Unsplash's API"
+      pathname="/"
+    />
+    <Grid item style={{ backgroundColor: "#000", position: "relative" }}>
+      <Navbar />
+      <EmblaCarouselComponent data={data} user={getProfile()} />
+    </Grid>
+  </>
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

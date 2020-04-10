@@ -16,6 +16,7 @@ import { StyledAvatar } from "../components/styledavatar"
 import { ImageCredit, StyledMainContainer } from "../helpers/styledcomponents"
 import placeholder from "../images/placeholder.jpg"
 import { getProfile } from "../utils/auth"
+import { SEO } from "../components/SEO"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -39,7 +40,9 @@ const ImageAuthorGrid = styled(Grid)`
 
 const Images = state => {
   // Check whether or not an id being passed in for the photo is valid
-  const isPhotoIdValid = state.location.state ? state.location.state.user.id : navigate("/main")
+  const isPhotoIdValid = state.location.state
+    ? state.location.state.user.id
+    : navigate("/main")
 
   const user = getProfile()
 
@@ -92,47 +95,54 @@ const Images = state => {
   if (error) return <ErrorComponent />
 
   return (
-    <StyledMainContainer container>
-      <MainNavbar user={user} />
-      <SingleLoadedImageGrid item>
-        <LazyLoadImage
-          src={chooseImageBasedOnSize(size)}
-          effect="blur"
-          placeholderSrc={placeholder}
-        />
-        <ImageAuthorGrid item>
-          <Link
-            to="/users"
-            state={
-              state.location.state.user.user ||
-              state.location.state.user.user.username
-            }
-          >
-            <StyledAvatar
-              src={
-                state.location.state.user.user.avatar ||
-                state.location.state.user.user.profile_image.small
+    <>
+      <SEO
+        title="Something like Unsplash"
+        description="A site to experiment with Unsplash's API"
+        pathname="/images"
+      />
+      <StyledMainContainer container>
+        <MainNavbar user={user} />
+        <SingleLoadedImageGrid item>
+          <LazyLoadImage
+            src={chooseImageBasedOnSize(size)}
+            effect="blur"
+            placeholderSrc={placeholder}
+          />
+          <ImageAuthorGrid item>
+            <Link
+              to="/users"
+              state={
+                state.location.state.user.user ||
+                state.location.state.user.user.username
               }
-              pageimages={1}
-            />
-          </Link>
-          <ImageCredit>
-            Photo by{" "}
-            <a
-              href={
-                state.location.state.user.user.href ||
-                state.location.state.user.user.links.html
-              }
-              style={{ color: "#fff" }}
-              rel="noopener noreferrer"
             >
-              {state.location.state.user.user.name}
-            </a>
-          </ImageCredit>
-        </ImageAuthorGrid>
-      </SingleLoadedImageGrid>
-      <Footer />
-    </StyledMainContainer>
+              <StyledAvatar
+                src={
+                  state.location.state.user.user.avatar ||
+                  state.location.state.user.user.profile_image.small
+                }
+                pageimages={1}
+              />
+            </Link>
+            <ImageCredit>
+              Photo by{" "}
+              <a
+                href={
+                  state.location.state.user.user.href ||
+                  state.location.state.user.user.links.html
+                }
+                style={{ color: "#fff" }}
+                rel="noopener noreferrer"
+              >
+                {state.location.state.user.user.name}
+              </a>
+            </ImageCredit>
+          </ImageAuthorGrid>
+        </SingleLoadedImageGrid>
+        <Footer />
+      </StyledMainContainer>
+    </>
   )
 }
 
