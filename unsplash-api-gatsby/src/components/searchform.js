@@ -87,10 +87,11 @@ export const SearchForm = () => {
             name="search"
             value={values.search}
             onChange={handleChange}
+            label={<span style={{ color: "transparent" }}>Search for images</span>}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SubmitButton type="submit" disabled={isSubmitting}>
+                  <SubmitButton type="submit" disabled={isSubmitting} aria-label="Submit search">
                     {isSubmitting ? (
                       <CircularProgress
                         style={{ color: "#fff" }}
@@ -112,6 +113,7 @@ export const SearchForm = () => {
                     type="reset"
                     values={values.search}
                     onClick={() => setFieldValue("search", "")}
+                    aria-label="Reset search query"
                   >
                     x
                   </SubmitButton>

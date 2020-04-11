@@ -27,7 +27,6 @@ export const UserLikedPhotos = ({
         page: 1,
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "cache-and-network",
     }
   )
   if (error) return <ErrorComponent />

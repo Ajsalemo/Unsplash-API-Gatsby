@@ -91,9 +91,10 @@ export const MobileNavMenu = ({ user }) => {
         aria-controls={open ? "menu-list-grow" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
+        aria-label="Open navigation menu"
       >
         {user.name ? (
-          <StyledAvatar src={user.picture} mobilenavbar={1} />
+          <StyledAvatar src={user.picture} mobilenavbar={1} alt={user.name ? `${user.name}'s profile image` : ""} />
         ) : (
           <MediaMenuIcon icon={faBars} />
         )}

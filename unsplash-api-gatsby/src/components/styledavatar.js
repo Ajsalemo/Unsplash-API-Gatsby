@@ -23,13 +23,14 @@ const StyledAvatarComponent = styled(LazyLoadImage)`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const StyledAvatar = ({ src, pageimages, mobilenavbar }) => (
+export const StyledAvatar = ({ src, pageimages, mobilenavbar, alt }) => (
   <StyledAvatarComponent
     src={src}
     effect="blur"
     placeholderSrc={placeholder}
     pageimages={pageimages}
     mobilenavbar={mobilenavbar}
+    alt={alt}
   />
 )
 

@@ -69,7 +69,6 @@ const Users = state => {
       username: isUsernameValid,
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: "cache-and-network",
   })
 
   const {
@@ -85,7 +84,6 @@ const Users = state => {
       page: 1,
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: "cache-and-network",
   })
 
   if (getUserProfileError || getUserImagesError) return <ErrorComponent />

@@ -10,7 +10,7 @@ import { ImageComponent } from "./imagecomponent"
 
 export const UserProfileAvatar = ({ userInfo }) => (
   <Grid item style={{ paddingBottom: "3em", textAlign: "center" }}>
-    <ImageComponent userprofile={1} src={userInfo.profile_image.large} />
+    <ImageComponent userprofile={1} src={userInfo.profile_image.large} alt={userInfo.name ? `${userInfo}'s profile image` : ""} />
     <Typography
       style={{ fontFamily: "Pacifico", color: "#fff" }}
       variant="subtitle2"

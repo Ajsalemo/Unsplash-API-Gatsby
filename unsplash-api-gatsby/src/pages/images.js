@@ -63,7 +63,6 @@ const Images = state => {
     variables: {
       id: isPhotoIdValid,
     },
-    fetchPolicy: "cache-and-network",
   })
 
   const chooseImageBasedOnSize = size => {
@@ -136,6 +135,7 @@ const Images = state => {
                   state.location.state.user.user.profile_image.small
                 }
                 pageimages={1}
+                alt={state.location.state.user.user.name ? `${state.location.state.user.user.name}'s profile image` : ""}
               />
             </Link>
             <ImageCredit>

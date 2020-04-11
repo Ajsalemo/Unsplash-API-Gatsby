@@ -28,7 +28,6 @@ const ImageResults = state => {
         query: searchQuery,
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "cache-and-network",
     }
   )
 

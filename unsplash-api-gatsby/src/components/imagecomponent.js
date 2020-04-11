@@ -19,8 +19,8 @@ export const StyledLazyLoadedImage = styled(LazyLoadImage)`
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-export const ImageComponent = ({ src, userprofile }) => (
-  <StyledLazyLoadedImage src={src} effect="blur" placeholderSrc={placeholder} userprofile={userprofile} />
+export const ImageComponent = ({ src, userprofile, alt }) => (
+  <StyledLazyLoadedImage src={src} effect="blur" placeholderSrc={placeholder} userprofile={userprofile} alt={alt} />
 )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

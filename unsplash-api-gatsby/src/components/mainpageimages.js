@@ -73,7 +73,7 @@ export const MainPageImages = ({
             >
               <Link to="/images" state={{ user: src }}>
                 <ImageComponent
-                  alt={""}
+                  alt={src.description ? src.description : ""}
                   // Render whichever one of the image src paramters that gets passed through
                   src={`${src.urls.raw}&h=330&w=330&fit=crop` || src.urls.custom}
                 />
@@ -87,6 +87,7 @@ export const MainPageImages = ({
                       <StyledAvatar
                         src={src.user.avatar || src.user.profile_image.small}
                         pageimages={1}
+                        alt={src.user.name ? `${src.user.name}'s profile image` : ""}
                       />
                     </Link>
                     <ImageCredit>
