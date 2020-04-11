@@ -62,7 +62,8 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
           id
           name
           username
-          profile_image @type(name: "Search_Images_By_Keyword_User_Profile_Image") {
+          profile_image
+            @type(name: "Search_Images_By_Keyword_User_Profile_Image") {
             small
           }
           links @type(name: "Search_Images_By_Keyword_User_Links") {
@@ -104,7 +105,10 @@ export const GET_USER_PROFILE = gql`
 export const GET_USERS_PHOTOS = gql`
   query getUserPhotos {
     getUserPhotos(username: $username, page: $page)
-      @rest(type: "Get_Users_Photo", path: "users/{args.username}/photos?page={args.page}") {
+      @rest(
+        type: "Get_Users_Photo"
+        path: "users/{args.username}/photos?page={args.page}"
+      ) {
       id
       likes
       description
@@ -129,7 +133,10 @@ export const GET_USERS_PHOTOS = gql`
 export const GET_USERS_LIKED_PHOTOS = gql`
   query getUserLikedPhotos {
     getUserLikedPhotos(username: $username, page: $page)
-      @rest(type: "Get_Users_Liked_Photos", path: "users/{args.username}/likes?page={args.page}") {
+      @rest(
+        type: "Get_Users_Liked_Photos"
+        path: "users/{args.username}/likes?page={args.page}"
+      ) {
       id
       likes
       description
@@ -161,6 +168,11 @@ export const GET_SPECIFIED_PHOTO = gql`
       width
       height
       downloads
+      location @type(name: "Get_Specified_Photo_Location") {
+        __typename
+        city
+        country
+      }
       user @type(name: "Get_Specified_Photo_User") {
         __typename
         name

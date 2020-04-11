@@ -2,7 +2,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 import { useQuery } from "@apollo/react-hooks"
-import { Grid } from "@material-ui/core"
+import { Grid, Typography } from "@material-ui/core"
 import { Link, navigate } from "gatsby"
 import React, { useEffect, useState } from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
@@ -13,10 +13,20 @@ import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { StyledAvatar } from "../components/styledavatar"
-import { ImageCredit, StyledMainContainer } from "../helpers/styledcomponents"
+import {
+  ImageCredit,
+  StyledMainContainer,
+  FlexCenterGrid,
+} from "../helpers/styledcomponents"
 import placeholder from "../images/placeholder.jpg"
 import { getProfile } from "../utils/auth"
 import { SEO } from "../components/SEO"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faHeart,
+  faDownload,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -25,7 +35,7 @@ const SingleLoadedImageGrid = styled(Grid)`
   height: auto;
   width: 100%;
   background-color: #1e172f;
-  padding-bottom: 2em;
+  padding-bottom: 6em;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -35,6 +45,9 @@ const ImageAuthorGrid = styled(Grid)`
   padding-top: 2em;
   display: flex;
   justify-content: space-evenly;
+`
+const StatisticsGrid = styled(FlexCenterGrid)`
+  align-items: center;
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
@@ -55,7 +68,7 @@ const Images = state => {
 
   const chooseImageBasedOnSize = size => {
     if (size.width <= 600) {
-      return `${data.getSpecifiedPhoto.urls.raw}&h=330&w=330&fit=crop`
+      return `${data.getSpecifiedPhoto.urls.raw}&h=350&w=350&fit=crop`
     } else if (size.width > 600 && size.width < 1140) {
       return `${data.getSpecifiedPhoto.urls.raw}&h=600&w=600&fit=crop`
     } else {
@@ -139,6 +152,47 @@ const Images = state => {
               </a>
             </ImageCredit>
           </ImageAuthorGrid>
+          <Grid item>
+            {data.getSpecifiedPhoto.description ? (
+              <StatisticsGrid item>
+                <Typography variant="subtitle2" style={{ color: "#fff" }}>
+                  {data.getSpecifiedPhoto.description}
+                </Typography>
+              </StatisticsGrid>
+            ) : null}
+            <StatisticsGrid item>
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: "red", paddingRight: "0.2em" }}
+              />
+              <Typography variant="subtitle2" style={{ color: "#fff" }}>
+                {data.getSpecifiedPhoto.likes}{" "}
+              </Typography>
+            </StatisticsGrid>
+            <StatisticsGrid item>
+              <FontAwesomeIcon
+                icon={faDownload}
+                style={{ color: "#fff", paddingRight: "0.2em" }}
+              />
+              <Typography variant="subtitle2" style={{ color: "#fff" }}>
+                {data.getSpecifiedPhoto.downloads}{" "}
+              </Typography>
+            </StatisticsGrid>
+            {data.getSpecifiedPhoto.location.city ||
+            data.getSpecifiedPhoto.location.country ? (
+              <StatisticsGrid>
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  style={{ color: "#fff", paddingRight: "0.2em" }}
+                />
+                <Typography variant="subtitle2" style={{ color: "#fff" }}>
+                  {data.getSpecifiedPhoto.location.city}
+                  {data.getSpecifiedPhoto.location.city ? ", " : null}
+                  {data.getSpecifiedPhoto.location.country}
+                </Typography>
+              </StatisticsGrid>
+            ) : null}
+          </Grid>
         </SingleLoadedImageGrid>
         <Footer />
       </StyledMainContainer>

@@ -52,7 +52,6 @@ const ImageTypography = styled(Typography)`
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const Users = state => {
-  console.log(state)
   // Check whether or not the username being passed in exists, or is valid
   const isUsernameValid = state.location.state ? state.location.state.username : navigate("/main")
 
