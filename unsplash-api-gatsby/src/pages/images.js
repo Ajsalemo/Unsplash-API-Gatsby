@@ -27,6 +27,7 @@ import {
   faDownload,
   faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons"
+import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -115,6 +116,7 @@ const Images = state => {
       />
       <StyledMainContainer container>
         <MainNavbar user={user} />
+        <MobileHomeNav />
         <SingleLoadedImageGrid item>
           <LazyLoadImage
             src={chooseImageBasedOnSize(size)}

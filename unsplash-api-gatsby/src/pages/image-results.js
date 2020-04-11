@@ -12,6 +12,7 @@ import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
 import { SEO } from "../components/SEO"
+import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -42,6 +43,7 @@ const ImageResults = state => {
       />
       <StyledMainContainer container>
         <MainNavbar user={user} />
+        <MobileHomeNav />
         <TotalResultsHeader
           keyword={searchQuery}
           totalResults={data.searchImagesByKeyword.total}

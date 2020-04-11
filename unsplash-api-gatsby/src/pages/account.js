@@ -10,6 +10,7 @@ import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile, isAuthenticated, login } from "../utils/auth"
 import { SEO } from "../components/SEO"
+import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -34,6 +35,7 @@ const Account = ({ location }) => {
       />
       <StyledMainContainer container>
         <MainNavbar user={user} />
+        <MobileHomeNav />
         <TotalResultsHeader keyword={"Your saved images"} />
         <MainPageImages user={user} location={location.pathname} />
         <Footer />

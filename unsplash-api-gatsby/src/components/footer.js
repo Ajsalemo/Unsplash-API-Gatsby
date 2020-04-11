@@ -86,8 +86,10 @@ export const Footer = () => (
           href="https://github.com/Ajsalemo/Unsplash-API-Gatsby"
           rel="noopener noreferrer"
           target="_blank"
+          style={{ color: "#fff", textDecoration: "none" }}
         >
-          <FontAwesomeIcon icon={faGithub} style={{ color: "#fff" }} />
+          <FontAwesomeIcon icon={faGithub} style={{ color: "#fff", paddingRight: "0.2em" }} />
+          Github
         </a>
       </Grid>
     </StyledFooterGrid>

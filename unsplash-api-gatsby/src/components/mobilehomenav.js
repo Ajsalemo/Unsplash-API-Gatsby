@@ -1,51 +1,44 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-import { Grid } from "@material-ui/core"
+import { AppBar, Toolbar, Typography } from "@material-ui/core"
 import { Link } from "gatsby"
 import React from "react"
 import styled from "styled-components"
-import { Footer } from "../components/footer"
-import { MainNavbar } from "../components/mainnavbar"
-import { StyledMainContainer } from "../helpers/styledcomponents"
-import { getProfile } from "../utils/auth"
-import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const NotFoundGrid = styled(Grid)`
-  height: 100%;
+const MobileLinkToHomeAppBar = styled(AppBar)`
+  z-index: 1;
+  margin: -0.5em 0 2em 0;
+  @media (min-width: 708px) {
+    display: none;
+  }
+`
+const MobileLinkToHomeTypography = styled(Typography)`
+  font-family: "Pacifico";
+  color: #fff;
+  text-align: center;
+`
+const MobileLinkToHomeToolbar = styled(Toolbar)`
+  background-color: #1e172f;
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  color: #fff;
 `
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const NotFoundPage = () => (
-  <>
-    <StyledMainContainer container>
-      <MainNavbar user={getProfile()} />
-      <MobileHomeNav />
-      <NotFoundGrid item>
-        <h1>Page not found</h1>
-        <p>You just hit a route that doesn&#39;t exist.</p>
-        <p>
-          Try searching for another photo or go <Link to="/main" style={{ color: "#fff" }}>home</Link>.
-        </p>
-      </NotFoundGrid>
-      <Footer />
-    </StyledMainContainer>
-  </>
+export const MobileHomeNav = () => (
+  <MobileLinkToHomeAppBar position="static">
+    <MobileLinkToHomeToolbar>
+      <Link to="/main" style={{ textDecoration: "none" }}>
+        <MobileLinkToHomeTypography>
+          Something like Unsplash
+        </MobileLinkToHomeTypography>
+      </Link>
+    </MobileLinkToHomeToolbar>
+  </MobileLinkToHomeAppBar>
 )
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
-
-export default NotFoundPage
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //

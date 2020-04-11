@@ -74,6 +74,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
             getCurrentPage(1)
             fetchMoreResults(1, fetchMore)
           }}
+          aria-label="Go to first page"
         >
           <FontAwesomeIcon icon={faAngleDoubleLeft} style={{ color: "#fff" }} />
         </PaginatedButton>
@@ -91,6 +92,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
             }}
             selectedpage={currentPage === page ? 1 : 0}
             key={i}
+            aria-label={`Go to page number ${page}`}
           >
             <Typography variant="subtitle2">{page}</Typography>
           </PaginatedButton>
@@ -103,6 +105,7 @@ export const Pagination = ({ totalPages, fetchMore }) => {
             getCurrentPage(totalPages)
             fetchMoreResults(totalPages, fetchMore)
           }}
+          aria-label="Go to last page"
         >
           <FontAwesomeIcon
             icon={faAngleDoubleRight}

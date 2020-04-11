@@ -18,6 +18,7 @@ import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
 import { SEO } from "../components/SEO"
 import { navigate } from "gatsby"
+import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -106,6 +107,7 @@ const Users = state => {
       />
       <StyledMainContainer container>
         <MainNavbar user={user} />
+        <MobileHomeNav />
         <UsersProfileGrid item>
           <UserProfileAvatar userInfo={getUserProfileData.getUserProfile} />
           <PublicProfileStats

@@ -12,6 +12,7 @@ import { MainPageImages } from "../components/mainpageimages"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
 import { SEO } from "../components/SEO"
+import { MobileHomeNav } from "../components/mobilehomenav"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -32,6 +33,7 @@ const Main = state => {
       />
       <StyledMainContainer container>
         <MainNavbar user={user} />
+        <MobileHomeNav />
         <MainPageImages
           images={data.randomPhotoQuery}
           location={state.location.pathname}
