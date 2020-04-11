@@ -56,7 +56,7 @@ export const MobileNavMenu = ({ user }) => {
   const displayName = user.nickname ? user.nickname : user.name
   const [open, setOpen] = useState(false)
   const anchorRef = useRef(null)
-  
+
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen)
   }
@@ -94,7 +94,11 @@ export const MobileNavMenu = ({ user }) => {
         aria-label="Open navigation menu"
       >
         {user.name ? (
-          <StyledAvatar src={user.picture} mobilenavbar={1} alt={user.name ? `${user.name}'s profile image` : ""} />
+          <StyledAvatar
+            src={user.picture}
+            mobilenavbar={1}
+            alt={user.name ? `${user.name}'s profile image` : ""}
+          />
         ) : (
           <MediaMenuIcon icon={faBars} />
         )}
@@ -124,10 +128,12 @@ export const MobileNavMenu = ({ user }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <DisplayNameMenuItem>
-                    <Typography variant="subtitle2">Hello,</Typography>
-                    <Typography variant="subtitle2">{displayName}</Typography>
-                  </DisplayNameMenuItem>
+                  {user.name ? (
+                    <DisplayNameMenuItem>
+                      <Typography variant="subtitle2">Hello,</Typography>
+                      <Typography variant="subtitle2">{displayName}</Typography>
+                    </DisplayNameMenuItem>
+                  ) : null}
                   <Link
                     to="/main"
                     onClick={handleClose}

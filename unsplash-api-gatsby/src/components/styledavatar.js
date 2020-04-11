@@ -10,8 +10,7 @@ import placeholder from "../images/placeholder.jpg"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const StyledAvatarComponent = styled(LazyLoadImage)`
-  width: ${props => (props.pageimages ? "3em" : null)};
-  height: ${props => (props.mobilenavbar ? "3em" : null)};
+  height: ${props => (props.mobilenavbar ? "4em" : null)};
   border-radius: 50%;
   border: 3px solid #fff;
   transition: all 0.5s ease-in-out !important;

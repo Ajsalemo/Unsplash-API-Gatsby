@@ -21,7 +21,7 @@ import { StyledAvatar } from "./styledavatar"
 
 const UserInformationGrid = styled(Grid)`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
   padding-bottom: 3.5em;
 `
@@ -83,9 +83,9 @@ export const MainPageImages = ({
                 {!chooseImagePanelView ? (
                   <>
                     {/* Pass whichever of the three props that currently exist  */}
-                    <Link to="/users" state={src.user || src.user.username} aria-label={`${src.user || src.user.username}'s profile image`}>
+                    <Link to="/users" state={src.user || src.user.username} aria-label={`${src.user.name || src.user.username}'s profile image`} style={{ padding: "1em" }}>
                       <StyledAvatar
-                        src={src.user.avatar || src.user.profile_image.small}
+                        src={src.user.avatar || src.user.profile_image.medium}
                         pageimages={1}
                         alt={src.user.name ? `${src.user.name}'s profile image` : ""}
                       />

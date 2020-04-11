@@ -134,7 +134,7 @@ const Images = state => {
               <StyledAvatar
                 src={
                   state.location.state.user.user.avatar ||
-                  state.location.state.user.user.profile_image.small
+                  state.location.state.user.user.profile_image.medium
                 }
                 pageimages={1}
                 alt={state.location.state.user.user.name ? `${state.location.state.user.user.name}'s profile image` : ""}

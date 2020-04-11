@@ -12,6 +12,8 @@ import styled from "styled-components"
 const MobileLinkToHomeAppBar = styled(AppBar)`
   z-index: 1;
   margin: -0.5em 0 2em 0;
+  padding-top: 0.5em;
+  background-color: #1e172f;
   @media (min-width: 708px) {
     display: none;
   }

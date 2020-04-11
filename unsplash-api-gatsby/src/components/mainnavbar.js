@@ -16,11 +16,16 @@ const NavbarSitename = styled(Link)`
   @media (min-width: 708px) {
     color: #fff;
     font-family: "Pacifico";
+    font-size: 0.9em;
     display: initial;
-    padding-right: 10em;
     z-index: 99999;
     text-decoration: none;
+    text-align: center;
   }
+  @media (min-width: 881px) {
+    padding-right: 10em;
+  }
+  
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
@@ -32,7 +37,7 @@ export const MainNavbar = ({ user }) => (
     <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
       <SearchForm />
       <NavbarSitename to="/main">
-        Something like Unsplash
+        <h1>Something like Unsplash</h1>
       </NavbarSitename>
       <MobileNavMenu user={user} />
     </Toolbar>

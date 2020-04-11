@@ -28,7 +28,7 @@ export const RANDOM_PHOTO_QUERY = gql`
         name
         username
         profile_image @type(name: "Random_Photo_Query_User_Profile_Image") {
-          small
+          medium
         }
         links @type(name: "Random_Photo_Query_User_Links") {
           __typename
@@ -64,7 +64,7 @@ export const SEARCH_IMAGES_BY_KEYWORD = gql`
           username
           profile_image
             @type(name: "Search_Images_By_Keyword_User_Profile_Image") {
-            small
+            medium
           }
           links @type(name: "Search_Images_By_Keyword_User_Links") {
             __typename
@@ -117,7 +117,7 @@ export const GET_USERS_PHOTOS = gql`
         name
         username
         profile_image @type(name: "Get_Users_Photo_User_Profile_Image") {
-          small
+          medium
         }
         links @type(name: "Get_Users_Photo_User_Links") {
           html
@@ -145,7 +145,7 @@ export const GET_USERS_LIKED_PHOTOS = gql`
         name
         username
         profile_image @type(name: "Get_Users_Liked_Photos_User_Profile_Image") {
-          small
+          medium
         }
         links @type(name: "Get_Users_Liked_Photos_User_Link") {
           html
@@ -178,7 +178,7 @@ export const GET_SPECIFIED_PHOTO = gql`
         name
         username
         profile_image @type(name: "Get_Specified_Photo_User_Profile_Image") {
-          small
+          medium
         }
         links @type(name: "Get_Specified_Photo_User_Links") {
           html
@@ -187,7 +187,7 @@ export const GET_SPECIFIED_PHOTO = gql`
       urls @type(name: "Get_Specified_Photo_URLS") {
         __typename
         raw
-        small
+        medium
         regular
       }
     }

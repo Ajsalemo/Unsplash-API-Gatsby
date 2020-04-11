@@ -59,7 +59,7 @@ export const clickToLike = (user, src, setUserImages) => {
                     raw: imageSrc,
                   },
                   user: {
-                    avatar: src.user.profile_image.small,
+                    avatar: src.user.profile_image.medium,
                     href: src.user.links.html,
                     username: src.user.username,
                     name: src.user.name,
@@ -88,7 +88,7 @@ export const clickToLike = (user, src, setUserImages) => {
                     raw: imageSrc,
                   },
                   user: {
-                    avatar: src.user.profile_image.small,
+                    avatar: src.user.profile_image.medium,
                     href: src.user.links.html,
                     username: src.user.username || src.user,
                     name: src.user.name,
@@ -114,7 +114,7 @@ export const clickToLike = (user, src, setUserImages) => {
                   raw: imageSrc,
                 },
                 user: {
-                  avatar: src.user.profile_image.small,
+                  avatar: src.user.profile_image.medium,
                   href: src.user.links.html,
                   username: src.user.username || src.user,
                   name: src.user.name,
