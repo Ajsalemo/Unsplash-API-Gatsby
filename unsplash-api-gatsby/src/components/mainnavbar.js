@@ -11,7 +11,7 @@ import { SearchForm } from "./searchform"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const NavbarSitename = styled(Typography)`
+const NavbarSitename = styled(Link)`
   display: none;
   @media (min-width: 708px) {
     color: #fff;
@@ -19,6 +19,7 @@ const NavbarSitename = styled(Typography)`
     display: initial;
     padding-right: 10em;
     z-index: 99999;
+    text-decoration: none;
   }
 `
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -30,9 +31,9 @@ export const MainNavbar = ({ user }) => (
   >
     <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
       <SearchForm />
-      <Link to="/main" style={{ textDecoration: "none" }}>
-        <NavbarSitename>Something like Unsplash</NavbarSitename>
-      </Link>
+      <NavbarSitename to="/main">
+        Something like Unsplash
+      </NavbarSitename>
       <MobileNavMenu user={user} />
     </Toolbar>
   </AppBar>

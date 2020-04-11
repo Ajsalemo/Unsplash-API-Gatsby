@@ -71,7 +71,7 @@ export const MainPageImages = ({
               style={{ display: "inline-flex", flexDirection: "column" }}
               key={i}
             >
-              <Link to="/images" state={{ user: src }}>
+              <Link to="/images" state={{ user: src }} aria-label={src.description ? src.description : "An image from Unsplash"}>
                 <ImageComponent
                   alt={src.description ? src.description : ""}
                   // Render whichever one of the image src paramters that gets passed through
@@ -83,7 +83,7 @@ export const MainPageImages = ({
                 {!chooseImagePanelView ? (
                   <>
                     {/* Pass whichever of the three props that currently exist  */}
-                    <Link to="/users" state={src.user || src.user.username}>
+                    <Link to="/users" state={src.user || src.user.username} aria-label={`${src.user || src.user.username}'s profile image`}>
                       <StyledAvatar
                         src={src.user.avatar || src.user.profile_image.small}
                         pageimages={1}
