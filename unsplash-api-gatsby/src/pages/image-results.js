@@ -4,16 +4,16 @@
 import { useQuery } from "@apollo/react-hooks"
 import React from "react"
 import { SEARCH_IMAGES_BY_KEYWORD } from "../apollo/queries"
+import ErrorComponent from "../components/errorcomponent"
 import { Footer } from "../components/footer"
 import { LoadingContainer } from "../components/loadingcontainer"
 import { MainNavbar } from "../components/mainnavbar"
 import { MainPageImages } from "../components/mainpageimages"
+import { MobileHomeNav } from "../components/mobilehomenav"
+import { SEO } from "../components/SEO"
 import { TotalResultsHeader } from "../components/totalresultsheader"
 import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
-import { SEO } from "../components/SEO"
-import { MobileHomeNav } from "../components/mobilehomenav"
-import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -33,7 +33,7 @@ const ImageResults = state => {
     }
   )
 
-  if (!data.searchImagesByKeyword) return <LoadingContainer />
+  if (!data) return <LoadingContainer />
   if (error) return <ErrorComponent />
 
   return (

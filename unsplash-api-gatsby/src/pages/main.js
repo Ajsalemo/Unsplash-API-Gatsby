@@ -23,7 +23,7 @@ const Main = state => {
   const { loading, error, data } = useQuery(RANDOM_PHOTO_QUERY)
   if (error) return <ErrorComponent />
   if (loading) return <LoadingContainer />
-
+  
   return (
     <>
       <SEO
@@ -38,6 +38,8 @@ const Main = state => {
           images={data.randomPhotoQuery}
           location={state.location.pathname}
           user={user}
+          loading={loading}
+          error={error}
         />
         <Footer />
       </StyledMainContainer>
