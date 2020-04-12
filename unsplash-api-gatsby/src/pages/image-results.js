@@ -13,6 +13,7 @@ import { StyledMainContainer } from "../helpers/styledcomponents"
 import { getProfile } from "../utils/auth"
 import { SEO } from "../components/SEO"
 import { MobileHomeNav } from "../components/mobilehomenav"
+import ErrorComponent from "../components/errorcomponent"
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -32,7 +33,8 @@ const ImageResults = state => {
     }
   )
 
-  if (loading) return <LoadingContainer />
+  if (!data.searchImagesByKeyword) return <LoadingContainer />
+  if (error) return <ErrorComponent />
 
   return (
     <>
