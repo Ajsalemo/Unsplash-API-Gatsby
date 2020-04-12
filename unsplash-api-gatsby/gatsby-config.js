@@ -7,7 +7,7 @@ module.exports = {
     title: `Something like Unsplash`,
     description: `Inspiration taken from Unsplash to create an image viewing app with Gatsby.`,
     author: `Anthony Salemo`,
-    url: "localhost:8000"
+    url: "https://gatsby-unsplash-images.netlify.com"
   },
   plugins: [
     {
