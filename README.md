@@ -2,7 +2,7 @@
 
  A searchable Web App using Unsplash's API to find HD images. This site is able to be nagivated with or without creating an account. Users do have the choice to create an account using Auth0 - and can save images for later viewing. A user can view images in full view, navigate other users profiles and search images by keyword with paginated results. This site is built to be mobile friendly.
  <br>
- [Link to Site](https://gatsby-unsplash-images.netlify.com/)
+ ![](https://gatsby-unsplash-images.netlify.com/)
 
 ![Imgur](https://i.imgur.com/glbW4nM.png)
 
