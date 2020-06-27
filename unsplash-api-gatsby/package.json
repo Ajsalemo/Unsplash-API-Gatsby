@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "unsplash-api-gatsby",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "An application for photo searching",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Anthony Salemo <ajssalemo@gmail.com>",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
     "@brainhubeu/react-carousel": "^1.10.34",
