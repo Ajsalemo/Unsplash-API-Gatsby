@@ -64,4 +64,4 @@ stages:
               WebAppName: $(webAppName)
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|10.10'
-              StartupCommand: 'yarn start'
+              StartupCommand: 'pm2 serve /home/site/wwwroot/public --no-daemon'
